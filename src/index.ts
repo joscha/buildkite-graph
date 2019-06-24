@@ -277,23 +277,17 @@ const releaseStep = new ManualStep('Release editor', options)
 const webBuildEditor = new Entity("web-build-editor")
     .add(buildEditorStep)
     .add(testEditorStep)
-    /*    
-    .add(annotateFailuresStep)
-    .add(deployCoverageReportStep)
-*/
+    // .add(annotateFailuresStep)
+    // .add(deployCoverageReportStep)
     .add(integrationTestStep)
     .add(saucelabsIntegrationTestStep)
     .add(visregBaselineUpdateStep)
-    /*
-    .add(annotateCucumberFailuresStep)
-    */
+    // .add(annotateCucumberFailuresStep)
     .add(copyToDeployBucketStep)
     // .add(updateCheckpointStep)
     .add(deployEditorToTechStep)
     .add(deployEditorToUserTestingStep);
-  /*
-    .add(releaseStep)
-    */
+  // .add(releaseStep)
 
 //console.log(JSON.stringify(webDeploy.serialize(),null,2));
 //console.log('---');
