@@ -2,16 +2,20 @@ import TopologicalSort from "topological-sort";
 
 import * as jsyaml from "js-yaml";
 
-interface BaseStep {
-  serialize(): object | null;
+type SerializedStep<T> = T extends object ? {} : null;
+
+type Primitive = number | string | boolean;
+
+interface BaseStep<SerializedStep> {
+  serialize(): SerializedStep;
 }
 
 // see https://github.com/microsoft/TypeScript/issues/22815#issuecomment-375766197
-interface DefaultStep extends BaseStep {}
-abstract class DefaultStep implements BaseStep {
-  public readonly dependencies: Set<DefaultStep> = new Set();
+interface DefaultStep<SerializedStep> extends BaseStep<SerializedStep> {}
+abstract class DefaultStep<SerializedStep> implements BaseStep<SerializedStep> {
+  public readonly dependencies: Set<DefaultStep<any>> = new Set();
 
-  dependsOn(step: DefaultStep): this {
+  dependsOn(step: DefaultStep<any>): this {
     this.dependencies.add(step);
     return this;
   }
@@ -22,10 +26,10 @@ type Wait = {
   continue_on_failure?: true;
 };
 
-class WaitStep implements BaseStep {
+class WaitStep implements BaseStep<SerializedStep<Wait>> {
   constructor(private readonly continueOnFailure?: boolean) {}
 
-  serialize() {
+  serialize(): Wait {
     const ret: Wait = {
       wait: null
     };
@@ -40,7 +44,12 @@ class WaitStep implements BaseStep {
   }
 }
 
-class Step extends DefaultStep {
+type Default = {
+  label: string;
+  command: string | string[];
+};
+
+class Step extends DefaultStep<Default> {
   constructor(
     private readonly label: string,
     private readonly command: string
@@ -48,7 +57,7 @@ class Step extends DefaultStep {
     super();
   }
 
-  serialize() {
+  serialize(): Default {
     return {
       label: this.label,
       command: this.command
@@ -87,19 +96,19 @@ type Trigger = {
   build?: Build;
 };
 
-class TriggerStep extends DefaultStep {
+class TriggerStep extends DefaultStep<Trigger> {
   private readonly env: Env = new Env();
 
   constructor(private readonly entity: Entity) {
     super();
   }
 
-  withEnv(name: string, value: string) {
+  withEnv(name: string, value: Primitive) {
     this.env.add(name, value);
     return this;
   }
 
-  serialize() {
+  serialize(): Trigger {
     const env = this.env.serialize();
     const ret: Trigger = {
       trigger: this.entity.name
@@ -118,16 +127,16 @@ class TriggerStep extends DefaultStep {
 }
 
 class Env {
-  private readonly vars: Map<string, string> = new Map();
+  private readonly vars: Map<string, Primitive> = new Map();
 
-  add(name: string, value: string) {
+  add(name: string, value: Primitive) {
     this.vars.set(name, value);
   }
 
   serialize() {
     return this.vars.size
       ? {
-          env: Array.from(this.vars).reduce<Record<string, string>>(
+          env: Array.from(this.vars).reduce<Record<string, Primitive>>(
             (ret, [k, v]) => {
               ret[k] = v;
               return ret;
@@ -140,23 +149,23 @@ class Env {
 }
 
 class Entity {
-  private readonly steps: DefaultStep[] = [];
+  private readonly steps: DefaultStep<any>[] = [];
   private readonly env: Env = new Env();
 
   constructor(public readonly name: string) {}
 
-  add(step: DefaultStep) {
+  add(step: DefaultStep<any>) {
     this.steps.push(step);
     return this;
   }
 
-  withEnv(name: string, value: string) {
+  withEnv(name: string, value: Primitive) {
     this.env.add(name, value);
     return this;
   }
 
   private sortedSteps() {
-    const sortOp = new TopologicalSort<DefaultStep, DefaultStep>(
+    const sortOp = new TopologicalSort<DefaultStep<any>, DefaultStep<any>>(
       new Map(this.steps.map(step => [step, step]))
     );
 
@@ -175,7 +184,7 @@ class Entity {
 
   serialize() {
     const sortedSteps = this.sortedSteps();
-    const allSteps: BaseStep[] = [];
+    const allSteps: BaseStep<any>[] = [];
     let lastWaitStep = -1;
     for (const step of sortedSteps) {
       dep: for (const dependency of step.dependencies) {
@@ -204,11 +213,13 @@ class Entity {
   }
 }
 
+// --- web-deploy
 const webDeploy = new Entity("web-deploy")
-  .withEnv("USE_COLOR", "1")
-  .withEnv("DEBUG", "true")
+  .withEnv("USE_COLOR", 1)
+  .withEnv("DEBUG", true)
   .add(new Step("Deploy", "buildkite/deploy_web.sh"));
 
+// --- web-build-editor
 const buildEditorStep = new Step(
   "Build Editor",
   "web/bin/buildkite/run_web_step.sh build editor"
@@ -275,19 +286,19 @@ const releaseStep = new ManualStep('Release editor', options)
 */
 
 const webBuildEditor = new Entity("web-build-editor")
-    .add(buildEditorStep)
-    .add(testEditorStep)
-    // .add(annotateFailuresStep)
-    // .add(deployCoverageReportStep)
-    .add(integrationTestStep)
-    .add(saucelabsIntegrationTestStep)
-    .add(visregBaselineUpdateStep)
-    // .add(annotateCucumberFailuresStep)
-    .add(copyToDeployBucketStep)
-    // .add(updateCheckpointStep)
-    .add(deployEditorToTechStep)
-    .add(deployEditorToUserTestingStep);
-  // .add(releaseStep)
+  .add(buildEditorStep)
+  .add(testEditorStep)
+  // .add(annotateFailuresStep)
+  // .add(deployCoverageReportStep)
+  .add(integrationTestStep)
+  .add(saucelabsIntegrationTestStep)
+  .add(visregBaselineUpdateStep)
+  // .add(annotateCucumberFailuresStep)
+  .add(copyToDeployBucketStep)
+  // .add(updateCheckpointStep)
+  .add(deployEditorToTechStep)
+  .add(deployEditorToUserTestingStep);
+// .add(releaseStep)
 
 //console.log(JSON.stringify(webDeploy.serialize(),null,2));
 //console.log('---');
@@ -296,3 +307,7 @@ const webBuildEditor = new Entity("web-build-editor")
 console.log(webDeploy.toYAML());
 console.log("---");
 console.log(webBuildEditor.toYAML());
+
+// create graph visualization via: https://github.com/jakesgordon/javascript-state-machine
+// https://github.com/DomParfitt/graphviz-react#readme
+// https://github.com/glejeune/node-graphviz
