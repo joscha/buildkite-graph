@@ -8,19 +8,22 @@
     "dist"
   ],
   "devDependencies": {
+    "@types/graphviz": "^0.0.30",
+    "@types/jest": "^24.0.15",
+    "@types/js-yaml": "^3.12.1",
     "husky": "^2.5.0",
+    "jest": "^24.8.0",
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1",
+    "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.2"
   },
   "scripts": {
     "prepare": "tsc",
-    "test": "yarn ts-node src/index.ts"
+    "test": "jest"
   },
   "dependencies": {
-    "@types/graphviz": "^0.0.30",
-    "@types/js-yaml": "^3.12.1",
     "graphviz": "^0.0.9",
     "js-yaml": "^3.13.1",
     "topological-sort": "^0.3.0"

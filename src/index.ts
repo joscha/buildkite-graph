@@ -51,7 +51,7 @@ type Default = {
   command: string | string[];
 };
 
-class Step extends DefaultStep<Default> {
+export class Step extends DefaultStep<Default> {
   constructor(
     private readonly label: string,
     private readonly command: string
@@ -71,7 +71,7 @@ class Step extends DefaultStep<Default> {
   }
 }
 
-class ParallelStep extends Step {
+export class ParallelStep extends Step {
   constructor(
     label: string,
     command: string,
@@ -98,7 +98,7 @@ type Trigger = {
   build?: Build;
 };
 
-class TriggerStep extends DefaultStep<Trigger> {
+export class TriggerStep extends DefaultStep<Trigger> {
   private readonly env: Env = new Env();
 
   constructor(
@@ -153,7 +153,7 @@ class Env {
   }
 }
 
-class Entity {
+export class Entity {
   private readonly steps: DefaultStep<any>[] = [];
   private readonly env: Env = new Env();
 
@@ -256,107 +256,3 @@ class Entity {
     return graph.to_dot();
   }
 }
-
-// --- web-deploy
-const webDeploy = new Entity("web-deploy")
-  .withEnv("USE_COLOR", 1)
-  .withEnv("DEBUG", true)
-  .add(new Step("Deploy", "buildkite/deploy_web.sh"));
-
-// --- web-build-editor
-const buildEditorStep = new Step(
-  "Build Editor",
-  "web/bin/buildkite/run_web_step.sh build editor"
-);
-const testEditorStep = new Step(
-  "Test Editor",
-  "web/bin/buildkite/run_web_step.sh test editor"
-);
-/*
-
-const annotateFailuresStep = new AlwaysExecutedStep('annotate failures')
-    .dependsOn(testEditorStep);
-const deployCoverageReportStep = new AlwaysExecutedStep('web/bin/buildkite/run_web_step.sh deploy-report coverage editor')
-    .dependsOn(testEditorStep);
-*/
-const integrationTestStep = new ParallelStep(
-  "Integration tests",
-  "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
-  8
-).dependsOn(buildEditorStep);
-
-const saucelabsIntegrationTestStep = new ParallelStep(
-  ":saucelabs: Integration tests",
-  "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
-  8
-)
-  // .add(new Plugin('sauce-connect-plugin'))
-  //.deferred()
-  .dependsOn(integrationTestStep);
-
-const visregBaselineUpdateStep = new Step(
-  "Visreg baseline update",
-  "web/bin/buildkite/run_web_step.sh run-visual-regression editor"
-).dependsOn(integrationTestStep);
-
-/*    
-const annotateCucumberFailuresStep = new AlwaysExecutedStep('web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases')
-    .dependsOn(integrationTestStep)
-    .dependsOn(saucelabsIntegrationTestStep);
-*/
-const copyToDeployBucketStep = new Step(
-  "Copy to deploy bucket",
-  "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor"
-).dependsOn(saucelabsIntegrationTestStep);
-/*
-const updateCheckpointStep = new Step('production/test/jobs/advance_branch.sh "checkpoint/web/green/editor"')
-    .dependsOn(copyToDeployBucketStep)
-
-*/
-
-const deployEditorToTechStep = new TriggerStep(webDeploy, "Deploy to tech")
-  .withEnv("FLAVOR", "tech")
-  .withEnv("RELEASE_PATH", "some/path/")
-  .dependsOn(copyToDeployBucketStep);
-
-const deployEditorToUserTestingStep = new TriggerStep(
-  webDeploy,
-  "Deploy to usertesting"
-)
-  .withEnv("FLAVOR", "usertesting")
-  .withEnv("RELEASE_PATH", "some/path/")
-  .dependsOn(copyToDeployBucketStep);
-
-/*
-const releaseStep = new ManualStep('Release editor', options)
-    .dependsOn(updateCheckpointStep)
-*/
-
-const webBuildEditor = new Entity("web-build-editor")
-  .add(buildEditorStep)
-  .add(testEditorStep)
-  // .add(annotateFailuresStep)
-  // .add(deployCoverageReportStep)
-  .add(integrationTestStep)
-  .add(saucelabsIntegrationTestStep)
-  .add(visregBaselineUpdateStep)
-  // .add(annotateCucumberFailuresStep)
-  .add(copyToDeployBucketStep)
-  // .add(updateCheckpointStep)
-  .add(deployEditorToTechStep)
-  .add(deployEditorToUserTestingStep);
-// .add(releaseStep)
-
-//console.log(JSON.stringify(webDeploy.serialize(),null,2));
-//console.log('---');
-//console.log(JSON.stringify(webBuildEditor.serialize(),null,2));
-
-console.log(webDeploy.toYAML());
-console.log("---");
-console.log(webBuildEditor.toYAML());
-console.log("---");
-console.log(webBuildEditor.toDot());
-
-// create graph visualization via: https://github.com/jakesgordon/javascript-state-machine
-// https://github.com/DomParfitt/graphviz-react#readme
-// https://github.com/glejeune/node-graphviz

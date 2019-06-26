@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildkite-graph can produce YAML for complex pipelines 1`] = `
+"steps:
+  - label: Build Editor
+    command: web/bin/buildkite/run_web_step.sh build editor
+  - label: Test Editor
+    command: web/bin/buildkite/run_web_step.sh test editor
+  - wait: ~
+  - label: Integration tests
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests local editor
+      chrome
+    concurrency: 8
+  - wait: ~
+  - label: ':saucelabs: Integration tests'
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
+      safari
+    concurrency: 8
+  - label: Visreg baseline update
+    command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
+  - wait: ~
+  - label: Copy to deploy bucket
+    command: web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor
+  - wait: ~
+  - trigger: web-deploy
+    build:
+      env:
+        FLAVOR: tech
+        RELEASE_PATH: some/path/
+  - trigger: web-deploy
+    build:
+      env:
+        FLAVOR: usertesting
+        RELEASE_PATH: some/path/
+"
+`;
+
+exports[`buildkite-graph can produce YAML for simple pipelines 1`] = `
+"steps:
+  - env:
+      USE_COLOR: 1
+      DEBUG: true
+  - label: Deploy
+    command: buildkite/deploy_web.sh
+"
+`;
+
+exports[`buildkite-graph can produce dot for complex pipelines 1`] = `
+"digraph \\"web-build-editor\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"Build Editor\\" [ color = \\"grey\\" ];
+  \\"Test Editor\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_1 {
+  graph [ color = \\"black\\" ];
+  \\"Integration tests\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_2 {
+  graph [ color = \\"black\\" ];
+  \\":saucelabs: Integration tests\\" [ color = \\"grey\\" ];
+  \\"Visreg baseline update\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_3 {
+  graph [ color = \\"black\\" ];
+  \\"Copy to deploy bucket\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_4 {
+  graph [ color = \\"black\\" ];
+  \\"Deploy to tech\\" [ color = \\"grey\\" ];
+  \\"Deploy to usertesting\\" [ color = \\"grey\\" ];
+}
+
+  \\"Build Editor\\";
+  \\"Integration tests\\";
+  \\":saucelabs: Integration tests\\";
+  \\"Visreg baseline update\\";
+  \\"Copy to deploy bucket\\";
+  \\"Deploy to tech\\";
+  \\"web-deploy\\" [ shape =Msquare ];
+  \\"Deploy to usertesting\\";
+  \\"Build Editor\\" -> \\"Integration tests\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"Integration tests\\" -> \\":saucelabs: Integration tests\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
+  \\"Integration tests\\" -> \\"Visreg baseline update\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
+  \\":saucelabs: Integration tests\\" -> \\"Copy to deploy bucket\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
+  \\"Copy to deploy bucket\\" -> \\"Deploy to tech\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
+  \\"Deploy to tech\\" -> \\"web-deploy\\" [ label = \\"triggers\\" ];
+  \\"Copy to deploy bucket\\" -> \\"Deploy to usertesting\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
+  \\"Deploy to usertesting\\" -> \\"web-deploy\\" [ label = \\"triggers\\" ];
+}
+"
+`;
