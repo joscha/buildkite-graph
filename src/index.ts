@@ -2,6 +2,8 @@ import TopologicalSort from "topological-sort";
 
 import * as jsyaml from "js-yaml";
 
+import * as graphviz from "graphviz";
+
 type SerializedStep<T> = T extends object ? {} : null;
 
 type Primitive = number | string | boolean;
@@ -65,7 +67,7 @@ class Step extends DefaultStep<Default> {
   }
 
   toString() {
-    return `<${this.label}>`;
+    return this.label;
   }
 }
 
@@ -99,7 +101,10 @@ type Trigger = {
 class TriggerStep extends DefaultStep<Trigger> {
   private readonly env: Env = new Env();
 
-  constructor(private readonly entity: Entity) {
+  constructor(
+    public readonly triggeredEntity: Entity,
+    public readonly label?: string
+  ) {
     super();
   }
 
@@ -111,7 +116,7 @@ class TriggerStep extends DefaultStep<Trigger> {
   serialize(): Trigger {
     const env = this.env.serialize();
     const ret: Trigger = {
-      trigger: this.entity.name
+      trigger: this.triggeredEntity.name
     };
     if (env) {
       ret.build = {
@@ -122,7 +127,7 @@ class TriggerStep extends DefaultStep<Trigger> {
   }
 
   toString() {
-    return `[trigger: ${this.entity.name}]`;
+    return this.label || `Trigger ${this.triggeredEntity.name}`;
   }
 }
 
@@ -182,25 +187,31 @@ class Entity {
     return Array.from(sortOp.sort().values()).map(i => i.node);
   }
 
-  serialize() {
+  private stortedWithBlocks() {
     const sortedSteps = this.sortedSteps();
-    const allSteps: BaseStep<any>[] = [];
+    const allSteps: (DefaultStep<any> | null)[] = [];
     let lastWaitStep = -1;
     for (const step of sortedSteps) {
       dep: for (const dependency of step.dependencies) {
         const dependentStep = allSteps.indexOf(dependency);
         if (dependentStep !== -1 && dependentStep > lastWaitStep) {
-          lastWaitStep = allSteps.push(new WaitStep()) - 1;
+          lastWaitStep = allSteps.push(null) - 1;
           break dep;
         }
       }
       allSteps.push(step);
     }
+    return allSteps;
+  }
+
+  serialize() {
+    const allSteps = this.stortedWithBlocks();
 
     return {
-      steps: [this.env.serialize(), ...allSteps.map(s => s.serialize())].filter(
-        Boolean
-      )
+      steps: [
+        this.env.serialize(),
+        ...allSteps.map(s => s || new WaitStep()).map(s => s.serialize())
+      ].filter(Boolean)
     };
   }
 
@@ -210,6 +221,39 @@ class Entity {
         "!!null": "canonical" // dump null as ~
       }
     });
+  }
+
+  toDot() {
+    const allSteps = this.stortedWithBlocks();
+    allSteps.unshift(null);
+
+    const graph = graphviz.digraph(`"${this.name}"`);
+    graph.set("compound", true);
+    let lastNode;
+    let i = 0;
+    let currentCluster: graphviz.Graph;
+    for (const step of allSteps) {
+      if (step === null) {
+        currentCluster = graph.addCluster(`cluster_${i++}`);
+        currentCluster.set("color", "black");
+        continue;
+      }
+      for (const dependency of step.dependencies) {
+        const edge = graph.addEdge(dependency.toString(), step.toString());
+        edge.set("ltail", `cluster_${i - 2}`);
+        edge.set("lhead", `cluster_${i - 1}`);
+      }
+      lastNode = currentCluster!.addNode(step.toString());
+      lastNode.set("color", "grey");
+
+      if (step instanceof TriggerStep) {
+        const triggered = graph.addNode(step.triggeredEntity.name);
+        triggered.set("shape", "Msquare");
+        const edge = graph.addEdge(lastNode, triggered);
+        edge.set("label", "triggers");
+      }
+    }
+    return graph.to_dot();
   }
 }
 
@@ -270,12 +314,15 @@ const updateCheckpointStep = new Step('production/test/jobs/advance_branch.sh "c
 
 */
 
-const deployEditorToTechStep = new TriggerStep(webDeploy)
+const deployEditorToTechStep = new TriggerStep(webDeploy, "Deploy to tech")
   .withEnv("FLAVOR", "tech")
   .withEnv("RELEASE_PATH", "some/path/")
   .dependsOn(copyToDeployBucketStep);
 
-const deployEditorToUserTestingStep = new TriggerStep(webDeploy)
+const deployEditorToUserTestingStep = new TriggerStep(
+  webDeploy,
+  "Deploy to usertesting"
+)
   .withEnv("FLAVOR", "usertesting")
   .withEnv("RELEASE_PATH", "some/path/")
   .dependsOn(copyToDeployBucketStep);
@@ -307,6 +354,8 @@ const webBuildEditor = new Entity("web-build-editor")
 console.log(webDeploy.toYAML());
 console.log("---");
 console.log(webBuildEditor.toYAML());
+console.log("---");
+console.log(webBuildEditor.toDot());
 
 // create graph visualization via: https://github.com/jakesgordon/javascript-state-machine
 // https://github.com/DomParfitt/graphviz-react#readme

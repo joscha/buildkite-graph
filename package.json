@@ -19,7 +19,9 @@
     "test": "yarn ts-node src/index.ts"
   },
   "dependencies": {
+    "@types/graphviz": "^0.0.30",
     "@types/js-yaml": "^3.12.1",
+    "graphviz": "^0.0.9",
     "js-yaml": "^3.13.1",
     "topological-sort": "^0.3.0"
   },
