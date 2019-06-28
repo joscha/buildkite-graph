@@ -1,7 +1,91 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`buildkite-graph can produce JSON for complex pipelines 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh build editor",
+      "label": "Build Editor",
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh test editor",
+      "label": "Test Editor",
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
+      "label": "Integration tests",
+      "parallelism": 8,
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
+      "label": ":saucelabs: Integration tests",
+      "parallelism": 8,
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
+      "label": "Visreg baseline update",
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
+      "label": "Copy to deploy bucket",
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
+    },
+    Object {
+      "build": Object {
+        "env": Object {
+          "FLAVOR": "tech",
+          "RELEASE_PATH": "some/path/",
+        },
+      },
+      "trigger": "web-deploy",
+    },
+    Object {
+      "build": Object {
+        "env": Object {
+          "FLAVOR": "usertesting",
+          "RELEASE_PATH": "some/path/",
+        },
+      },
+      "trigger": "web-deploy",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph can produce JSON for simple pipelines 1`] = `
+Object {
+  "env": Object {
+    "DEBUG": true,
+    "USE_COLOR": 1,
+  },
+  "steps": Array [
+    Object {
+      "command": "buildkite/deploy_web.sh",
+      "label": "Deploy",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph can produce YAML for complex pipelines 1`] = `
-"steps:
+"
+steps:
   - label: Build Editor
     command: web/bin/buildkite/run_web_step.sh build editor
   - label: Test Editor
@@ -11,13 +95,13 @@ exports[`buildkite-graph can produce YAML for complex pipelines 1`] = `
     command: >-
       web/bin/buildkite/run_web_step.sh run-integration-tests local editor
       chrome
-    concurrency: 8
+    parallelism: 8
   - wait: ~
   - label: ':saucelabs: Integration tests'
     command: >-
       web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
       safari
-    concurrency: 8
+    parallelism: 8
   - label: Visreg baseline update
     command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
   - wait: ~
@@ -38,10 +122,10 @@ exports[`buildkite-graph can produce YAML for complex pipelines 1`] = `
 `;
 
 exports[`buildkite-graph can produce YAML for simple pipelines 1`] = `
-"steps:
-  - env:
-      USE_COLOR: 1
-      DEBUG: true
+"env:
+  USE_COLOR: 1
+  DEBUG: true
+steps:
   - label: Deploy
     command: buildkite/deploy_web.sh
 "

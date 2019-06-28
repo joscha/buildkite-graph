@@ -1,10 +1,17 @@
-import { Entity, Step, ParallelStep, TriggerStep } from "../";
+import {
+  Entity,
+  Step,
+  TriggerStep,
+  JsonSerializer,
+  YamlSerializer,
+  DotSerializer
+} from "../";
 
 describe("buildkite-graph", () => {
   function createSimple() {
-    return new Entity("web-deploy")
-      .withEnv("USE_COLOR", 1)
-      .withEnv("DEBUG", true)
+    return new Entity("web-deploy").env
+      .set("USE_COLOR", 1)
+      .env.set("DEBUG", true)
       .add(new Step("Deploy", "buildkite/deploy_web.sh"));
   }
 
@@ -25,17 +32,18 @@ describe("buildkite-graph", () => {
   const deployCoverageReportStep = new AlwaysExecutedStep('web/bin/buildkite/run_web_step.sh deploy-report coverage editor')
       .dependsOn(testEditorStep);
   */
-    const integrationTestStep = new ParallelStep(
+    const integrationTestStep = new Step(
       "Integration tests",
-      "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
-      8
-    ).dependsOn(buildEditorStep);
-
-    const saucelabsIntegrationTestStep = new ParallelStep(
-      ":saucelabs: Integration tests",
-      "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
-      8
+      "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome"
     )
+      .withParallelism(8)
+      .dependsOn(buildEditorStep);
+
+    const saucelabsIntegrationTestStep = new Step(
+      ":saucelabs: Integration tests",
+      "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari"
+    )
+      .withParallelism(8)
       // .add(new Plugin('sauce-connect-plugin'))
       //.deferred()
       .dependsOn(integrationTestStep);
@@ -60,17 +68,20 @@ describe("buildkite-graph", () => {
   
   */
 
-    const deployEditorToTechStep = new TriggerStep(webDeploy, "Deploy to tech")
-      .withEnv("FLAVOR", "tech")
-      .withEnv("RELEASE_PATH", "some/path/")
+    const deployEditorToTechStep = new TriggerStep(
+      webDeploy,
+      "Deploy to tech"
+    ).build.env
+      .set("FLAVOR", "tech")
+      .build.env.set("RELEASE_PATH", "some/path/")
       .dependsOn(copyToDeployBucketStep);
 
     const deployEditorToUserTestingStep = new TriggerStep(
       webDeploy,
       "Deploy to usertesting"
-    )
-      .withEnv("FLAVOR", "usertesting")
-      .withEnv("RELEASE_PATH", "some/path/")
+    ).build.env
+      .set("FLAVOR", "usertesting")
+      .build.env.set("RELEASE_PATH", "some/path/")
       .dependsOn(copyToDeployBucketStep);
 
     /*
@@ -95,21 +106,38 @@ describe("buildkite-graph", () => {
     return webBuildEditor;
   }
 
-  it("can produce YAML for simple pipelines", () => {
-    const webDeploy = createSimple();
+  describe("can produce JSON", () => {
+    const serializer = new JsonSerializer();
+    it("for simple pipelines", () => {
+      const webDeploy = createSimple();
 
-    // expect(webDeploy.serialize()).toMatchSnapshot();
-    expect(webDeploy.toYAML()).toMatchSnapshot();
+      expect(serializer.serialize(webDeploy)).toMatchSnapshot();
+    });
+
+    it("for complex pipelines", () => {
+      const webBuildEditor = createComplex();
+      expect(serializer.serialize(webBuildEditor)).toMatchSnapshot();
+    });
   });
 
-  it("can produce YAML for complex pipelines", () => {
-    const webBuildEditor = createComplex();
-    // expect(webBuildEditor.serialize()).toMatchSnapshot();
-    expect(webBuildEditor.toYAML()).toMatchSnapshot();
+  describe("can produce YAML", () => {
+    const serializer = new YamlSerializer();
+    it("for simple pipelines", () => {
+      const webDeploy = createSimple();
+      expect(serializer.serialize(webDeploy)).toMatchSnapshot();
+    });
+
+    it("for complex pipelines", () => {
+      const webBuildEditor = createComplex();
+      expect(serializer.serialize(webBuildEditor)).toMatchSnapshot();
+    });
   });
 
-  it("can produce dot for complex pipelines", () => {
-    const webBuildEditor = createComplex();
-    expect(webBuildEditor.toDot()).toMatchSnapshot();
+  describe("can produce dot", () => {
+    const serializer = new DotSerializer();
+    it("for complex pipelines", () => {
+      const webBuildEditor = createComplex();
+      expect(serializer.serialize(webBuildEditor)).toMatchSnapshot();
+    });
   });
 });

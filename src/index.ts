@@ -4,6 +4,12 @@ import * as jsyaml from "js-yaml";
 
 import * as graphviz from "graphviz";
 
+import ow from "ow";
+
+import "reflect-metadata";
+
+import { Expose, Exclude, classToPlain, Transform } from "class-transformer";
+
 type SerializedStep<T> = T extends object ? {} : null;
 
 type Primitive = number | string | boolean;
@@ -15,6 +21,7 @@ interface BaseStep<SerializedStep> {
 // see https://github.com/microsoft/TypeScript/issues/22815#issuecomment-375766197
 interface DefaultStep<SerializedStep> extends BaseStep<SerializedStep> {}
 abstract class DefaultStep<SerializedStep> implements BaseStep<SerializedStep> {
+  @Exclude()
   public readonly dependencies: Set<DefaultStep<any>> = new Set();
 
   dependsOn(step: DefaultStep<any>): this {
@@ -29,16 +36,16 @@ type Wait = {
 };
 
 class WaitStep implements BaseStep<SerializedStep<Wait>> {
-  constructor(private readonly continueOnFailure?: boolean) {}
+  @Expose({ name: "continue_on_failure" })
+  public continueOnFailure?: true;
+  public readonly wait: null = null;
+
+  constructor(continueOnFailure?: true) {
+    this.continueOnFailure = continueOnFailure;
+  }
 
   serialize(): Wait {
-    const ret: Wait = {
-      wait: null
-    };
-    if (this.continueOnFailure) {
-      ret.continue_on_failure = true;
-    }
-    return ret;
+    return this;
   }
 
   toString() {
@@ -47,23 +54,29 @@ class WaitStep implements BaseStep<SerializedStep<Wait>> {
 }
 
 type Default = {
-  label: string;
+  label?: string;
   command: string | string[];
+  parallelism?: number;
 };
 
 export class Step extends DefaultStep<Default> {
-  constructor(
-    private readonly label: string,
-    private readonly command: string
-  ) {
+  public parallelism?: number;
+
+  public readonly command: string | string[];
+
+  constructor(public readonly label?: string, ...command: string[]) {
     super();
+    this.command = command.length === 1 ? command[0] : command;
+  }
+
+  withParallelism(parallelism: number): this {
+    ow(parallelism, ow.number.positive);
+    this.parallelism = parallelism;
+    return this;
   }
 
   serialize(): Default {
-    return {
-      label: this.label,
-      command: this.command
-    };
+    return this;
   }
 
   toString() {
@@ -71,35 +84,31 @@ export class Step extends DefaultStep<Default> {
   }
 }
 
-export class ParallelStep extends Step {
-  constructor(
-    label: string,
-    command: string,
-    private readonly concurrency: number
-  ) {
-    super(label, command);
-  }
-
-  serialize() {
-    const ret = super.serialize();
-    return {
-      ...ret,
-      concurrency: this.concurrency
-    };
-  }
-}
-
-type Build = {
-  env?: object;
-};
-
 type Trigger = {
   trigger: string;
   build?: Build;
 };
 
+class Build {
+  public readonly env: Env<TriggerStep>;
+  constructor(triggerStep: TriggerStep) {
+    this.env = new EnvImpl(triggerStep);
+  }
+}
+
+@Exclude()
 export class TriggerStep extends DefaultStep<Trigger> {
-  private readonly env: Env = new Env();
+  public readonly build = new Build(this);
+
+  @Expose()
+  get trigger() {
+    return this.triggeredEntity.name;
+  }
+
+  @Expose({ name: "build" })
+  private get _build() {
+    return { env: (this.build.env as EnvImpl<any>).vars };
+  }
 
   constructor(
     public readonly triggeredEntity: Entity,
@@ -108,126 +117,150 @@ export class TriggerStep extends DefaultStep<Trigger> {
     super();
   }
 
-  withEnv(name: string, value: Primitive) {
-    this.env.add(name, value);
-    return this;
-  }
-
+  /*
   serialize(): Trigger {
-    const env = this.env.serialize();
+    //const env = transformEnv(this.env as EnvImpl<this>);
     const ret: Trigger = {
       trigger: this.triggeredEntity.name
     };
-    if (env) {
+    if (this.env) {
       ret.build = {
-        ...env
+        env: this.env
       };
     }
     return ret;
   }
+  */
 
   toString() {
     return this.label || `Trigger ${this.triggeredEntity.name}`;
   }
 }
 
-class Env {
-  private readonly vars: Map<string, Primitive> = new Map();
+interface Env<T> {
+  set(name: string, value: Primitive): T;
+}
 
-  add(name: string, value: Primitive) {
-    this.vars.set(name, value);
+@Exclude()
+class EnvImpl<T> implements Env<T> {
+  @Exclude()
+  private readonly parent: T;
+
+  @Expose({ name: "env" })
+  public readonly vars: Map<string, Primitive> = new Map();
+
+  constructor(parent: T) {
+    this.parent = parent;
   }
 
-  serialize() {
-    return this.vars.size
-      ? {
-          env: Array.from(this.vars).reduce<Record<string, Primitive>>(
-            (ret, [k, v]) => {
-              ret[k] = v;
-              return ret;
-            },
-            {}
-          )
-        }
-      : null;
+  set(name: string, value: Primitive): T {
+    this.vars.set(name, value);
+    return this.parent;
   }
 }
 
-export class Entity {
-  private readonly steps: DefaultStep<any>[] = [];
-  private readonly env: Env = new Env();
+function transformEnv(env: EnvImpl<any>) {
+  return env.vars.size ? env.vars : undefined;
+}
 
-  constructor(public readonly name: string) {}
+@Exclude()
+export class Entity {
+  public readonly name: string;
+
+  public readonly steps: DefaultStep<any>[] = [];
+
+  @Expose()
+  @Transform(value => transformEnv(value))
+  public readonly env: Env<this>;
+
+  constructor(name: string) {
+    this.name = name;
+    this.env = new EnvImpl(this);
+  }
+
+  /*
+  @Expose({ name: "env" })
+  private get _env() {
+    return this.env.serialized();
+  }
+  */
 
   add(step: DefaultStep<any>) {
     this.steps.push(step);
     return this;
   }
 
-  withEnv(name: string, value: Primitive) {
-    this.env.add(name, value);
-    return this;
+  @Expose({ name: "steps" })
+  private get _steps() {
+    const allSteps = stortedWithBlocks(this);
+
+    return [...allSteps.map(s => s || new WaitStep())].filter(Boolean);
   }
+}
 
-  private sortedSteps() {
-    const sortOp = new TopologicalSort<DefaultStep<any>, DefaultStep<any>>(
-      new Map(this.steps.map(step => [step, step]))
-    );
+function sortedSteps(e: Entity) {
+  const sortOp = new TopologicalSort<DefaultStep<any>, DefaultStep<any>>(
+    new Map(e.steps.map(step => [step, step]))
+  );
 
-    for (const step of this.steps) {
-      for (const dependency of step.dependencies) {
-        if (this.steps.indexOf(dependency) === -1) {
-          //throw new Error(`Step not part of the graph: '${dependency}'`);
-          sortOp.addNode(dependency, dependency);
-          this.steps.push(dependency);
-        }
-        sortOp.addEdge(dependency, step);
+  for (const step of e.steps) {
+    for (const dependency of step.dependencies) {
+      if (e.steps.indexOf(dependency) === -1) {
+        //throw new Error(`Step not part of the graph: '${dependency}'`);
+        sortOp.addNode(dependency, dependency);
+        e.steps.push(dependency);
+      }
+      sortOp.addEdge(dependency, step);
+    }
+  }
+  return Array.from(sortOp.sort().values()).map(i => i.node);
+}
+
+function stortedWithBlocks(e: Entity) {
+  const sorted = sortedSteps(e);
+  const allSteps: (DefaultStep<any> | null)[] = [];
+  let lastWaitStep = -1;
+  for (const step of sorted) {
+    dep: for (const dependency of step.dependencies) {
+      const dependentStep = allSteps.indexOf(dependency);
+      if (dependentStep !== -1 && dependentStep > lastWaitStep) {
+        lastWaitStep = allSteps.push(null) - 1;
+        break dep;
       }
     }
-    return Array.from(sortOp.sort().values()).map(i => i.node);
+    allSteps.push(step);
   }
+  return allSteps;
+}
 
-  private stortedWithBlocks() {
-    const sortedSteps = this.sortedSteps();
-    const allSteps: (DefaultStep<any> | null)[] = [];
-    let lastWaitStep = -1;
-    for (const step of sortedSteps) {
-      dep: for (const dependency of step.dependencies) {
-        const dependentStep = allSteps.indexOf(dependency);
-        if (dependentStep !== -1 && dependentStep > lastWaitStep) {
-          lastWaitStep = allSteps.push(null) - 1;
-          break dep;
-        }
-      }
-      allSteps.push(step);
-    }
-    return allSteps;
+interface Serializer<T> {
+  serialize(e: Entity): T;
+}
+
+export class JsonSerializer implements Serializer<object> {
+  serialize(e: Entity) {
+    // TODO: filter undefined values
+    return classToPlain(e);
   }
+}
 
-  serialize() {
-    const allSteps = this.stortedWithBlocks();
-
-    return {
-      steps: [
-        this.env.serialize(),
-        ...allSteps.map(s => s || new WaitStep()).map(s => s.serialize())
-      ].filter(Boolean)
-    };
-  }
-
-  toYAML() {
-    return jsyaml.safeDump(this.serialize(), {
+export class YamlSerializer implements Serializer<string> {
+  serialize(e: Entity) {
+    return jsyaml.safeDump(new JsonSerializer().serialize(e), {
+      skipInvalid: true,
       styles: {
         "!!null": "canonical" // dump null as ~
       }
     });
   }
+}
 
-  toDot() {
-    const allSteps = this.stortedWithBlocks();
+export class DotSerializer implements Serializer<string> {
+  serialize(e: Entity) {
+    const allSteps = stortedWithBlocks(e);
     allSteps.unshift(null);
 
-    const graph = graphviz.digraph(`"${this.name}"`);
+    const graph = graphviz.digraph(`"${e.name}"`);
     graph.set("compound", true);
     let lastNode;
     let i = 0;
