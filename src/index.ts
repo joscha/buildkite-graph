@@ -199,6 +199,11 @@ export class Entity {
     private get _steps() {
         const allSteps = stortedWithBlocks(this);
 
+        // TODO: when step.always = true,
+        // then previous step needs a wait step with continueOnFailure: true
+        // if step after does not have .always = true a wait step needs to be
+        // inserted.
+        // See: https://buildkite.com/docs/pipelines/wait-step#continuing-on-failure
         return [...allSteps.map(s => s || new WaitStep())].filter(Boolean);
     }
 }
