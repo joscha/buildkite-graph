@@ -1,4 +1,4 @@
-import { Entity, Step, TriggerStep } from '../';
+import { Entity, Step, TriggerStep, Plugin } from '../';
 import { JsonSerializer } from '../serializers/json';
 import { YamlSerializer } from '../serializers/yaml';
 import { DotSerializer } from '../serializers/dot';
@@ -21,13 +21,29 @@ describe('buildkite-graph', () => {
             'web/bin/buildkite/run_web_step.sh test editor',
             'Test Editor',
         );
-        /*
-  
-  const annotateFailuresStep = new AlwaysExecutedStep('annotate failures')
-      .dependsOn(testEditorStep);
-  const deployCoverageReportStep = new AlwaysExecutedStep('web/bin/buildkite/run_web_step.sh deploy-report coverage editor')
-      .dependsOn(testEditorStep);
-  */
+
+        const annotateFailuresStep = new Step(
+            new Plugin('bugcrowd/test-summary#v1.5.0', {
+                inputs: [
+                    {
+                        label: ':htmllint: HTML lint',
+                        artifact_path: 'web/target/htmllint-*.txt',
+                        type: 'oneline',
+                    },
+                ],
+            }),
+
+            'Annotate failures',
+        ).plugins
+            .add(new Plugin('detect-clowns#v1.0.0'))
+            .alwaysExecute()
+            .dependsOn(testEditorStep);
+
+        const deployCoverageReportStep = new Step(
+            'web/bin/buildkite/run_web_step.sh deploy-report coverage editor',
+            'Upload coverage',
+        ).dependsOn(testEditorStep);
+
         const integrationTestStep = new Step(
             'web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome',
             'Integration tests',
@@ -49,7 +65,7 @@ describe('buildkite-graph', () => {
             'Visreg baseline update',
         ).dependsOn(integrationTestStep);
 
-        /*    
+        /*
   const annotateCucumberFailuresStep = new AlwaysExecutedStep('web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases')
       .dependsOn(integrationTestStep)
       .dependsOn(saucelabsIntegrationTestStep);
@@ -88,8 +104,8 @@ describe('buildkite-graph', () => {
         const webBuildEditor = new Entity('web-build-editor')
             .add(buildEditorStep)
             .add(testEditorStep)
-            // .add(annotateFailuresStep)
-            // .add(deployCoverageReportStep)
+            .add(annotateFailuresStep)
+            .add(deployCoverageReportStep)
             .add(integrationTestStep)
             .add(saucelabsIntegrationTestStep)
             .add(visregBaselineUpdateStep)

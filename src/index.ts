@@ -20,12 +20,22 @@ abstract class DefaultStep implements BaseStep {
         this.dependencies.add(step);
         return this;
     }
+
+    @Exclude()
+    public always: boolean = false;
+
+    alwaysExecute() {
+        this.always = true;
+        return this;
+    }
 }
 
-type Wait = {
-    wait: null;
-    continue_on_failure?: true;
-};
+@Exclude()
+abstract class Chainable<T> {
+    constructor(protected readonly parent: T) {
+        this.parent = parent;
+    }
+}
 
 class WaitStep implements BaseStep {
     // TODO: Omit this when not true once
@@ -45,20 +55,51 @@ class WaitStep implements BaseStep {
     }
 }
 
-type Default = {
-    label?: string;
-    command: string | string[];
-    parallelism?: number;
-};
+interface Plugins<T> {
+    add(plugin: Plugin): T;
+}
+
+function transformPlugins(value: PluginsImpl<any>) {
+    if (!value.plugins.length) {
+        return undefined;
+    }
+
+    return value.plugins.map(plugin => {
+        return {
+            [plugin.pluginNameOrPath]: plugin.configuration || null,
+        };
+    });
+}
+
+@Exclude()
+class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
+    public plugins: Plugin[] = [];
+
+    add(plugin: Plugin) {
+        this.plugins.push(plugin);
+        return this.parent;
+    }
+}
 
 export class Step extends DefaultStep {
     public parallelism?: number;
 
-    public readonly command: string | string[];
+    public readonly command?: string | string[];
 
-    constructor(command: string | string[], public readonly label?: string) {
+    @Transform(transformPlugins)
+    public readonly plugins: Plugins<this> = new PluginsImpl(this);
+
+    constructor(plugin: Plugin, label?: string);
+    constructor(command: string, label?: string);
+    constructor(commands: string[], label?: string);
+    constructor(
+        command: string | string[] | Plugin,
+        public readonly label?: string,
+    ) {
         super();
-        if (typeof command === 'string') {
+        if (command instanceof Plugin) {
+            this.plugins.add(command);
+        } else if (typeof command === 'string') {
             ow(command, ow.string.not.empty);
             this.command = command;
         } else {
@@ -78,11 +119,6 @@ export class Step extends DefaultStep {
         return this.label;
     }
 }
-
-type Trigger = {
-    trigger: string;
-    build?: Build;
-};
 
 class Build {
     public readonly env: Env<TriggerStep>;
@@ -122,16 +158,9 @@ interface Env<T> {
 }
 
 @Exclude()
-class EnvImpl<T> implements Env<T> {
-    @Exclude()
-    private readonly parent: T;
-
+class EnvImpl<T> extends Chainable<T> implements Env<T> {
     @Expose({ name: 'env' })
     public readonly vars: Map<string, Primitive> = new Map();
-
-    constructor(parent: T) {
-        this.parent = parent;
-    }
 
     set(name: string, value: Primitive): T {
         this.vars.set(name, value);
@@ -207,4 +236,13 @@ export function stortedWithBlocks(e: Entity) {
         allSteps.push(step);
     }
     return allSteps;
+}
+
+export class Plugin {
+    constructor(
+        public readonly pluginNameOrPath: string,
+        public readonly configuration?: object,
+    ) {
+        ow(pluginNameOrPath, ow.string.not.empty);
+    }
 }

@@ -7,19 +7,46 @@ Object {
     Object {
       "command": "web/bin/buildkite/run_web_step.sh build editor",
       "label": "Build Editor",
+      "plugins": undefined,
     },
     Object {
       "command": "web/bin/buildkite/run_web_step.sh test editor",
       "label": "Test Editor",
+      "plugins": undefined,
     },
     Object {
       "continue_on_failure": undefined,
       "wait": null,
     },
     Object {
+      "label": "Annotate failures",
+      "plugins": Array [
+        Object {
+          "bugcrowd/test-summary#v1.5.0": Object {
+            "inputs": Array [
+              Object {
+                "artifact_path": "web/target/htmllint-*.txt",
+                "label": ":htmllint: HTML lint",
+                "type": "oneline",
+              },
+            ],
+          },
+        },
+        Object {
+          "detect-clowns#v1.0.0": null,
+        },
+      ],
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh deploy-report coverage editor",
+      "label": "Upload coverage",
+      "plugins": undefined,
+    },
+    Object {
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
       "label": "Integration tests",
       "parallelism": 8,
+      "plugins": undefined,
     },
     Object {
       "continue_on_failure": undefined,
@@ -29,10 +56,12 @@ Object {
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
       "label": ":saucelabs: Integration tests",
       "parallelism": 8,
+      "plugins": undefined,
     },
     Object {
       "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
       "label": "Visreg baseline update",
+      "plugins": undefined,
     },
     Object {
       "continue_on_failure": undefined,
@@ -41,6 +70,7 @@ Object {
     Object {
       "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
       "label": "Copy to deploy bucket",
+      "plugins": undefined,
     },
     Object {
       "continue_on_failure": undefined,
@@ -49,6 +79,7 @@ Object {
     Object {
       "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
       "label": "Update checkpoint",
+      "plugins": undefined,
     },
     Object {
       "build": Object {
@@ -82,6 +113,7 @@ Object {
     Object {
       "command": "buildkite/deploy_web.sh",
       "label": "Deploy",
+      "plugins": undefined,
     },
   ],
 }
@@ -95,6 +127,16 @@ steps:
   - label: Test Editor
     command: web/bin/buildkite/run_web_step.sh test editor
   - wait: ~
+  - label: Annotate failures
+    plugins:
+      - 'bugcrowd/test-summary#v1.5.0':
+          inputs:
+            - label: ':htmllint: HTML lint'
+              artifact_path: web/target/htmllint-*.txt
+              type: oneline
+      - 'detect-clowns#v1.0.0': ~
+  - label: Upload coverage
+    command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
   - label: Integration tests
     command: >-
       web/bin/buildkite/run_web_step.sh run-integration-tests local editor
@@ -148,6 +190,8 @@ subgraph cluster_0 {
 
 subgraph cluster_1 {
   graph [ color = \\"black\\" ];
+  \\"Annotate failures\\" [ color = \\"grey\\" ];
+  \\"Upload coverage\\" [ color = \\"grey\\" ];
   \\"Integration tests\\" [ color = \\"grey\\" ];
 }
 
@@ -169,6 +213,9 @@ subgraph cluster_4 {
   \\"Deploy to usertesting\\" [ color = \\"grey\\" ];
 }
 
+  \\"Test Editor\\";
+  \\"Annotate failures\\";
+  \\"Upload coverage\\";
   \\"Build Editor\\";
   \\"Integration tests\\";
   \\":saucelabs: Integration tests\\";
@@ -178,6 +225,8 @@ subgraph cluster_4 {
   \\"Deploy to tech\\";
   \\"web-deploy\\" [ shape =Msquare ];
   \\"Deploy to usertesting\\";
+  \\"Test Editor\\" -> \\"Annotate failures\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"Test Editor\\" -> \\"Upload coverage\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
   \\"Build Editor\\" -> \\"Integration tests\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
   \\"Integration tests\\" -> \\":saucelabs: Integration tests\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
   \\"Integration tests\\" -> \\"Visreg baseline update\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
