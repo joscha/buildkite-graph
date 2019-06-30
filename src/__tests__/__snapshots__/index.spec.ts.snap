@@ -47,6 +47,10 @@ Object {
       "wait": null,
     },
     Object {
+      "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
+      "label": "Update checkpoint",
+    },
+    Object {
       "build": Object {
         "env": Object {
           "FLAVOR": "tech",
@@ -108,6 +112,8 @@ steps:
   - label: Copy to deploy bucket
     command: web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor
   - wait: ~
+  - label: Update checkpoint
+    command: production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"
   - trigger: web-deploy
     build:
       env:
@@ -158,6 +164,7 @@ subgraph cluster_3 {
 
 subgraph cluster_4 {
   graph [ color = \\"black\\" ];
+  \\"Update checkpoint\\" [ color = \\"grey\\" ];
   \\"Deploy to tech\\" [ color = \\"grey\\" ];
   \\"Deploy to usertesting\\" [ color = \\"grey\\" ];
 }
@@ -167,6 +174,7 @@ subgraph cluster_4 {
   \\":saucelabs: Integration tests\\";
   \\"Visreg baseline update\\";
   \\"Copy to deploy bucket\\";
+  \\"Update checkpoint\\";
   \\"Deploy to tech\\";
   \\"web-deploy\\" [ shape =Msquare ];
   \\"Deploy to usertesting\\";
@@ -174,6 +182,7 @@ subgraph cluster_4 {
   \\"Integration tests\\" -> \\":saucelabs: Integration tests\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
   \\"Integration tests\\" -> \\"Visreg baseline update\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
   \\":saucelabs: Integration tests\\" -> \\"Copy to deploy bucket\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
+  \\"Copy to deploy bucket\\" -> \\"Update checkpoint\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
   \\"Copy to deploy bucket\\" -> \\"Deploy to tech\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
   \\"Deploy to tech\\" -> \\"web-deploy\\" [ label = \\"triggers\\" ];
   \\"Copy to deploy bucket\\" -> \\"Deploy to usertesting\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
