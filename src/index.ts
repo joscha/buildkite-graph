@@ -38,13 +38,13 @@ abstract class Chainable<T> {
 }
 
 class WaitStep implements BaseStep {
+    public readonly wait: null = null;
+
     // TODO: Omit this when not true once
     // https://github.com/typestack/class-transformer/issues/273
     // has been fixed
     @Expose({ name: 'continue_on_failure' })
     public continueOnFailure?: true;
-
-    public readonly wait: null = null;
 
     constructor(continueOnFailure?: true) {
         this.continueOnFailure = continueOnFailure;
@@ -84,7 +84,10 @@ class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
 export class Step extends DefaultStep {
     public parallelism?: number;
 
-    public readonly command?: string | string[];
+    @Transform(value =>
+        value ? (value.length === 1 ? value[0] : value) : undefined,
+    )
+    public readonly command?: string[];
 
     @Transform(transformPlugins)
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
@@ -101,11 +104,11 @@ export class Step extends DefaultStep {
             this.plugins.add(command);
         } else if (typeof command === 'string') {
             ow(command, ow.string.not.empty);
-            this.command = command;
+            this.command = [command];
         } else {
             ow(command, ow.array.minLength(1));
             ow(command, ow.array.ofType(ow.string.not.empty));
-            this.command = command.length === 1 ? command[0] : command;
+            this.command = command;
         }
     }
 
@@ -116,7 +119,12 @@ export class Step extends DefaultStep {
     }
 
     toString() {
-        return this.label;
+        return (
+            this.label ||
+            (this.command
+                ? `<${this.command.join(' && ')}>`
+                : this.plugins.toString())
+        );
     }
 }
 
@@ -197,14 +205,33 @@ export class Entity {
 
     @Expose({ name: 'steps' })
     private get _steps() {
-        const allSteps = stortedWithBlocks(this);
+        const stepsWithBlocks = stortedWithBlocks(this);
 
         // TODO: when step.always = true,
         // then previous step needs a wait step with continueOnFailure: true
         // if step after does not have .always = true a wait step needs to be
         // inserted.
         // See: https://buildkite.com/docs/pipelines/wait-step#continuing-on-failure
-        return [...allSteps.map(s => s || new WaitStep())].filter(Boolean);
+        const steps = [];
+        let lastWait: WaitStep | undefined = undefined;
+        for (const s of stepsWithBlocks) {
+            if (s === null) {
+                lastWait = new WaitStep();
+                steps.push(lastWait);
+            } else {
+                if (lastWait) {
+                    if (s.always && !lastWait.continueOnFailure) {
+                        lastWait.continueOnFailure = true;
+                    } else if (lastWait.continueOnFailure && !s.always) {
+                        lastWait = new WaitStep();
+                        steps.push(lastWait);
+                    }
+                }
+                steps.push(s);
+            }
+        }
+
+        return steps;
     }
 }
 

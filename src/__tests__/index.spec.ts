@@ -1,123 +1,88 @@
-import { Entity, Step, TriggerStep, Plugin } from '../';
+import { Entity, Step } from '../';
+import { DotSerializer } from '../serializers/dot';
 import { JsonSerializer } from '../serializers/json';
 import { YamlSerializer } from '../serializers/yaml';
-import { DotSerializer } from '../serializers/dot';
+import { createSimple, createComplex } from './helpers';
+
+const jsonSerializer = new JsonSerializer();
+const yamlSerializer = new YamlSerializer();
+const dotSerializer = new DotSerializer();
+
+function createTest(name: string, gen: () => Entity) {
+    describe('JSON', () => {
+        it(name, () => {
+            expect(jsonSerializer.serialize(gen())).toMatchSnapshot();
+        });
+    });
+    describe('YAML', () => {
+        it(name, () => {
+            expect(yamlSerializer.serialize(gen())).toMatchSnapshot();
+        });
+    });
+    describe('dot', () => {
+        it(name, () => {
+            expect(dotSerializer.serialize(gen())).toMatchSnapshot();
+        });
+    });
+}
 
 describe('buildkite-graph', () => {
-    function createSimple() {
-        return new Entity('web-deploy').env
-            .set('USE_COLOR', 1)
-            .env.set('DEBUG', true)
-            .add(new Step('buildkite/deploy_web.sh', 'Deploy'));
-    }
+    describe('general serialization', () => {
+        createTest('simple', createSimple);
+        createTest('complex', createComplex);
+    });
 
-    function createComplex() {
-        const webDeploy = createSimple();
-        const buildEditorStep = new Step(
-            'web/bin/buildkite/run_web_step.sh build editor',
-            'Build Editor',
+    describe('continue on failure', () => {
+        createTest(
+            'multiple subsequent always-executed subsequent steps do not get an additional wait step',
+            () => {
+                const command = new Step('command.sh');
+                const always = new Step(
+                    'echo This runs regardless of the success or failure',
+                )
+                    .alwaysExecute()
+                    .dependsOn(command);
+                const always2 = new Step(
+                    'echo This runs regardless of the success or failure 2',
+                )
+                    .alwaysExecute()
+                    .dependsOn(command);
+                const always3 = new Step(
+                    'echo This runs regardless of the success or failure 3',
+                )
+                    .alwaysExecute()
+                    .dependsOn(command);
+
+                return new Entity('test')
+                    .add(command)
+                    .add(always)
+                    .add(always2)
+                    .add(always3);
+            },
         );
-        const testEditorStep = new Step(
-            'web/bin/buildkite/run_web_step.sh test editor',
-            'Test Editor',
+
+        createTest(
+            'subsequent depending steps that are not always executed get an additional wait step',
+            () => {
+                const command = new Step('command.sh');
+                const always = new Step(
+                    'echo This runs regardless of the success or failure',
+                )
+                    .alwaysExecute()
+                    .dependsOn(command);
+                const passed = new Step('echo The command passed').dependsOn(
+                    command,
+                );
+
+                return new Entity('test')
+                    .add(command)
+                    .add(always)
+                    .add(passed);
+            },
         );
+    });
 
-        const annotateFailuresStep = new Step(
-            new Plugin('bugcrowd/test-summary#v1.5.0', {
-                inputs: [
-                    {
-                        label: ':htmllint: HTML lint',
-                        artifact_path: 'web/target/htmllint-*.txt',
-                        type: 'oneline',
-                    },
-                ],
-            }),
-
-            'Annotate failures',
-        ).plugins
-            .add(new Plugin('detect-clowns#v1.0.0'))
-            .alwaysExecute()
-            .dependsOn(testEditorStep);
-
-        const deployCoverageReportStep = new Step(
-            'web/bin/buildkite/run_web_step.sh deploy-report coverage editor',
-            'Upload coverage',
-        ).dependsOn(testEditorStep);
-
-        const integrationTestStep = new Step(
-            'web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome',
-            'Integration tests',
-        )
-            .withParallelism(8)
-            .dependsOn(buildEditorStep);
-
-        const saucelabsIntegrationTestStep = new Step(
-            'web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari',
-            ':saucelabs: Integration tests',
-        )
-            .withParallelism(8)
-            // .add(new Plugin('sauce-connect-plugin'))
-            //.deferred()
-            .dependsOn(integrationTestStep);
-
-        const visregBaselineUpdateStep = new Step(
-            'web/bin/buildkite/run_web_step.sh run-visual-regression editor',
-            'Visreg baseline update',
-        ).dependsOn(integrationTestStep);
-
-        /*
-  const annotateCucumberFailuresStep = new AlwaysExecutedStep('web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases')
-      .dependsOn(integrationTestStep)
-      .dependsOn(saucelabsIntegrationTestStep);
-  */
-        const copyToDeployBucketStep = new Step(
-            'web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor',
-            'Copy to deploy bucket',
-        ).dependsOn(saucelabsIntegrationTestStep);
-
-        const updateCheckpointStep = new Step(
-            'production/test/jobs/advance_branch.sh "checkpoint/web/green/editor"',
-            'Update checkpoint',
-        ).dependsOn(copyToDeployBucketStep);
-
-        const deployEditorToTechStep = new TriggerStep(
-            webDeploy,
-            'Deploy to tech',
-        ).build.env
-            .set('FLAVOR', 'tech')
-            .build.env.set('RELEASE_PATH', 'some/path/')
-            .dependsOn(copyToDeployBucketStep);
-
-        const deployEditorToUserTestingStep = new TriggerStep(
-            webDeploy,
-            'Deploy to usertesting',
-        ).build.env
-            .set('FLAVOR', 'usertesting')
-            .build.env.set('RELEASE_PATH', 'some/path/')
-            .dependsOn(copyToDeployBucketStep);
-
-        /*
-  const releaseStep = new ManualStep('Release editor', options)
-      .dependsOn(updateCheckpointStep)
-  */
-
-        const webBuildEditor = new Entity('web-build-editor')
-            .add(buildEditorStep)
-            .add(testEditorStep)
-            .add(annotateFailuresStep)
-            .add(deployCoverageReportStep)
-            .add(integrationTestStep)
-            .add(saucelabsIntegrationTestStep)
-            .add(visregBaselineUpdateStep)
-            // .add(annotateCucumberFailuresStep)
-            .add(copyToDeployBucketStep)
-            .add(updateCheckpointStep)
-            .add(deployEditorToTechStep)
-            .add(deployEditorToUserTestingStep);
-        // .add(releaseStep)
-        return webBuildEditor;
-    }
-
+    /*
     describe('can produce JSON', () => {
         const serializer = new JsonSerializer();
         it('for simple pipelines', () => {
@@ -129,6 +94,45 @@ describe('buildkite-graph', () => {
         it('for complex pipelines', () => {
             const webBuildEditor = createComplex();
             expect(serializer.serialize(webBuildEditor)).toMatchSnapshot();
+        });
+
+        describe('continue on failure', () => {
+            it('multiple subsequent always-executed subsequent steps do not get an additional wait step', () => {
+                const command = new Step('command.sh');
+                const always = new Step('echo This runs regardless of the success or failure')
+                .alwaysExecute()
+                .dependsOn(command);
+                const always2 = new Step('echo This runs regardless of the success or failure 2')
+                .alwaysExecute()
+                .dependsOn(command);
+                const always3 = new Step('echo This runs regardless of the success or failure 3')
+                .alwaysExecute()
+                .dependsOn(command);
+
+                const pipeline = new Entity('test')
+                    .add(command)
+                    .add(always)
+                    .add(always2)
+                    .add(always3);
+
+                    expect(serializer.serialize(pipeline)).toMatchSnapshot();
+            });
+
+            it('subsequent depending steps that are not always executed get an additional wait step', () => {
+                const command = new Step('command.sh');
+                const always = new Step('echo This runs regardless of the success or failure')
+                .alwaysExecute()
+                .dependsOn(command);
+                const passed = new Step('echo The command passed')
+                .dependsOn(command);
+
+                const pipeline = new Entity('test')
+                    .add(command)
+                    .add(always)
+                    .add(passed);
+
+                    expect(serializer.serialize(pipeline)).toMatchSnapshot();
+            });
         });
     });
 
@@ -152,4 +156,5 @@ describe('buildkite-graph', () => {
             expect(serializer.serialize(webBuildEditor)).toMatchSnapshot();
         });
     });
+    */
 });

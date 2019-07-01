@@ -1,6 +1,149 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildkite-graph can produce JSON for complex pipelines 1`] = `
+exports[`buildkite-graph continue on failure JSON multiple subsequent always-executed subsequent steps do not get an additional wait step 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "command": "command.sh",
+      "label": undefined,
+      "plugins": undefined,
+    },
+    Object {
+      "continue_on_failure": true,
+      "wait": null,
+    },
+    Object {
+      "command": "echo This runs regardless of the success or failure",
+      "label": undefined,
+      "plugins": undefined,
+    },
+    Object {
+      "command": "echo This runs regardless of the success or failure 2",
+      "label": undefined,
+      "plugins": undefined,
+    },
+    Object {
+      "command": "echo This runs regardless of the success or failure 3",
+      "label": undefined,
+      "plugins": undefined,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph continue on failure JSON subsequent depending steps that are not always executed get an additional wait step 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "command": "command.sh",
+      "label": undefined,
+      "plugins": undefined,
+    },
+    Object {
+      "continue_on_failure": true,
+      "wait": null,
+    },
+    Object {
+      "command": "echo This runs regardless of the success or failure",
+      "label": undefined,
+      "plugins": undefined,
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
+    },
+    Object {
+      "command": "echo The command passed",
+      "label": undefined,
+      "plugins": undefined,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph continue on failure YAML multiple subsequent always-executed subsequent steps do not get an additional wait step 1`] = `
+"
+steps:
+  -
+    command: command.sh
+  - wait: ~
+    continue_on_failure: true
+  -
+    command: echo This runs regardless of the success or failure
+  -
+    command: echo This runs regardless of the success or failure 2
+  -
+    command: echo This runs regardless of the success or failure 3
+"
+`;
+
+exports[`buildkite-graph continue on failure YAML subsequent depending steps that are not always executed get an additional wait step 1`] = `
+"
+steps:
+  -
+    command: command.sh
+  - wait: ~
+    continue_on_failure: true
+  -
+    command: echo This runs regardless of the success or failure
+  - wait: ~
+  -
+    command: echo The command passed
+"
+`;
+
+exports[`buildkite-graph continue on failure dot multiple subsequent always-executed subsequent steps do not get an additional wait step 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<command.sh>\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_1 {
+  graph [ color = \\"black\\" ];
+  \\"<echo This runs regardless of the success or failure>\\" [ color = \\"grey\\" ];
+  \\"<echo This runs regardless of the success or failure 2>\\" [ color = \\"grey\\" ];
+  \\"<echo This runs regardless of the success or failure 3>\\" [ color = \\"grey\\" ];
+}
+
+  \\"<command.sh>\\";
+  \\"<echo This runs regardless of the success or failure>\\";
+  \\"<echo This runs regardless of the success or failure 2>\\";
+  \\"<echo This runs regardless of the success or failure 3>\\";
+  \\"<command.sh>\\" -> \\"<echo This runs regardless of the success or failure>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"<command.sh>\\" -> \\"<echo This runs regardless of the success or failure 2>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"<command.sh>\\" -> \\"<echo This runs regardless of the success or failure 3>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph continue on failure dot subsequent depending steps that are not always executed get an additional wait step 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<command.sh>\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_1 {
+  graph [ color = \\"black\\" ];
+  \\"<echo This runs regardless of the success or failure>\\" [ color = \\"grey\\" ];
+  \\"<echo The command passed>\\" [ color = \\"grey\\" ];
+}
+
+  \\"<command.sh>\\";
+  \\"<echo This runs regardless of the success or failure>\\";
+  \\"<echo The command passed>\\";
+  \\"<command.sh>\\" -> \\"<echo This runs regardless of the success or failure>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"<command.sh>\\" -> \\"<echo The command passed>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph general serialization JSON complex 1`] = `
 Object {
   "env": undefined,
   "steps": Array [
@@ -15,7 +158,7 @@ Object {
       "plugins": undefined,
     },
     Object {
-      "continue_on_failure": undefined,
+      "continue_on_failure": true,
       "wait": null,
     },
     Object {
@@ -41,6 +184,10 @@ Object {
       "command": "web/bin/buildkite/run_web_step.sh deploy-report coverage editor",
       "label": "Upload coverage",
       "plugins": undefined,
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
     },
     Object {
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
@@ -103,7 +250,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph can produce JSON for simple pipelines 1`] = `
+exports[`buildkite-graph general serialization JSON simple 1`] = `
 Object {
   "env": Object {
     "DEBUG": true,
@@ -119,7 +266,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph can produce YAML for complex pipelines 1`] = `
+exports[`buildkite-graph general serialization YAML complex 1`] = `
 "
 steps:
   - label: Build Editor
@@ -127,6 +274,7 @@ steps:
   - label: Test Editor
     command: web/bin/buildkite/run_web_step.sh test editor
   - wait: ~
+    continue_on_failure: true
   - label: Annotate failures
     plugins:
       - 'bugcrowd/test-summary#v1.5.0':
@@ -137,6 +285,7 @@ steps:
       - 'detect-clowns#v1.0.0': ~
   - label: Upload coverage
     command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
+  - wait: ~
   - label: Integration tests
     command: >-
       web/bin/buildkite/run_web_step.sh run-integration-tests local editor
@@ -169,7 +318,7 @@ steps:
 "
 `;
 
-exports[`buildkite-graph can produce YAML for simple pipelines 1`] = `
+exports[`buildkite-graph general serialization YAML simple 1`] = `
 "env:
   USE_COLOR: 1
   DEBUG: true
@@ -179,7 +328,7 @@ steps:
 "
 `;
 
-exports[`buildkite-graph can produce dot for complex pipelines 1`] = `
+exports[`buildkite-graph general serialization dot complex 1`] = `
 "digraph \\"web-build-editor\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -236,6 +385,18 @@ subgraph cluster_4 {
   \\"Deploy to tech\\" -> \\"web-deploy\\" [ label = \\"triggers\\" ];
   \\"Copy to deploy bucket\\" -> \\"Deploy to usertesting\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
   \\"Deploy to usertesting\\" -> \\"web-deploy\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph general serialization dot simple 1`] = `
+"digraph \\"web-deploy\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"Deploy\\" [ color = \\"grey\\" ];
+}
+
 }
 "
 `;
