@@ -82,12 +82,12 @@ class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
 }
 
 export class Step extends DefaultStep {
-    public parallelism?: number;
-
     @Transform(value =>
         value ? (value.length === 1 ? value[0] : value) : undefined,
     )
     public readonly command?: string[];
+
+    public parallelism?: number;
 
     @Transform(transformPlugins)
     public readonly plugins: Plugins<this> = new PluginsImpl(this);

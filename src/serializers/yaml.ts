@@ -5,7 +5,10 @@ import { JsonSerializer } from './json';
 
 export class YamlSerializer implements Serializer<string> {
     serialize(e: Entity) {
-        return jsyaml.safeDump(new JsonSerializer().serialize(e), {
+        let json = new JsonSerializer().serialize(e);
+        // get rid of undefined values
+        json = JSON.parse(JSON.stringify(json));
+        return jsyaml.safeDump(json, {
             skipInvalid: true,
             styles: {
                 '!!null': 'canonical', // dump null as ~

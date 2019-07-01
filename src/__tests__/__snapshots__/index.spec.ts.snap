@@ -64,33 +64,24 @@ Object {
 `;
 
 exports[`buildkite-graph continue on failure YAML multiple subsequent always-executed subsequent steps do not get an additional wait step 1`] = `
-"
-steps:
-  -
-    command: command.sh
+"steps:
+  - command: command.sh
   - wait: ~
     continue_on_failure: true
-  -
-    command: echo This runs regardless of the success or failure
-  -
-    command: echo This runs regardless of the success or failure 2
-  -
-    command: echo This runs regardless of the success or failure 3
+  - command: echo This runs regardless of the success or failure
+  - command: echo This runs regardless of the success or failure 2
+  - command: echo This runs regardless of the success or failure 3
 "
 `;
 
 exports[`buildkite-graph continue on failure YAML subsequent depending steps that are not always executed get an additional wait step 1`] = `
-"
-steps:
-  -
-    command: command.sh
+"steps:
+  - command: command.sh
   - wait: ~
     continue_on_failure: true
-  -
-    command: echo This runs regardless of the success or failure
+  - command: echo This runs regardless of the success or failure
   - wait: ~
-  -
-    command: echo The command passed
+  - command: echo The command passed
 "
 `;
 
@@ -267,8 +258,7 @@ Object {
 `;
 
 exports[`buildkite-graph general serialization YAML complex 1`] = `
-"
-steps:
+"steps:
   - label: Build Editor
     command: web/bin/buildkite/run_web_step.sh build editor
   - label: Test Editor
