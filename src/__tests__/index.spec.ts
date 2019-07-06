@@ -1,4 +1,4 @@
-import { Entity, Step } from '../';
+import { Command, Entity, Step } from '../';
 import { DotSerializer } from '../serializers/dot';
 import { JsonSerializer } from '../serializers/json';
 import { YamlSerializer } from '../serializers/yaml';
@@ -80,5 +80,27 @@ describe('buildkite-graph', () => {
                     .add(passed);
             },
         );
+    });
+
+    describe('timeouts', () => {
+        createTest('commands with timeouts set step timeout total', () => {
+            const command1 = new Command('yarn install', 10);
+            const command2 = new Command('yarn test', 10);
+            return new Entity('test').add(new Step([command1, command2]));
+        });
+
+        createTest('step timeout total trumps commands', () => {
+            const command1 = new Command('yarn install', 10);
+            const command2 = new Command('yarn test', 10);
+            return new Entity('test').add(
+                new Step([command1, command2]).withTimeout(2),
+            );
+        });
+
+        createTest('one infinite timeout will cancel out the others', () => {
+            const command1 = new Command('yarn install', 10);
+            const command2 = new Command('yarn test');
+            return new Entity('test').add(new Step([command1, command2]));
+        });
     });
 });

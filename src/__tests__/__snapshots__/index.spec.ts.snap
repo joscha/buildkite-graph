@@ -8,6 +8,7 @@ Object {
       "command": "command.sh",
       "label": undefined,
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "continue_on_failure": true,
@@ -17,16 +18,19 @@ Object {
       "command": "echo This runs regardless of the success or failure",
       "label": undefined,
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "command": "echo This runs regardless of the success or failure 2",
       "label": undefined,
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "command": "echo This runs regardless of the success or failure 3",
       "label": undefined,
       "plugins": undefined,
+      "timeout": undefined,
     },
   ],
 }
@@ -40,6 +44,7 @@ Object {
       "command": "command.sh",
       "label": undefined,
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "continue_on_failure": true,
@@ -49,6 +54,7 @@ Object {
       "command": "echo This runs regardless of the success or failure",
       "label": undefined,
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "continue_on_failure": undefined,
@@ -58,6 +64,7 @@ Object {
       "command": "echo The command passed",
       "label": undefined,
       "plugins": undefined,
+      "timeout": undefined,
     },
   ],
 }
@@ -142,11 +149,13 @@ Object {
       "command": "web/bin/buildkite/run_web_step.sh build editor",
       "label": "Build Editor",
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "command": "web/bin/buildkite/run_web_step.sh test editor",
       "label": "Test Editor",
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "continue_on_failure": true,
@@ -170,11 +179,13 @@ Object {
           "detect-clowns#v1.0.0": null,
         },
       ],
+      "timeout": undefined,
     },
     Object {
       "command": "web/bin/buildkite/run_web_step.sh deploy-report coverage editor",
       "label": "Upload coverage",
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "continue_on_failure": undefined,
@@ -185,6 +196,7 @@ Object {
       "label": "Integration tests",
       "parallelism": 8,
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "continue_on_failure": undefined,
@@ -195,11 +207,13 @@ Object {
       "label": ":saucelabs: Integration tests",
       "parallelism": 8,
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
       "label": "Visreg baseline update",
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "continue_on_failure": undefined,
@@ -209,6 +223,7 @@ Object {
       "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
       "label": "Copy to deploy bucket",
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "continue_on_failure": undefined,
@@ -218,6 +233,7 @@ Object {
       "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
       "label": "Update checkpoint",
       "plugins": undefined,
+      "timeout": undefined,
     },
     Object {
       "build": Object {
@@ -252,6 +268,7 @@ Object {
       "command": "buildkite/deploy_web.sh",
       "label": "Deploy",
       "plugins": undefined,
+      "timeout": undefined,
     },
   ],
 }
@@ -385,6 +402,119 @@ exports[`buildkite-graph general serialization dot simple 1`] = `
 subgraph cluster_0 {
   graph [ color = \\"black\\" ];
   \\"Deploy\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph timeouts JSON commands with timeouts set step timeout total 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn install",
+        "yarn test",
+      ],
+      "label": undefined,
+      "plugins": undefined,
+      "timeout": 20,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph timeouts JSON one infinite timeout will cancel out the others 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn install",
+        "yarn test",
+      ],
+      "label": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph timeouts JSON step timeout total trumps commands 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn install",
+        "yarn test",
+      ],
+      "label": undefined,
+      "plugins": undefined,
+      "timeout": 2,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph timeouts YAML commands with timeouts set step timeout total 1`] = `
+"steps:
+  - command:
+      - yarn install
+      - yarn test
+    timeout: 20
+"
+`;
+
+exports[`buildkite-graph timeouts YAML one infinite timeout will cancel out the others 1`] = `
+"steps:
+  - command:
+      - yarn install
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph timeouts YAML step timeout total trumps commands 1`] = `
+"steps:
+  - command:
+      - yarn install
+      - yarn test
+    timeout: 2
+"
+`;
+
+exports[`buildkite-graph timeouts dot commands with timeouts set step timeout total 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph timeouts dot one infinite timeout will cancel out the others 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph timeouts dot step timeout total trumps commands 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
 }
 
 }

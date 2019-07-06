@@ -81,35 +81,102 @@ class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
     }
 }
 
+function assertTimeout(timeout: number) {
+    ow(timeout, ow.number.integerOrInfinite);
+    ow(timeout, ow.number.positive);
+}
+
+export class Command {
+    constructor(public command: string, public timeout: number = Infinity) {
+        ow(command, ow.string.not.empty);
+        assertTimeout(timeout);
+    }
+
+    toString() {
+        return this.command;
+    }
+}
+
 export class Step extends DefaultStep {
-    @Transform(value =>
-        value ? (value.length === 1 ? value[0] : value) : undefined,
+    @Transform((value: Command[]) =>
+        value
+            ? value.length === 1
+                ? value[0].command
+                : value.map(c => c.command)
+            : undefined,
     )
-    public readonly command?: string[];
+    public readonly command?: Command[];
 
     public parallelism?: number;
+
+    @Expose({ name: 'timeout' })
+    get timeout() {
+        if (this._timeout === Infinity || this._timeout === 0) {
+            return undefined;
+        } else if (this._timeout) {
+            return this._timeout;
+        }
+        if (this.command) {
+            const value = this.command.reduce((acc, command) => {
+                acc += command.timeout;
+                return acc;
+            }, 0);
+            if (value === Infinity || value === 0) {
+                return undefined;
+            } else if (value) {
+                return value;
+            }
+        }
+    }
+
+    @Exclude()
+    private _timeout?: number;
 
     @Transform(transformPlugins)
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
 
     constructor(plugin: Plugin, label?: string);
     constructor(command: string, label?: string);
-    constructor(commands: string[], label?: string);
+    constructor(command: Command, label?: string);
+    constructor(commands: (string | Plugin | Command)[], label?: string);
     constructor(
-        command: string | string[] | Plugin,
+        command: string | Plugin | Command | (string | Plugin | Command)[],
         public readonly label?: string,
     ) {
         super();
         if (command instanceof Plugin) {
             this.plugins.add(command);
         } else if (typeof command === 'string') {
-            ow(command, ow.string.not.empty);
+            this.command = [new Command(command)];
+        } else if (command instanceof Command) {
             this.command = [command];
         } else {
             ow(command, ow.array.minLength(1));
-            ow(command, ow.array.ofType(ow.string.not.empty));
-            this.command = command;
+            const commands: Command[] = [];
+
+            for (const c of command) {
+                if (c instanceof Plugin) {
+                    this.plugins.add(c);
+                } else if (typeof c === 'string') {
+                    commands.push(new Command(c));
+                } else if (c instanceof Command) {
+                    commands.push(c);
+                }
+            }
+            if (commands.length) {
+                this.command = commands;
+            }
         }
+    }
+
+    /**
+     *
+     * @param timeout for the step in seconds.
+     */
+    withTimeout(timeout: number = Infinity): this {
+        assertTimeout(timeout);
+        this._timeout = timeout;
+        return this;
     }
 
     withParallelism(parallelism: number): this {
