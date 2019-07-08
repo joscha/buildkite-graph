@@ -54,8 +54,7 @@ export function createComplex() {
         ':saucelabs: Integration tests',
     )
         .withParallelism(8)
-        // .add(new Plugin('sauce-connect-plugin'))
-        //.deferred()
+        .add(new Plugin('sauce-connect-plugin'))
         .dependsOn(integrationTestStep);
 
     const visregBaselineUpdateStep = new Step(

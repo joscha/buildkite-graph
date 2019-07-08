@@ -5,6 +5,7 @@ import ow from 'ow';
 import 'reflect-metadata';
 
 import { Expose, Exclude, Transform } from 'class-transformer';
+import slug from 'slug';
 
 type Primitive = number | string | boolean;
 
@@ -98,14 +99,15 @@ export class Command {
 }
 
 export class Step extends DefaultStep {
-    @Transform((value: Command[]) =>
-        value
-            ? value.length === 1
-                ? value[0].command
-                : value.map(c => c.command)
-            : undefined,
-    )
-    public readonly command?: Command[];
+    @Transform((value: Command[]) => {
+        if (!value || value.length === 0) {
+            return undefined;
+        }
+        return value.length === 1
+            ? value[0].command
+            : value.map(c => c.command);
+    })
+    public readonly command: Command[] = [];
 
     public parallelism?: number;
 
@@ -144,29 +146,25 @@ export class Step extends DefaultStep {
         public readonly label?: string,
     ) {
         super();
-        if (command instanceof Plugin) {
-            this.plugins.add(command);
-        } else if (typeof command === 'string') {
-            this.command = [new Command(command)];
-        } else if (command instanceof Command) {
-            this.command = [command];
-        } else {
+        if (Array.isArray(command)) {
             ow(command, ow.array.minLength(1));
-            const commands: Command[] = [];
-
             for (const c of command) {
-                if (c instanceof Plugin) {
-                    this.plugins.add(c);
-                } else if (typeof c === 'string') {
-                    commands.push(new Command(c));
-                } else if (c instanceof Command) {
-                    commands.push(c);
-                }
+                this.add(c);
             }
-            if (commands.length) {
-                this.command = commands;
-            }
+        } else {
+            this.add(command);
         }
+    }
+
+    add(c: string | Plugin | Command) {
+        if (c instanceof Plugin) {
+            this.plugins.add(c);
+        } else if (typeof c === 'string') {
+            this.command.push(new Command(c));
+        } else if (c instanceof Command) {
+            this.command.push(c);
+        }
+        return this;
     }
 
     /**
@@ -208,7 +206,7 @@ export class TriggerStep extends DefaultStep {
 
     @Expose()
     get trigger() {
-        return this.triggeredEntity.name;
+        return slug(this.triggeredEntity.name, { lower: true });
     }
 
     @Expose({ name: 'build' })

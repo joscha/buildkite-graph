@@ -162,6 +162,7 @@ Object {
       "wait": null,
     },
     Object {
+      "command": undefined,
       "label": "Annotate failures",
       "plugins": Array [
         Object {
@@ -206,7 +207,11 @@ Object {
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
       "label": ":saucelabs: Integration tests",
       "parallelism": 8,
-      "plugins": undefined,
+      "plugins": Array [
+        Object {
+          "sauce-connect-plugin": null,
+        },
+      ],
       "timeout": undefined,
     },
     Object {
@@ -303,6 +308,8 @@ exports[`buildkite-graph general serialization YAML complex 1`] = `
     command: >-
       web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
       safari
+    plugins:
+      - sauce-connect-plugin: ~
     parallelism: 8
   - label: Visreg baseline update
     command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
