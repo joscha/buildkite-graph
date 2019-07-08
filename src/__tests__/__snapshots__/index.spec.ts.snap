@@ -221,6 +221,16 @@ Object {
       "timeout": undefined,
     },
     Object {
+      "continue_on_failure": true,
+      "wait": null,
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases",
+      "label": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
       "continue_on_failure": undefined,
       "wait": null,
     },
@@ -314,6 +324,9 @@ exports[`buildkite-graph general serialization YAML complex 1`] = `
   - label: Visreg baseline update
     command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
   - wait: ~
+    continue_on_failure: true
+  - command: web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases
+  - wait: ~
   - label: Copy to deploy bucket
     command: web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor
   - wait: ~
@@ -366,6 +379,7 @@ subgraph cluster_2 {
 
 subgraph cluster_3 {
   graph [ color = \\"black\\" ];
+  \\"<web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases>\\" [ color = \\"grey\\" ];
   \\"Copy to deploy bucket\\" [ color = \\"grey\\" ];
 }
 
@@ -383,6 +397,7 @@ subgraph cluster_4 {
   \\"Integration tests\\";
   \\":saucelabs: Integration tests\\";
   \\"Visreg baseline update\\";
+  \\"<web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases>\\";
   \\"Copy to deploy bucket\\";
   \\"Update checkpoint\\";
   \\"Deploy to tech\\";
@@ -393,6 +408,8 @@ subgraph cluster_4 {
   \\"Build Editor\\" -> \\"Integration tests\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
   \\"Integration tests\\" -> \\":saucelabs: Integration tests\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
   \\"Integration tests\\" -> \\"Visreg baseline update\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
+  \\"Integration tests\\" -> \\"<web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases>\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
+  \\":saucelabs: Integration tests\\" -> \\"<web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases>\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
   \\":saucelabs: Integration tests\\" -> \\"Copy to deploy bucket\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
   \\"Copy to deploy bucket\\" -> \\"Update checkpoint\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
   \\"Copy to deploy bucket\\" -> \\"Deploy to tech\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];

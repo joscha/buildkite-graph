@@ -62,11 +62,13 @@ export function createComplex() {
         'Visreg baseline update',
     ).dependsOn(integrationTestStep);
 
-    /*
-const annotateCucumberFailuresStep = new AlwaysExecutedStep('web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases')
-  .dependsOn(integrationTestStep)
-  .dependsOn(saucelabsIntegrationTestStep);
-*/
+    const annotateCucumberFailuresStep = new Step(
+        'web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases',
+    )
+        .alwaysExecute()
+        .dependsOn(integrationTestStep)
+        .dependsOn(saucelabsIntegrationTestStep);
+
     const copyToDeployBucketStep = new Step(
         'web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor',
         'Copy to deploy bucket',
@@ -106,7 +108,7 @@ const releaseStep = new ManualStep('Release editor', options)
         .add(integrationTestStep)
         .add(saucelabsIntegrationTestStep)
         .add(visregBaselineUpdateStep)
-        // .add(annotateCucumberFailuresStep)
+        .add(annotateCucumberFailuresStep)
         .add(copyToDeployBucketStep)
         .add(updateCheckpointStep)
         .add(deployEditorToTechStep)
