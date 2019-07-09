@@ -2,8 +2,8 @@ import { Entity, Step, TriggerStep, Plugin } from '../';
 
 export function createSimple() {
     return new Entity('web-deploy').env
-        .set('USE_COLOR', 1)
-        .env.set('DEBUG', true)
+        .set('USE_COLOR', '1')
+        .env.set('DEBUG', 'true')
         .add(new Step('buildkite/deploy_web.sh', 'Deploy'));
 }
 
