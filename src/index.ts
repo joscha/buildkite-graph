@@ -157,6 +157,12 @@ export class Step extends DefaultStep {
         }
     }
 
+    @Expose({ name: 'branches' })
+    @Transform((branches: Set<string>) =>
+        branches.size ? [...branches].sort().join(' ') : undefined,
+    )
+    private _branches: Set<string> = new Set();
+
     @Expose({ name: 'plugins' })
     @Transform(transformPlugins)
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
@@ -212,6 +218,12 @@ export class Step extends DefaultStep {
         ow(key, ow.string.nonEmpty);
         ow(value, ow.string.nonEmpty);
         this._agents.set(key, value);
+        return this;
+    }
+
+    withBranch(pattern: string): this {
+        ow(pattern, ow.string.nonEmpty);
+        this._branches.add(pattern);
         return this;
     }
 

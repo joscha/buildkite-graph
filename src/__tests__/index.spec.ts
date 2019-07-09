@@ -114,4 +114,15 @@ describe('buildkite-graph', () => {
             );
         });
     });
+
+    describe('branches', () => {
+        createTest('can be defined', () => {
+            return new Entity('whatever').add(
+                new Step('noop')
+                    .withBranch('master')
+                    .withBranch('stable/*')
+                    .withBranch('!release/*'),
+            );
+        });
+    });
 });
