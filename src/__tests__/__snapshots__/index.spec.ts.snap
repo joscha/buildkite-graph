@@ -14,21 +14,12 @@ subgraph cluster_0 {
 
 exports[`buildkite-graph agents can be defined json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
       "agents": Object {
         "npm": "true",
       },
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "noop",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
   ],
 }
@@ -56,22 +47,13 @@ subgraph cluster_0 {
 
 exports[`buildkite-graph artifact_paths can be defined json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
       "artifact_paths": Array [
         "logs/**/*",
         "coverage/**/*",
       ],
-      "branches": undefined,
       "command": "noop",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
   ],
 }
@@ -100,19 +82,10 @@ subgraph cluster_0 {
 
 exports[`buildkite-graph branches can be defined json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
       "branches": "!release/* master stable/*",
       "command": "noop",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
   ],
 }
@@ -139,19 +112,11 @@ subgraph cluster_0 {
 
 exports[`buildkite-graph concurrency can be defined json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "noop",
       "concurrency": 3,
       "concurrency_group": "my-app/deploy",
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
   ],
 }
@@ -193,59 +158,22 @@ subgraph cluster_1 {
 
 exports[`buildkite-graph continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "command.sh",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
       "continue_on_failure": true,
       "wait": null,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "echo This runs regardless of the success or failure",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "echo This runs regardless of the success or failure 2",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "echo This runs regardless of the success or failure 3",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
   ],
 }
@@ -287,51 +215,22 @@ subgraph cluster_1 {
 
 exports[`buildkite-graph continue on failure subsequent depending steps that are not always executed get an additional wait step json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "command.sh",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
       "continue_on_failure": true,
       "wait": null,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "echo This runs regardless of the success or failure",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
-      "continue_on_failure": undefined,
       "wait": null,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "echo The command passed",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
   ],
 }
@@ -415,45 +314,21 @@ subgraph cluster_4 {
 
 exports[`buildkite-graph general serialization complex json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh build editor",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": "Build Editor",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh test editor",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": "Test Editor",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
       "continue_on_failure": true,
       "wait": null,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
-      "command": undefined,
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": "Annotate failures",
-      "parallelism": undefined,
       "plugins": Array [
         Object {
           "bugcrowd/test-summary#v1.5.0": Object {
@@ -470,47 +345,24 @@ Object {
           "detect-clowns#v1.0.0": null,
         },
       ],
-      "timeout": undefined,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh deploy-report coverage editor",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": "Upload coverage",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
-      "continue_on_failure": undefined,
       "wait": null,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": "Integration tests",
       "parallelism": 8,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
-      "continue_on_failure": undefined,
       "wait": null,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": ":saucelabs: Integration tests",
       "parallelism": 8,
       "plugins": Array [
@@ -518,67 +370,31 @@ Object {
           "sauce-connect-plugin": null,
         },
       ],
-      "timeout": undefined,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": "Visreg baseline update",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
       "continue_on_failure": true,
       "wait": null,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
-      "continue_on_failure": undefined,
       "wait": null,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": "Copy to deploy bucket",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
-      "continue_on_failure": undefined,
       "wait": null,
     },
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": "Update checkpoint",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
     Object {
       "build": Object {
@@ -678,16 +494,8 @@ Object {
   },
   "steps": Array [
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": "buildkite/deploy_web.sh",
-      "concurrency": undefined,
-      "concurrency_group": undefined,
       "label": "Deploy",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
   ],
 }
@@ -717,21 +525,12 @@ subgraph cluster_0 {
 
 exports[`buildkite-graph timeouts commands with timeouts set step timeout total json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": Array [
         "yarn install",
         "yarn test",
       ],
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
       "timeout": 20,
     },
   ],
@@ -761,22 +560,12 @@ subgraph cluster_0 {
 
 exports[`buildkite-graph timeouts one infinite timeout will cancel out the others json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": Array [
         "yarn install",
         "yarn test",
       ],
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
     },
   ],
 }
@@ -804,21 +593,12 @@ subgraph cluster_0 {
 
 exports[`buildkite-graph timeouts step timeout total trumps commands json 1`] = `
 Object {
-  "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
-      "artifact_paths": undefined,
-      "branches": undefined,
       "command": Array [
         "yarn install",
         "yarn test",
       ],
-      "concurrency": undefined,
-      "concurrency_group": undefined,
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
       "timeout": 2,
     },
   ],
