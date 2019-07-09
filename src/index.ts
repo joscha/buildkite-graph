@@ -376,9 +376,13 @@ function sortedSteps(e: Entity) {
     for (const step of e.steps) {
         for (const dependency of step.dependencies) {
             if (e.steps.indexOf(dependency) === -1) {
-                //throw new Error(`Step not part of the graph: '${dependency}'`);
+                // a dependency has not been added to the graph explicitly,
+                // so we add it implicitly
                 sortOp.addNode(dependency, dependency);
                 e.steps.push(dependency);
+                // maybe we want to rather throw here?
+                // Unsure...there could be a strict mode where we:
+                // throw new Error(`Step not part of the graph: '${dependency}'`);
             }
             sortOp.addEdge(dependency, step);
         }
