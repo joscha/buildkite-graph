@@ -1,27 +1,20 @@
 import { Command, Entity, Step } from '../';
+import { Serializer } from '../serializer';
 import { DotSerializer } from '../serializers/dot';
 import { JsonSerializer } from '../serializers/json';
 import { YamlSerializer } from '../serializers/yaml';
 import { createSimple, createComplex } from './helpers';
 
-const jsonSerializer = new JsonSerializer();
-const yamlSerializer = new YamlSerializer();
-const dotSerializer = new DotSerializer();
+const serializers: Record<string, Serializer<any>> = {
+    json: new JsonSerializer(),
+    yaml: new YamlSerializer(),
+    dot: new DotSerializer(),
+};
 
 function createTest(name: string, gen: () => Entity) {
-    describe('JSON', () => {
-        it(name, () => {
-            expect(jsonSerializer.serialize(gen())).toMatchSnapshot();
-        });
-    });
-    describe('YAML', () => {
-        it(name, () => {
-            expect(yamlSerializer.serialize(gen())).toMatchSnapshot();
-        });
-    });
-    describe('dot', () => {
-        it(name, () => {
-            expect(dotSerializer.serialize(gen())).toMatchSnapshot();
+    describe(name, () => {
+        test.each(Object.keys(serializers))('%s', type => {
+            expect(serializers[type].serialize(gen())).toMatchSnapshot();
         });
     });
 }
@@ -108,6 +101,16 @@ describe('buildkite-graph', () => {
         createTest('can be defined', () => {
             return new Entity('whatever').add(
                 new Step('noop').withAgent('npm', 'true'),
+            );
+        });
+    });
+
+    describe('artifact_paths', () => {
+        createTest('can be defined', () => {
+            return new Entity('whatever').add(
+                new Step('noop')
+                    .withArtifactPath('logs/**/*')
+                    .withArtifactPath('coverage/**/*'),
             );
         });
     });

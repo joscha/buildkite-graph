@@ -1,32 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildkite-graph agents JSON can be defined 1`] = `
-Object {
-  "env": undefined,
-  "steps": Array [
-    Object {
-      "agents": Object {
-        "npm": "true",
-      },
-      "command": "noop",
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph agents YAML can be defined 1`] = `
-"steps:
-  - command: noop
-    agents:
-      npm: 'true'
-"
-`;
-
-exports[`buildkite-graph agents dot can be defined 1`] = `
+exports[`buildkite-graph agents can be defined dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -38,41 +12,16 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph continue on failure JSON multiple subsequent always-executed subsequent steps do not get an additional wait step 1`] = `
+exports[`buildkite-graph agents can be defined json 1`] = `
 Object {
   "env": undefined,
   "steps": Array [
     Object {
-      "agents": undefined,
-      "command": "command.sh",
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "continue_on_failure": true,
-      "wait": null,
-    },
-    Object {
-      "agents": undefined,
-      "command": "echo This runs regardless of the success or failure",
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "agents": undefined,
-      "command": "echo This runs regardless of the success or failure 2",
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "agents": undefined,
-      "command": "echo This runs regardless of the success or failure 3",
+      "agents": Object {
+        "npm": "true",
+      },
+      "artifact_paths": undefined,
+      "command": "noop",
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -82,37 +31,37 @@ Object {
 }
 `;
 
-exports[`buildkite-graph continue on failure JSON subsequent depending steps that are not always executed get an additional wait step 1`] = `
+exports[`buildkite-graph agents can be defined yaml 1`] = `
+"steps:
+  - command: noop
+    agents:
+      npm: 'true'
+"
+`;
+
+exports[`buildkite-graph artifact_paths can be defined dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph artifact_paths can be defined json 1`] = `
 Object {
   "env": undefined,
   "steps": Array [
     Object {
       "agents": undefined,
-      "command": "command.sh",
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "continue_on_failure": true,
-      "wait": null,
-    },
-    Object {
-      "agents": undefined,
-      "command": "echo This runs regardless of the success or failure",
-      "label": undefined,
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "continue_on_failure": undefined,
-      "wait": null,
-    },
-    Object {
-      "agents": undefined,
-      "command": "echo The command passed",
+      "artifact_paths": Array [
+        "logs/**/*",
+        "coverage/**/*",
+      ],
+      "command": "noop",
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -122,29 +71,16 @@ Object {
 }
 `;
 
-exports[`buildkite-graph continue on failure YAML multiple subsequent always-executed subsequent steps do not get an additional wait step 1`] = `
+exports[`buildkite-graph artifact_paths can be defined yaml 1`] = `
 "steps:
-  - command: command.sh
-  - wait: ~
-    continue_on_failure: true
-  - command: echo This runs regardless of the success or failure
-  - command: echo This runs regardless of the success or failure 2
-  - command: echo This runs regardless of the success or failure 3
+  - command: noop
+    artifact_paths:
+      - logs/**/*
+      - coverage/**/*
 "
 `;
 
-exports[`buildkite-graph continue on failure YAML subsequent depending steps that are not always executed get an additional wait step 1`] = `
-"steps:
-  - command: command.sh
-  - wait: ~
-    continue_on_failure: true
-  - command: echo This runs regardless of the success or failure
-  - wait: ~
-  - command: echo The command passed
-"
-`;
-
-exports[`buildkite-graph continue on failure dot multiple subsequent always-executed subsequent steps do not get an additional wait step 1`] = `
+exports[`buildkite-graph continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -170,7 +106,66 @@ subgraph cluster_1 {
 "
 `;
 
-exports[`buildkite-graph continue on failure dot subsequent depending steps that are not always executed get an additional wait step 1`] = `
+exports[`buildkite-graph continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step json 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "command.sh",
+      "label": undefined,
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "continue_on_failure": true,
+      "wait": null,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "echo This runs regardless of the success or failure",
+      "label": undefined,
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "echo This runs regardless of the success or failure 2",
+      "label": undefined,
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "echo This runs regardless of the success or failure 3",
+      "label": undefined,
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step yaml 1`] = `
+"steps:
+  - command: command.sh
+  - wait: ~
+    continue_on_failure: true
+  - command: echo This runs regardless of the success or failure
+  - command: echo This runs regardless of the success or failure 2
+  - command: echo This runs regardless of the success or failure 3
+"
+`;
+
+exports[`buildkite-graph continue on failure subsequent depending steps that are not always executed get an additional wait step dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -193,22 +188,15 @@ subgraph cluster_1 {
 "
 `;
 
-exports[`buildkite-graph general serialization JSON complex 1`] = `
+exports[`buildkite-graph continue on failure subsequent depending steps that are not always executed get an additional wait step json 1`] = `
 Object {
   "env": undefined,
   "steps": Array [
     Object {
       "agents": undefined,
-      "command": "web/bin/buildkite/run_web_step.sh build editor",
-      "label": "Build Editor",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "agents": undefined,
-      "command": "web/bin/buildkite/run_web_step.sh test editor",
-      "label": "Test Editor",
+      "artifact_paths": undefined,
+      "command": "command.sh",
+      "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
@@ -219,78 +207,8 @@ Object {
     },
     Object {
       "agents": undefined,
-      "command": undefined,
-      "label": "Annotate failures",
-      "parallelism": undefined,
-      "plugins": Array [
-        Object {
-          "bugcrowd/test-summary#v1.5.0": Object {
-            "inputs": Array [
-              Object {
-                "artifact_path": "web/target/htmllint-*.txt",
-                "label": ":htmllint: HTML lint",
-                "type": "oneline",
-              },
-            ],
-          },
-        },
-        Object {
-          "detect-clowns#v1.0.0": null,
-        },
-      ],
-      "timeout": undefined,
-    },
-    Object {
-      "agents": undefined,
-      "command": "web/bin/buildkite/run_web_step.sh deploy-report coverage editor",
-      "label": "Upload coverage",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "continue_on_failure": undefined,
-      "wait": null,
-    },
-    Object {
-      "agents": undefined,
-      "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
-      "label": "Integration tests",
-      "parallelism": 8,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "continue_on_failure": undefined,
-      "wait": null,
-    },
-    Object {
-      "agents": undefined,
-      "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
-      "label": ":saucelabs: Integration tests",
-      "parallelism": 8,
-      "plugins": Array [
-        Object {
-          "sauce-connect-plugin": null,
-        },
-      ],
-      "timeout": undefined,
-    },
-    Object {
-      "agents": undefined,
-      "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
-      "label": "Visreg baseline update",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "continue_on_failure": true,
-      "wait": null,
-    },
-    Object {
-      "agents": undefined,
-      "command": "web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases",
+      "artifact_paths": undefined,
+      "command": "echo This runs regardless of the success or failure",
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -302,57 +220,9 @@ Object {
     },
     Object {
       "agents": undefined,
-      "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
-      "label": "Copy to deploy bucket",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "continue_on_failure": undefined,
-      "wait": null,
-    },
-    Object {
-      "agents": undefined,
-      "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
-      "label": "Update checkpoint",
-      "parallelism": undefined,
-      "plugins": undefined,
-      "timeout": undefined,
-    },
-    Object {
-      "build": Object {
-        "env": Object {
-          "FLAVOR": "tech",
-          "RELEASE_PATH": "some/path/",
-        },
-      },
-      "trigger": "web-deploy",
-    },
-    Object {
-      "build": Object {
-        "env": Object {
-          "FLAVOR": "usertesting",
-          "RELEASE_PATH": "some/path/",
-        },
-      },
-      "trigger": "web-deploy",
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph general serialization JSON simple 1`] = `
-Object {
-  "env": Object {
-    "DEBUG": true,
-    "USE_COLOR": 1,
-  },
-  "steps": Array [
-    Object {
-      "agents": undefined,
-      "command": "buildkite/deploy_web.sh",
-      "label": "Deploy",
+      "artifact_paths": undefined,
+      "command": "echo The command passed",
+      "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
@@ -361,73 +231,18 @@ Object {
 }
 `;
 
-exports[`buildkite-graph general serialization YAML complex 1`] = `
+exports[`buildkite-graph continue on failure subsequent depending steps that are not always executed get an additional wait step yaml 1`] = `
 "steps:
-  - label: Build Editor
-    command: web/bin/buildkite/run_web_step.sh build editor
-  - label: Test Editor
-    command: web/bin/buildkite/run_web_step.sh test editor
+  - command: command.sh
   - wait: ~
     continue_on_failure: true
-  - label: Annotate failures
-    plugins:
-      - 'bugcrowd/test-summary#v1.5.0':
-          inputs:
-            - label: ':htmllint: HTML lint'
-              artifact_path: web/target/htmllint-*.txt
-              type: oneline
-      - 'detect-clowns#v1.0.0': ~
-  - label: Upload coverage
-    command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
+  - command: echo This runs regardless of the success or failure
   - wait: ~
-  - label: Integration tests
-    command: >-
-      web/bin/buildkite/run_web_step.sh run-integration-tests local editor
-      chrome
-    parallelism: 8
-  - wait: ~
-  - label: ':saucelabs: Integration tests'
-    command: >-
-      web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
-      safari
-    parallelism: 8
-    plugins:
-      - sauce-connect-plugin: ~
-  - label: Visreg baseline update
-    command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
-  - wait: ~
-    continue_on_failure: true
-  - command: web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases
-  - wait: ~
-  - label: Copy to deploy bucket
-    command: web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor
-  - wait: ~
-  - label: Update checkpoint
-    command: production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"
-  - trigger: web-deploy
-    build:
-      env:
-        FLAVOR: tech
-        RELEASE_PATH: some/path/
-  - trigger: web-deploy
-    build:
-      env:
-        FLAVOR: usertesting
-        RELEASE_PATH: some/path/
+  - command: echo The command passed
 "
 `;
 
-exports[`buildkite-graph general serialization YAML simple 1`] = `
-"env:
-  USE_COLOR: 1
-  DEBUG: true
-steps:
-  - label: Deploy
-    command: buildkite/deploy_web.sh
-"
-`;
-
-exports[`buildkite-graph general serialization dot complex 1`] = `
+exports[`buildkite-graph general serialization complex dot 1`] = `
 "digraph \\"web-build-editor\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -492,7 +307,222 @@ subgraph cluster_4 {
 "
 `;
 
-exports[`buildkite-graph general serialization dot simple 1`] = `
+exports[`buildkite-graph general serialization complex json 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "web/bin/buildkite/run_web_step.sh build editor",
+      "label": "Build Editor",
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "web/bin/buildkite/run_web_step.sh test editor",
+      "label": "Test Editor",
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "continue_on_failure": true,
+      "wait": null,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": undefined,
+      "label": "Annotate failures",
+      "parallelism": undefined,
+      "plugins": Array [
+        Object {
+          "bugcrowd/test-summary#v1.5.0": Object {
+            "inputs": Array [
+              Object {
+                "artifact_path": "web/target/htmllint-*.txt",
+                "label": ":htmllint: HTML lint",
+                "type": "oneline",
+              },
+            ],
+          },
+        },
+        Object {
+          "detect-clowns#v1.0.0": null,
+        },
+      ],
+      "timeout": undefined,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "web/bin/buildkite/run_web_step.sh deploy-report coverage editor",
+      "label": "Upload coverage",
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
+      "label": "Integration tests",
+      "parallelism": 8,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
+      "label": ":saucelabs: Integration tests",
+      "parallelism": 8,
+      "plugins": Array [
+        Object {
+          "sauce-connect-plugin": null,
+        },
+      ],
+      "timeout": undefined,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
+      "label": "Visreg baseline update",
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "continue_on_failure": true,
+      "wait": null,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases",
+      "label": undefined,
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
+      "label": "Copy to deploy bucket",
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "continue_on_failure": undefined,
+      "wait": null,
+    },
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
+      "label": "Update checkpoint",
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+    Object {
+      "build": Object {
+        "env": Object {
+          "FLAVOR": "tech",
+          "RELEASE_PATH": "some/path/",
+        },
+      },
+      "trigger": "web-deploy",
+    },
+    Object {
+      "build": Object {
+        "env": Object {
+          "FLAVOR": "usertesting",
+          "RELEASE_PATH": "some/path/",
+        },
+      },
+      "trigger": "web-deploy",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph general serialization complex yaml 1`] = `
+"steps:
+  - label: Build Editor
+    command: web/bin/buildkite/run_web_step.sh build editor
+  - label: Test Editor
+    command: web/bin/buildkite/run_web_step.sh test editor
+  - wait: ~
+    continue_on_failure: true
+  - label: Annotate failures
+    plugins:
+      - 'bugcrowd/test-summary#v1.5.0':
+          inputs:
+            - label: ':htmllint: HTML lint'
+              artifact_path: web/target/htmllint-*.txt
+              type: oneline
+      - 'detect-clowns#v1.0.0': ~
+  - label: Upload coverage
+    command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
+  - wait: ~
+  - label: Integration tests
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests local editor
+      chrome
+    parallelism: 8
+  - wait: ~
+  - label: ':saucelabs: Integration tests'
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
+      safari
+    parallelism: 8
+    plugins:
+      - sauce-connect-plugin: ~
+  - label: Visreg baseline update
+    command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
+  - wait: ~
+    continue_on_failure: true
+  - command: web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases
+  - wait: ~
+  - label: Copy to deploy bucket
+    command: web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor
+  - wait: ~
+  - label: Update checkpoint
+    command: production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"
+  - trigger: web-deploy
+    build:
+      env:
+        FLAVOR: tech
+        RELEASE_PATH: some/path/
+  - trigger: web-deploy
+    build:
+      env:
+        FLAVOR: usertesting
+        RELEASE_PATH: some/path/
+"
+`;
+
+exports[`buildkite-graph general serialization simple dot 1`] = `
 "digraph \\"web-deploy\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -504,12 +534,55 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph timeouts JSON commands with timeouts set step timeout total 1`] = `
+exports[`buildkite-graph general serialization simple json 1`] = `
+Object {
+  "env": Object {
+    "DEBUG": true,
+    "USE_COLOR": 1,
+  },
+  "steps": Array [
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "command": "buildkite/deploy_web.sh",
+      "label": "Deploy",
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph general serialization simple yaml 1`] = `
+"env:
+  USE_COLOR: 1
+  DEBUG: true
+steps:
+  - label: Deploy
+    command: buildkite/deploy_web.sh
+"
+`;
+
+exports[`buildkite-graph timeouts commands with timeouts set step timeout total dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph timeouts commands with timeouts set step timeout total json 1`] = `
 Object {
   "env": undefined,
   "steps": Array [
     Object {
       "agents": undefined,
+      "artifact_paths": undefined,
       "command": Array [
         "yarn install",
         "yarn test",
@@ -523,12 +596,34 @@ Object {
 }
 `;
 
-exports[`buildkite-graph timeouts JSON one infinite timeout will cancel out the others 1`] = `
+exports[`buildkite-graph timeouts commands with timeouts set step timeout total yaml 1`] = `
+"steps:
+  - command:
+      - yarn install
+      - yarn test
+    timeout: 20
+"
+`;
+
+exports[`buildkite-graph timeouts one infinite timeout will cancel out the others dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph timeouts one infinite timeout will cancel out the others json 1`] = `
 Object {
   "env": undefined,
   "steps": Array [
     Object {
       "agents": undefined,
+      "artifact_paths": undefined,
       "command": Array [
         "yarn install",
         "yarn test",
@@ -542,12 +637,33 @@ Object {
 }
 `;
 
-exports[`buildkite-graph timeouts JSON step timeout total trumps commands 1`] = `
+exports[`buildkite-graph timeouts one infinite timeout will cancel out the others yaml 1`] = `
+"steps:
+  - command:
+      - yarn install
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph timeouts step timeout total trumps commands dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph timeouts step timeout total trumps commands json 1`] = `
 Object {
   "env": undefined,
   "steps": Array [
     Object {
       "agents": undefined,
+      "artifact_paths": undefined,
       "command": Array [
         "yarn install",
         "yarn test",
@@ -561,64 +677,11 @@ Object {
 }
 `;
 
-exports[`buildkite-graph timeouts YAML commands with timeouts set step timeout total 1`] = `
-"steps:
-  - command:
-      - yarn install
-      - yarn test
-    timeout: 20
-"
-`;
-
-exports[`buildkite-graph timeouts YAML one infinite timeout will cancel out the others 1`] = `
-"steps:
-  - command:
-      - yarn install
-      - yarn test
-"
-`;
-
-exports[`buildkite-graph timeouts YAML step timeout total trumps commands 1`] = `
+exports[`buildkite-graph timeouts step timeout total trumps commands yaml 1`] = `
 "steps:
   - command:
       - yarn install
       - yarn test
     timeout: 2
-"
-`;
-
-exports[`buildkite-graph timeouts dot commands with timeouts set step timeout total 1`] = `
-"digraph \\"test\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph timeouts dot one infinite timeout will cancel out the others 1`] = `
-"digraph \\"test\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph timeouts dot step timeout total trumps commands 1`] = `
-"digraph \\"test\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
-}
-
-}
 "
 `;

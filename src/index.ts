@@ -121,6 +121,10 @@ export class Step extends DefaultStep {
         return this._parallelism;
     }
 
+    @Expose({ name: 'artifact_paths' })
+    @Transform((paths: Set<string>) => (paths.size ? paths : undefined))
+    private _artifactPaths: Set<string> = new Set();
+
     private _agents: Map<string, string> = new Map();
 
     @Expose()
@@ -208,6 +212,12 @@ export class Step extends DefaultStep {
         ow(key, ow.string.nonEmpty);
         ow(value, ow.string.nonEmpty);
         this._agents.set(key, value);
+        return this;
+    }
+
+    withArtifactPath(glob: string): this {
+        ow(glob, ow.string.nonEmpty);
+        this._artifactPaths.add(glob);
         return this;
     }
 
