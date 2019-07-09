@@ -144,7 +144,7 @@ describe('buildkite-graph', () => {
         new Entity('whatever').add(
             new Step('noop').env
                 .set('RAILS_ENV', 'test')
-                .env.set('DEBUG', true),
+                .env.set('DEBUG', 'true'),
         ),
     );
 });

@@ -7,8 +7,6 @@ import 'reflect-metadata';
 import { Expose, Exclude, Transform } from 'class-transformer';
 import slug from 'slug';
 
-type Primitive = number | string | boolean;
-
 interface BaseStep {}
 
 // see https://github.com/microsoft/TypeScript/issues/22815#issuecomment-375766197
@@ -295,15 +293,17 @@ export class TriggerStep extends DefaultStep {
 }
 
 interface Env<T> {
-    set(name: string, value: Primitive): T;
+    set(name: string, value: string): T;
 }
 
 @Exclude()
 class EnvImpl<T> extends Chainable<T> implements Env<T> {
     @Expose({ name: 'env' })
-    public readonly vars: Map<string, Primitive> = new Map();
+    public readonly vars: Map<string, string> = new Map();
 
-    set(name: string, value: Primitive): T {
+    set(name: string, value: string): T {
+        ow(name, ow.string.nonEmpty);
+        ow(value, ow.string.nonEmpty);
         this.vars.set(name, value);
         return this.parent;
     }

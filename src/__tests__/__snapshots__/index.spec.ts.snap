@@ -265,7 +265,7 @@ Object {
     Object {
       "command": "noop",
       "env": Object {
-        "DEBUG": true,
+        "DEBUG": "true",
         "RAILS_ENV": "test",
       },
     },
@@ -278,7 +278,7 @@ exports[`buildkite-graph env yaml 1`] = `
   - command: noop
     env:
       RAILS_ENV: test
-      DEBUG: true
+      DEBUG: 'true'
 "
 `;
 
