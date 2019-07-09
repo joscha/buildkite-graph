@@ -1,12 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`buildkite-graph agents JSON can be defined 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "agents": Object {
+        "npm": "true",
+      },
+      "command": "noop",
+      "label": undefined,
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph agents YAML can be defined 1`] = `
+"steps:
+  - command: noop
+    agents:
+      npm: 'true'
+"
+`;
+
+exports[`buildkite-graph agents dot can be defined 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
 exports[`buildkite-graph continue on failure JSON multiple subsequent always-executed subsequent steps do not get an additional wait step 1`] = `
 Object {
   "env": undefined,
   "steps": Array [
     Object {
+      "agents": undefined,
       "command": "command.sh",
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -15,20 +55,26 @@ Object {
       "wait": null,
     },
     Object {
+      "agents": undefined,
       "command": "echo This runs regardless of the success or failure",
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
     Object {
+      "agents": undefined,
       "command": "echo This runs regardless of the success or failure 2",
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
     Object {
+      "agents": undefined,
       "command": "echo This runs regardless of the success or failure 3",
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -41,8 +87,10 @@ Object {
   "env": undefined,
   "steps": Array [
     Object {
+      "agents": undefined,
       "command": "command.sh",
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -51,8 +99,10 @@ Object {
       "wait": null,
     },
     Object {
+      "agents": undefined,
       "command": "echo This runs regardless of the success or failure",
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -61,8 +111,10 @@ Object {
       "wait": null,
     },
     Object {
+      "agents": undefined,
       "command": "echo The command passed",
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -146,14 +198,18 @@ Object {
   "env": undefined,
   "steps": Array [
     Object {
+      "agents": undefined,
       "command": "web/bin/buildkite/run_web_step.sh build editor",
       "label": "Build Editor",
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
     Object {
+      "agents": undefined,
       "command": "web/bin/buildkite/run_web_step.sh test editor",
       "label": "Test Editor",
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -162,8 +218,10 @@ Object {
       "wait": null,
     },
     Object {
+      "agents": undefined,
       "command": undefined,
       "label": "Annotate failures",
+      "parallelism": undefined,
       "plugins": Array [
         Object {
           "bugcrowd/test-summary#v1.5.0": Object {
@@ -183,8 +241,10 @@ Object {
       "timeout": undefined,
     },
     Object {
+      "agents": undefined,
       "command": "web/bin/buildkite/run_web_step.sh deploy-report coverage editor",
       "label": "Upload coverage",
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -193,6 +253,7 @@ Object {
       "wait": null,
     },
     Object {
+      "agents": undefined,
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
       "label": "Integration tests",
       "parallelism": 8,
@@ -204,6 +265,7 @@ Object {
       "wait": null,
     },
     Object {
+      "agents": undefined,
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
       "label": ":saucelabs: Integration tests",
       "parallelism": 8,
@@ -215,8 +277,10 @@ Object {
       "timeout": undefined,
     },
     Object {
+      "agents": undefined,
       "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
       "label": "Visreg baseline update",
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -225,8 +289,10 @@ Object {
       "wait": null,
     },
     Object {
+      "agents": undefined,
       "command": "web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases",
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -235,8 +301,10 @@ Object {
       "wait": null,
     },
     Object {
+      "agents": undefined,
       "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
       "label": "Copy to deploy bucket",
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -245,8 +313,10 @@ Object {
       "wait": null,
     },
     Object {
+      "agents": undefined,
       "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
       "label": "Update checkpoint",
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -280,8 +350,10 @@ Object {
   },
   "steps": Array [
     Object {
+      "agents": undefined,
       "command": "buildkite/deploy_web.sh",
       "label": "Deploy",
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -318,9 +390,9 @@ exports[`buildkite-graph general serialization YAML complex 1`] = `
     command: >-
       web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
       safari
+    parallelism: 8
     plugins:
       - sauce-connect-plugin: ~
-    parallelism: 8
   - label: Visreg baseline update
     command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
   - wait: ~
@@ -437,11 +509,13 @@ Object {
   "env": undefined,
   "steps": Array [
     Object {
+      "agents": undefined,
       "command": Array [
         "yarn install",
         "yarn test",
       ],
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": 20,
     },
@@ -454,11 +528,13 @@ Object {
   "env": undefined,
   "steps": Array [
     Object {
+      "agents": undefined,
       "command": Array [
         "yarn install",
         "yarn test",
       ],
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": undefined,
     },
@@ -471,11 +547,13 @@ Object {
   "env": undefined,
   "steps": Array [
     Object {
+      "agents": undefined,
       "command": Array [
         "yarn install",
         "yarn test",
       ],
       "label": undefined,
+      "parallelism": undefined,
       "plugins": undefined,
       "timeout": 2,
     },

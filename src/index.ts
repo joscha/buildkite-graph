@@ -98,7 +98,12 @@ export class Command {
     }
 }
 
+@Exclude()
 export class Step extends DefaultStep {
+    @Expose({ name: 'label' })
+    private _label?: string;
+
+    @Expose({ name: 'command' })
     @Transform((value: Command[]) => {
         if (!value || value.length === 0) {
             return undefined;
@@ -109,7 +114,24 @@ export class Step extends DefaultStep {
     })
     public readonly command: Command[] = [];
 
-    public parallelism?: number;
+    private _parallelism?: number;
+
+    @Expose({ name: 'parallelism' })
+    get paralellism() {
+        return this._parallelism;
+    }
+
+    private _agents: Map<string, string> = new Map();
+
+    @Expose()
+    @Transform((agents: Map<string, string>) =>
+        agents.size ? agents : undefined,
+    )
+    get agents() {
+        return this._agents;
+    }
+
+    private _timeout?: number;
 
     @Expose({ name: 'timeout' })
     get timeout() {
@@ -131,9 +153,7 @@ export class Step extends DefaultStep {
         }
     }
 
-    @Exclude()
-    private _timeout?: number;
-
+    @Expose({ name: 'plugins' })
     @Transform(transformPlugins)
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
 
@@ -143,9 +163,10 @@ export class Step extends DefaultStep {
     constructor(commands: (string | Plugin | Command)[], label?: string);
     constructor(
         command: string | Plugin | Command | (string | Plugin | Command)[],
-        public readonly label?: string,
+        label?: string,
     ) {
         super();
+        this._label = label;
         if (Array.isArray(command)) {
             ow(command, ow.array.minLength(1));
             for (const c of command) {
@@ -179,13 +200,20 @@ export class Step extends DefaultStep {
 
     withParallelism(parallelism: number): this {
         ow(parallelism, ow.number.positive);
-        this.parallelism = parallelism;
+        this._parallelism = parallelism;
+        return this;
+    }
+
+    withAgent(key: string, value: string): this {
+        ow(key, ow.string.nonEmpty);
+        ow(value, ow.string.nonEmpty);
+        this._agents.set(key, value);
         return this;
     }
 
     toString() {
         return (
-            this.label ||
+            this._label ||
             (this.command
                 ? `<${this.command.join(' && ')}>`
                 : this.plugins.toString())

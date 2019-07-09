@@ -103,4 +103,12 @@ describe('buildkite-graph', () => {
             return new Entity('test').add(new Step([command1, command2]));
         });
     });
+
+    describe('agents', () => {
+        createTest('can be defined', () => {
+            return new Entity('whatever').add(
+                new Step('noop').withAgent('npm', 'true'),
+            );
+        });
+    });
 });
