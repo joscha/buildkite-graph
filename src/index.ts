@@ -83,8 +83,7 @@ class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
 }
 
 function assertTimeout(timeout: number) {
-    ow(timeout, ow.number.integerOrInfinite);
-    ow(timeout, ow.number.positive);
+    ow(timeout, ow.number.integerOrInfinite.positive);
 }
 
 export class Command {
@@ -120,6 +119,12 @@ export class Step extends DefaultStep {
     get paralellism() {
         return this._parallelism;
     }
+
+    @Expose()
+    private concurrency?: number;
+
+    @Expose({ name: 'concurrency_group' })
+    private concurrencyGroup?: string;
 
     @Expose({ name: 'artifact_paths' })
     @Transform((paths: Set<string>) => (paths.size ? paths : undefined))
@@ -230,6 +235,13 @@ export class Step extends DefaultStep {
     withArtifactPath(glob: string): this {
         ow(glob, ow.string.nonEmpty);
         this._artifactPaths.add(glob);
+        return this;
+    }
+
+    withConcurrency(concurrency: number, group: string): this {
+        ow(concurrency, ow.number.integer.positive);
+        this.concurrency = concurrency;
+        this.concurrencyGroup = group;
         return this;
     }
 

@@ -23,6 +23,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "noop",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -64,6 +66,8 @@ Object {
       ],
       "branches": undefined,
       "command": "noop",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -103,6 +107,8 @@ Object {
       "artifact_paths": undefined,
       "branches": "!release/* master stable/*",
       "command": "noop",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -116,6 +122,46 @@ exports[`buildkite-graph branches can be defined yaml 1`] = `
 "steps:
   - command: noop
     branches: '!release/* master stable/*'
+"
+`;
+
+exports[`buildkite-graph concurrency can be defined dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph concurrency can be defined json 1`] = `
+Object {
+  "env": undefined,
+  "steps": Array [
+    Object {
+      "agents": undefined,
+      "artifact_paths": undefined,
+      "branches": undefined,
+      "command": "noop",
+      "concurrency": 3,
+      "concurrency_group": "my-app/deploy",
+      "label": undefined,
+      "parallelism": undefined,
+      "plugins": undefined,
+      "timeout": undefined,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph concurrency can be defined yaml 1`] = `
+"steps:
+  - command: noop
+    concurrency: 3
+    concurrency_group: my-app/deploy
 "
 `;
 
@@ -154,6 +200,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "command.sh",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -168,6 +216,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "echo This runs regardless of the success or failure",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -178,6 +228,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "echo This runs regardless of the success or failure 2",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -188,6 +240,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "echo This runs regardless of the success or failure 3",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -240,6 +294,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "command.sh",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -254,6 +310,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "echo This runs regardless of the success or failure",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -268,6 +326,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "echo The command passed",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -362,6 +422,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh build editor",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": "Build Editor",
       "parallelism": undefined,
       "plugins": undefined,
@@ -372,6 +434,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh test editor",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": "Test Editor",
       "parallelism": undefined,
       "plugins": undefined,
@@ -386,6 +450,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": undefined,
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": "Annotate failures",
       "parallelism": undefined,
       "plugins": Array [
@@ -411,6 +477,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh deploy-report coverage editor",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": "Upload coverage",
       "parallelism": undefined,
       "plugins": undefined,
@@ -425,6 +493,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": "Integration tests",
       "parallelism": 8,
       "plugins": undefined,
@@ -439,6 +509,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": ":saucelabs: Integration tests",
       "parallelism": 8,
       "plugins": Array [
@@ -453,6 +525,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": "Visreg baseline update",
       "parallelism": undefined,
       "plugins": undefined,
@@ -467,6 +541,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -481,6 +557,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": "Copy to deploy bucket",
       "parallelism": undefined,
       "plugins": undefined,
@@ -495,6 +573,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": "Update checkpoint",
       "parallelism": undefined,
       "plugins": undefined,
@@ -602,6 +682,8 @@ Object {
       "artifact_paths": undefined,
       "branches": undefined,
       "command": "buildkite/deploy_web.sh",
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": "Deploy",
       "parallelism": undefined,
       "plugins": undefined,
@@ -645,6 +727,8 @@ Object {
         "yarn install",
         "yarn test",
       ],
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -687,6 +771,8 @@ Object {
         "yarn install",
         "yarn test",
       ],
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,
@@ -728,6 +814,8 @@ Object {
         "yarn install",
         "yarn test",
       ],
+      "concurrency": undefined,
+      "concurrency_group": undefined,
       "label": undefined,
       "parallelism": undefined,
       "plugins": undefined,

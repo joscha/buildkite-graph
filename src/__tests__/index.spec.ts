@@ -125,4 +125,14 @@ describe('buildkite-graph', () => {
             );
         });
     });
+
+    describe('concurrency', () => {
+        createTest('can be defined', () => {
+            return new Entity('whatever').add(
+                new Step('noop')
+                    .withConcurrency(10, 'will/be/overridden')
+                    .withConcurrency(3, 'my-app/deploy'),
+            );
+        });
+    });
 });
