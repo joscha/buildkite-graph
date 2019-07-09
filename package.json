@@ -23,8 +23,8 @@
     },
     "scripts": {
         "prepare": "tsc",
-        "test": "jest",
-        "test:watch": "yarn --silent test --watch"
+        "test": "jest --ci --coverage",
+        "test:watch": "jest --watch"
     },
     "dependencies": {
         "class-transformer": "^0.2.3",

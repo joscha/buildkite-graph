@@ -52,6 +52,7 @@ class WaitStep implements BaseStep {
     }
 
     toString() {
+        /* istanbul ignore next */
         return '[wait]';
     }
 }
@@ -330,8 +331,8 @@ export class Entity {
         this.env = new EnvImpl(this);
     }
 
-    add(step: DefaultStep) {
-        this.steps.push(step);
+    add(...step: DefaultStep[]) {
+        this.steps.push(...step);
         return this;
     }
 

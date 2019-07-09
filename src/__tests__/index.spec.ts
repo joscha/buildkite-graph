@@ -25,6 +25,16 @@ describe('buildkite-graph', () => {
         createTest('complex', createComplex);
     });
 
+    createTest('missing transitive steps get added to the graph', () => {
+        const step1 = new Step('yarn');
+        const step2 = new Step('yarn test').dependsOn(step1);
+        return new Entity('test').add(step2);
+    });
+
+    createTest('step addition', () =>
+        new Entity('whatever').add(new Step('yarn').add('yarn test')),
+    );
+
     describe('continue on failure', () => {
         createTest(
             'multiple subsequent always-executed subsequent steps do not get an additional wait step',
@@ -95,6 +105,10 @@ describe('buildkite-graph', () => {
             const command2 = new Command('yarn test');
             return new Entity('test').add(new Step([command1, command2]));
         });
+
+        createTest('can be infinite', () => {
+            return new Entity('test').add(new Step('noop').withTimeout());
+        });
     });
 
     createTest('agents', () =>
@@ -128,7 +142,9 @@ describe('buildkite-graph', () => {
 
     createTest('env', () =>
         new Entity('whatever').add(
-            new Step('noop').env.set('RAILS_ENV', 'test'),
+            new Step('noop').env
+                .set('RAILS_ENV', 'test')
+                .env.set('DEBUG', true),
         ),
     );
 });

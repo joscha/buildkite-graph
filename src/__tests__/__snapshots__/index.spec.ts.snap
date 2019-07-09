@@ -265,6 +265,7 @@ Object {
     Object {
       "command": "noop",
       "env": Object {
+        "DEBUG": true,
         "RAILS_ENV": "test",
       },
     },
@@ -277,6 +278,7 @@ exports[`buildkite-graph env yaml 1`] = `
   - command: noop
     env:
       RAILS_ENV: test
+      DEBUG: true
 "
 `;
 
@@ -541,6 +543,111 @@ exports[`buildkite-graph general serialization simple yaml 1`] = `
 steps:
   - label: Deploy
     command: buildkite/deploy_web.sh
+"
+`;
+
+exports[`buildkite-graph missing transitive steps get added to the graph dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn>\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_1 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn test>\\" [ color = \\"grey\\" ];
+}
+
+  \\"<yarn>\\";
+  \\"<yarn test>\\";
+  \\"<yarn>\\" -> \\"<yarn test>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph missing transitive steps get added to the graph json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "yarn",
+    },
+    Object {
+      "wait": null,
+    },
+    Object {
+      "command": "yarn test",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph missing transitive steps get added to the graph yaml 1`] = `
+"steps:
+  - command: yarn
+  - wait: ~
+  - command: yarn test
+"
+`;
+
+exports[`buildkite-graph step addition dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph step addition json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph step addition yaml 1`] = `
+"steps:
+  - command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph timeouts can be infinite dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph timeouts can be infinite json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph timeouts can be infinite yaml 1`] = `
+"steps:
+  - command: noop
 "
 `;
 
