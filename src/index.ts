@@ -113,6 +113,10 @@ export class Step extends DefaultStep {
     })
     public readonly command: Command[] = [];
 
+    @Expose()
+    @Transform(value => transformEnv(value))
+    public readonly env: Env<this>;
+
     private _parallelism?: number;
 
     @Expose({ name: 'parallelism' })
@@ -181,6 +185,7 @@ export class Step extends DefaultStep {
         label?: string,
     ) {
         super();
+        this.env = new EnvImpl(this);
         this._label = label;
         if (Array.isArray(command)) {
             ow(command, ow.array.minLength(1));
@@ -214,7 +219,7 @@ export class Step extends DefaultStep {
     }
 
     withParallelism(parallelism: number): this {
-        ow(parallelism, ow.number.positive);
+        ow(parallelism, ow.number.integer.positive);
         this._parallelism = parallelism;
         return this;
     }

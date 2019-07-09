@@ -97,42 +97,38 @@ describe('buildkite-graph', () => {
         });
     });
 
-    describe('agents', () => {
-        createTest('can be defined', () => {
-            return new Entity('whatever').add(
-                new Step('noop').withAgent('npm', 'true'),
-            );
-        });
-    });
+    createTest('agents', () =>
+        new Entity('whatever').add(new Step('noop').withAgent('npm', 'true')),
+    );
 
-    describe('artifact_paths', () => {
-        createTest('can be defined', () => {
-            return new Entity('whatever').add(
-                new Step('noop')
-                    .withArtifactPath('logs/**/*')
-                    .withArtifactPath('coverage/**/*'),
-            );
-        });
-    });
+    createTest('artifact_paths', () =>
+        new Entity('whatever').add(
+            new Step('noop')
+                .withArtifactPath('logs/**/*')
+                .withArtifactPath('coverage/**/*'),
+        ),
+    );
 
-    describe('branches', () => {
-        createTest('can be defined', () => {
-            return new Entity('whatever').add(
-                new Step('noop')
-                    .withBranch('master')
-                    .withBranch('stable/*')
-                    .withBranch('!release/*'),
-            );
-        });
-    });
+    createTest('branches', () =>
+        new Entity('whatever').add(
+            new Step('noop')
+                .withBranch('master')
+                .withBranch('stable/*')
+                .withBranch('!release/*'),
+        ),
+    );
 
-    describe('concurrency', () => {
-        createTest('can be defined', () => {
-            return new Entity('whatever').add(
-                new Step('noop')
-                    .withConcurrency(10, 'will/be/overridden')
-                    .withConcurrency(3, 'my-app/deploy'),
-            );
-        });
-    });
+    createTest('concurrency', () =>
+        new Entity('whatever').add(
+            new Step('noop')
+                .withConcurrency(10, 'will/be/overridden')
+                .withConcurrency(3, 'my-app/deploy'),
+        ),
+    );
+
+    createTest('env', () =>
+        new Entity('whatever').add(
+            new Step('noop').env.set('RAILS_ENV', 'test'),
+        ),
+    );
 });

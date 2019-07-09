@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildkite-graph agents can be defined dot 1`] = `
+exports[`buildkite-graph agents dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -12,7 +12,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph agents can be defined json 1`] = `
+exports[`buildkite-graph agents json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -25,7 +25,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph agents can be defined yaml 1`] = `
+exports[`buildkite-graph agents yaml 1`] = `
 "steps:
   - command: noop
     agents:
@@ -33,7 +33,7 @@ exports[`buildkite-graph agents can be defined yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph artifact_paths can be defined dot 1`] = `
+exports[`buildkite-graph artifact_paths dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -45,7 +45,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph artifact_paths can be defined json 1`] = `
+exports[`buildkite-graph artifact_paths json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -59,7 +59,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph artifact_paths can be defined yaml 1`] = `
+exports[`buildkite-graph artifact_paths yaml 1`] = `
 "steps:
   - command: noop
     artifact_paths:
@@ -68,7 +68,7 @@ exports[`buildkite-graph artifact_paths can be defined yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph branches can be defined dot 1`] = `
+exports[`buildkite-graph branches dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -80,7 +80,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph branches can be defined json 1`] = `
+exports[`buildkite-graph branches json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -91,14 +91,14 @@ Object {
 }
 `;
 
-exports[`buildkite-graph branches can be defined yaml 1`] = `
+exports[`buildkite-graph branches yaml 1`] = `
 "steps:
   - command: noop
     branches: '!release/* master stable/*'
 "
 `;
 
-exports[`buildkite-graph concurrency can be defined dot 1`] = `
+exports[`buildkite-graph concurrency dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -110,7 +110,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph concurrency can be defined json 1`] = `
+exports[`buildkite-graph concurrency json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -122,7 +122,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph concurrency can be defined yaml 1`] = `
+exports[`buildkite-graph concurrency yaml 1`] = `
 "steps:
   - command: noop
     concurrency: 3
@@ -244,6 +244,39 @@ exports[`buildkite-graph continue on failure subsequent depending steps that are
   - command: echo This runs regardless of the success or failure
   - wait: ~
   - command: echo The command passed
+"
+`;
+
+exports[`buildkite-graph env dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph env json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "env": Object {
+        "RAILS_ENV": "test",
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph env yaml 1`] = `
+"steps:
+  - command: noop
+    env:
+      RAILS_ENV: test
 "
 `;
 
