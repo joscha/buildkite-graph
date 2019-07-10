@@ -15,6 +15,13 @@ abstract class DefaultStep implements BaseStep {
     @Exclude()
     public readonly dependencies: Set<DefaultStep> = new Set();
 
+    private _label?: string;
+
+    @Expose()
+    get label() {
+        return this._label;
+    }
+
     dependsOn(step: DefaultStep): this {
         this.dependencies.add(step);
         return this;
@@ -25,6 +32,11 @@ abstract class DefaultStep implements BaseStep {
 
     alwaysExecute() {
         this.always = true;
+        return this;
+    }
+
+    withLabel(label: string) {
+        this._label = label;
         return this;
     }
 }
@@ -98,9 +110,6 @@ export class Command {
 
 @Exclude()
 export class Step extends DefaultStep {
-    @Expose({ name: 'label' })
-    private _label?: string;
-
     @Expose({ name: 'command' })
     @Transform((value: Command[]) => {
         if (!value || value.length === 0) {
@@ -191,7 +200,9 @@ export class Step extends DefaultStep {
     ) {
         super();
         this.env = new EnvImpl(this);
-        this._label = label;
+        if (label) {
+            this.withLabel(label);
+        }
         if (Array.isArray(command)) {
             ow(command, ow.array.minLength(1));
             for (const c of command) {
@@ -263,7 +274,7 @@ export class Step extends DefaultStep {
 
     toString() {
         return (
-            this._label ||
+            this.label ||
             (this.command
                 ? `<${this.command.join(' && ')}>`
                 : this.plugins.toString())
@@ -292,11 +303,11 @@ export class TriggerStep extends DefaultStep {
         return { env: (this.build.env as EnvImpl<any>).vars };
     }
 
-    constructor(
-        public readonly triggeredEntity: Entity,
-        public readonly label?: string,
-    ) {
+    constructor(public readonly triggeredEntity: Entity, label?: string) {
         super();
+        if (label) {
+            this.withLabel(label);
+        }
     }
 
     toString() {

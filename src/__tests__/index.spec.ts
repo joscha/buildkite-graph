@@ -153,4 +153,12 @@ describe('buildkite-graph', () => {
             new Step('noop').withId('my-id-overridden').withId('my-id'),
         ),
     );
+
+    createTest('label', () =>
+        new Entity('whatever').add(
+            new Step('noop')
+                .withLabel('my label overridden')
+                .withLabel('my label'),
+        ),
+    );
 });
