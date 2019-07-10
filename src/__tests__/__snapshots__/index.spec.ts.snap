@@ -816,7 +816,7 @@ Object {
         "yarn install",
         "yarn test",
       ],
-      "timeout": 20,
+      "timeout_in_minutes": 20,
     },
   ],
 }
@@ -827,7 +827,7 @@ exports[`buildkite-graph timeouts commands with timeouts set step timeout total 
   - command:
       - yarn install
       - yarn test
-    timeout: 20
+    timeout_in_minutes: 20
 "
 `;
 
@@ -884,7 +884,7 @@ Object {
         "yarn install",
         "yarn test",
       ],
-      "timeout": 2,
+      "timeout_in_minutes": 2,
     },
   ],
 }
@@ -895,6 +895,6 @@ exports[`buildkite-graph timeouts step timeout total trumps commands yaml 1`] = 
   - command:
       - yarn install
       - yarn test
-    timeout: 2
+    timeout_in_minutes: 2
 "
 `;

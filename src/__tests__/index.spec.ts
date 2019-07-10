@@ -96,7 +96,7 @@ describe('buildkite-graph', () => {
             const command1 = new Command('yarn install', 10);
             const command2 = new Command('yarn test', 10);
             return new Entity('test').add(
-                new Step([command1, command2]).withTimeout(2),
+                new Step([command1, command2]).withTimeout(100).withTimeout(2),
             );
         });
 

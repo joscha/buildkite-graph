@@ -160,7 +160,7 @@ export class Step extends DefaultStep {
 
     private _timeout?: number;
 
-    @Expose({ name: 'timeout' })
+    @Expose({ name: 'timeout_in_minutes' })
     get timeout() {
         if (this._timeout === Infinity || this._timeout === 0) {
             return undefined;
