@@ -147,4 +147,10 @@ describe('buildkite-graph', () => {
                 .env.set('DEBUG', 'true'),
         ),
     );
+
+    createTest('id', () =>
+        new Entity('whatever').add(
+            new Step('noop').withId('my-id-overridden').withId('my-id'),
+        ),
+    );
 });

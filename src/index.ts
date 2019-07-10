@@ -116,6 +116,12 @@ export class Step extends DefaultStep {
     @Transform(value => transformEnv(value))
     public readonly env: Env<this>;
 
+    private _id?: string;
+    @Expose({ name: 'id' })
+    get id() {
+        return this._id;
+    }
+
     private _parallelism?: number;
 
     @Expose({ name: 'parallelism' })
@@ -246,6 +252,12 @@ export class Step extends DefaultStep {
         ow(concurrency, ow.number.integer.positive);
         this.concurrency = concurrency;
         this.concurrencyGroup = group;
+        return this;
+    }
+
+    withId(identifier: string) {
+        ow(identifier, ow.string.nonEmpty);
+        this._id = identifier;
         return this;
     }
 
