@@ -11,10 +11,16 @@ const serializers: Record<string, Serializer<any>> = {
     dot: new DotSerializer(),
 };
 
-function createTest(name: string, gen: () => Entity) {
+function createTest(name: string, gen: () => Entity | Entity[]) {
     describe(name, () => {
         test.each(Object.keys(serializers))('%s', type => {
-            expect(serializers[type].serialize(gen())).toMatchSnapshot();
+            let entities = gen();
+            if (!Array.isArray(entities)) {
+                entities = [entities];
+            }
+            for (const entity of entities) {
+                expect(serializers[type].serialize(entity)).toMatchSnapshot();
+            }
         });
     });
 }
@@ -185,4 +191,28 @@ describe('buildkite-graph', () => {
                 .plugins.add(new Plugin('detect-clowns#v1.0.0')),
         ),
     );
+
+    describe('soft_fail', () => {
+        createTest('boolean', () => [
+            new Entity('whatever').add(new Step('noop').withSoftFail('*')),
+            new Entity('whatever').add(new Step('noop').withSoftFail(true)),
+        ]);
+
+        createTest('multiple', () =>
+            new Entity('whatever').add(
+                new Step('noop').withSoftFail(1).withSoftFail(-127),
+            ),
+        );
+
+        createTest('star', () =>
+            new Entity('whatever').add(
+                new Step('noop').withSoftFail(1).withSoftFail('*'),
+            ),
+        );
+    });
+
+    createTest('skip', () => [
+        new Entity('whatever').add(new Step('noop').skip(false).skip(true)),
+        new Entity('whatever').add(new Step('noop').skip('my reason')),
+    ]);
 });

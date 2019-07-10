@@ -735,6 +735,191 @@ exports[`buildkite-graph plugins yaml 1`] = `
 "
 `;
 
+exports[`buildkite-graph skip dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph skip dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph skip json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "skip": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph skip json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "skip": "my reason",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph skip yaml 1`] = `
+"steps:
+  - command: noop
+    skip: true
+"
+`;
+
+exports[`buildkite-graph skip yaml 2`] = `
+"steps:
+  - command: noop
+    skip: my reason
+"
+`;
+
+exports[`buildkite-graph soft_fail boolean dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph soft_fail boolean dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph soft_fail boolean json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "soft_fail": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph soft_fail boolean json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "soft_fail": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph soft_fail boolean yaml 1`] = `
+"steps:
+  - command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph soft_fail boolean yaml 2`] = `
+"steps:
+  - command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph soft_fail multiple dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph soft_fail multiple json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "soft_fail": Array [
+        1,
+        -127,
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph soft_fail multiple yaml 1`] = `
+"steps:
+  - command: noop
+    soft_fail:
+      - 1
+      - -127
+"
+`;
+
+exports[`buildkite-graph soft_fail star dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph soft_fail star json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "soft_fail": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph soft_fail star yaml 1`] = `
+"steps:
+  - command: noop
+    soft_fail: true
+"
+`;
+
 exports[`buildkite-graph step addition dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];

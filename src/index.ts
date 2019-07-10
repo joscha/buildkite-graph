@@ -108,6 +108,8 @@ export class Command {
     }
 }
 
+type SoftFailStatus = number | '*';
+
 @Exclude()
 export class Step extends DefaultStep {
     @Expose({ name: 'command' })
@@ -190,6 +192,22 @@ export class Step extends DefaultStep {
     @Transform(transformPlugins)
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
 
+    @Expose({ name: 'soft_fail' })
+    @Transform((value: Set<SoftFailStatus>) => {
+        if (!value.size) {
+            return undefined;
+        } else if (value.has('*')) {
+            return true;
+        } else {
+            return value;
+        }
+    })
+    private _softFail: Set<SoftFailStatus> = new Set();
+
+    @Expose({ name: 'skip' })
+    @Transform((value: boolean) => (value ? value : undefined))
+    private _skip?: boolean | string;
+
     constructor(plugin: Plugin, label?: string);
     constructor(command: string, label?: string);
     constructor(command: Command, label?: string);
@@ -266,9 +284,25 @@ export class Step extends DefaultStep {
         return this;
     }
 
-    withId(identifier: string) {
+    withId(identifier: string): this {
         ow(identifier, ow.string.nonEmpty);
         this._id = identifier;
+        return this;
+    }
+
+    withSoftFail(fail: SoftFailStatus | true): this {
+        if (fail !== '*' && fail !== true) {
+            ow(fail, ow.number.integer);
+        }
+        this._softFail.add(fail === true ? '*' : fail);
+        return this;
+    }
+
+    skip(skip: boolean | string): this {
+        if (typeof skip !== 'boolean') {
+            ow(skip, ow.string.nonEmpty);
+        }
+        this._skip = skip;
         return this;
     }
 
