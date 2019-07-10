@@ -16,11 +16,10 @@ type EntityGenerator = () => Entity | Entity[];
 const createTest = (
     name: string,
     gen: EntityGenerator,
-    testFn = test,
     describeFn = describe,
 ) =>
     describeFn(name, () => {
-        testFn.each(Object.keys(serializers))('%s', type => {
+        test.each(Object.keys(serializers))('%s', type => {
             let entities = gen();
             if (!Array.isArray(entities)) {
                 entities = [entities];
@@ -32,7 +31,7 @@ const createTest = (
     });
 
 createTest.only = (name: string, gen: EntityGenerator) =>
-    createTest(name, gen, test, describe.only);
+    createTest(name, gen, describe.only);
 
 describe('buildkite-graph', () => {
     describe('general serialization', () => {
