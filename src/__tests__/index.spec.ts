@@ -1,4 +1,4 @@
-import { Command, Entity, Step } from '../';
+import { Command, Entity, Step, Plugin } from '../';
 import { Serializer } from '../serializer';
 import { DotSerializer } from '../serializers/dot';
 import { JsonSerializer } from '../serializers/json';
@@ -165,6 +165,24 @@ describe('buildkite-graph', () => {
     createTest('parallelism', () =>
         new Entity('whatever').add(
             new Step('noop').withParallelism(100).withParallelism(123),
+        ),
+    );
+
+    createTest('plugins', () =>
+        new Entity('whatever').add(
+            new Step('noop').plugins
+                .add(
+                    new Plugin('bugcrowd/test-summary#v1.5.0', {
+                        inputs: [
+                            {
+                                label: ':htmllint: HTML lint',
+                                artifact_path: 'web/target/htmllint-*.txt',
+                                type: 'oneline',
+                            },
+                        ],
+                    }),
+                )
+                .plugins.add(new Plugin('detect-clowns#v1.0.0')),
         ),
     );
 });

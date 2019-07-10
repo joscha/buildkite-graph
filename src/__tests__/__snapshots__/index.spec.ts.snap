@@ -684,6 +684,57 @@ exports[`buildkite-graph parallelism yaml 1`] = `
 "
 `;
 
+exports[`buildkite-graph plugins dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph plugins json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "plugins": Array [
+        Object {
+          "bugcrowd/test-summary#v1.5.0": Object {
+            "inputs": Array [
+              Object {
+                "artifact_path": "web/target/htmllint-*.txt",
+                "label": ":htmllint: HTML lint",
+                "type": "oneline",
+              },
+            ],
+          },
+        },
+        Object {
+          "detect-clowns#v1.0.0": null,
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph plugins yaml 1`] = `
+"steps:
+  - command: noop
+    plugins:
+      - 'bugcrowd/test-summary#v1.5.0':
+          inputs:
+            - label: ':htmllint: HTML lint'
+              artifact_path: web/target/htmllint-*.txt
+              type: oneline
+      - 'detect-clowns#v1.0.0': ~
+"
+`;
+
 exports[`buildkite-graph step addition dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
