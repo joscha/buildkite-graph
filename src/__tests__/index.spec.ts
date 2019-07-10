@@ -161,4 +161,10 @@ describe('buildkite-graph', () => {
                 .withLabel('my label'),
         ),
     );
+
+    createTest('parallelism', () =>
+        new Entity('whatever').add(
+            new Step('noop').withParallelism(100).withParallelism(123),
+        ),
+    );
 });
