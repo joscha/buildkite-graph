@@ -735,6 +735,202 @@ exports[`buildkite-graph plugins yaml 1`] = `
 "
 `;
 
+exports[`buildkite-graph retry dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph retry dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph retry dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph retry dot 4`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph retry dot 5`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph retry dot 6`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph retry dot 7`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph retry json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph retry json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph retry json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph retry json 4`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph retry json 5`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph retry json 6`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph retry json 7`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph retry yaml 1`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph retry yaml 2`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph retry yaml 3`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph retry yaml 4`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph retry yaml 5`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph retry yaml 6`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph retry yaml 7`] = `
+"steps:
+  - command: noop
+"
+`;
+
 exports[`buildkite-graph skip dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -873,8 +1069,12 @@ Object {
     Object {
       "command": "noop",
       "soft_fail": Array [
-        1,
-        -127,
+        Object {
+          "exit_status": 1,
+        },
+        Object {
+          "exit_status": -127,
+        },
       ],
     },
   ],
@@ -885,8 +1085,8 @@ exports[`buildkite-graph soft_fail multiple yaml 1`] = `
 "steps:
   - command: noop
     soft_fail:
-      - 1
-      - -127
+      - exit_status: 1
+      - exit_status: -127
 "
 `;
 

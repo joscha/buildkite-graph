@@ -1,4 +1,4 @@
-import { Command, Entity, Step, Plugin } from '../';
+import { Command, Entity, Step, Plugin, ExitStatus } from '../';
 import { Serializer } from '../serializer';
 import { DotSerializer } from '../serializers/dot';
 import { JsonSerializer } from '../serializers/json';
@@ -11,9 +11,16 @@ const serializers: Record<string, Serializer<any>> = {
     dot: new DotSerializer(),
 };
 
-function createTest(name: string, gen: () => Entity | Entity[]) {
-    describe(name, () => {
-        test.each(Object.keys(serializers))('%s', type => {
+type EntityGenerator = () => Entity | Entity[];
+
+const createTest = (
+    name: string,
+    gen: EntityGenerator,
+    testFn = test,
+    describeFn = describe,
+) =>
+    describeFn(name, () => {
+        testFn.each(Object.keys(serializers))('%s', type => {
             let entities = gen();
             if (!Array.isArray(entities)) {
                 entities = [entities];
@@ -23,7 +30,9 @@ function createTest(name: string, gen: () => Entity | Entity[]) {
             }
         });
     });
-}
+
+createTest.only = (name: string, gen: EntityGenerator) =>
+    createTest(name, gen, test, describe.only);
 
 describe('buildkite-graph', () => {
     describe('general serialization', () => {
@@ -214,5 +223,33 @@ describe('buildkite-graph', () => {
     createTest('skip', () => [
         new Entity('whatever').add(new Step('noop').skip(false).skip(true)),
         new Entity('whatever').add(new Step('noop').skip('my reason')),
+    ]);
+
+    createTest('retry', () => [
+        new Entity('whatever').add(new Step('noop').automaticRetry(true)),
+        new Entity('whatever').add(
+            new Step('noop').automaticRetry(
+                new Map<ExitStatus, number>([['*', 2], [255, 2]]),
+            ),
+        ),
+        new Entity('whatever').add(new Step('noop').manualRetry(false)),
+        new Entity('whatever').add(
+            new Step('noop').manualRetry(
+                false,
+                false,
+                "Sorry, you can't retry a deployment",
+            ),
+        ),
+        new Entity('whatever').add(
+            new Step('noop').manualRetry(
+                true,
+                false,
+                "Sorry, you can't retry a deployment",
+            ),
+        ),
+        new Entity('whatever').add(new Step('noop').manualRetry(true, true)),
+        new Entity('whatever').add(
+            new Step('noop').automaticRetry(true).manualRetry(true, true),
+        ),
     ]);
 });

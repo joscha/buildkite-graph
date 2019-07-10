@@ -108,7 +108,7 @@ export class Command {
     }
 }
 
-type SoftFailStatus = number | '*';
+export type ExitStatus = number | '*';
 
 @Exclude()
 export class Step extends DefaultStep {
@@ -193,16 +193,16 @@ export class Step extends DefaultStep {
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
 
     @Expose({ name: 'soft_fail' })
-    @Transform((value: Set<SoftFailStatus>) => {
+    @Transform((value: Set<ExitStatus>) => {
         if (!value.size) {
             return undefined;
         } else if (value.has('*')) {
             return true;
         } else {
-            return value;
+            return [...value].map(exit_status => ({ exit_status }));
         }
     })
-    private _softFail: Set<SoftFailStatus> = new Set();
+    private _softFail: Set<ExitStatus> = new Set();
 
     @Expose({ name: 'skip' })
     @Transform((value: boolean) => (value ? value : undefined))
@@ -290,7 +290,7 @@ export class Step extends DefaultStep {
         return this;
     }
 
-    withSoftFail(fail: SoftFailStatus | true): this {
+    withSoftFail(fail: ExitStatus | true): this {
         if (fail !== '*' && fail !== true) {
             ow(fail, ow.number.integer);
         }
@@ -303,6 +303,18 @@ export class Step extends DefaultStep {
             ow(skip, ow.string.nonEmpty);
         }
         this._skip = skip;
+        return this;
+    }
+
+    automaticRetry(statuses: true | Map<ExitStatus, number> = true): this {
+        return this;
+    }
+
+    manualRetry(
+        allowed: boolean = true,
+        permitOnPassed: boolean = false,
+        reason?: string,
+    ): this {
         return this;
     }
 
