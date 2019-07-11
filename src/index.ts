@@ -7,6 +7,8 @@ import 'reflect-metadata';
 import { Expose, Exclude, Transform } from 'class-transformer';
 import slug from 'slug';
 
+const exitStatusPredicate = ow.any(ow.string.equals('*'), ow.number.integer);
+
 interface BaseStep {}
 
 // see https://github.com/microsoft/TypeScript/issues/22815#issuecomment-375766197
@@ -144,8 +146,7 @@ class RetryImpl extends Chainable<Step> implements Retry<Step> {
         if (typeof statuses !== 'boolean') {
             ow(statuses, ow.map.nonEmpty);
             ow(statuses, ow.map.valuesOfType(ow.number.integer.positive));
-            const p = ow.any(ow.string.equals('*'), ow.number.integer);
-            ow(statuses, ow.map.valuesOfType(p as any)); // Fix predicate type
+            ow(statuses, ow.map.valuesOfType(exitStatusPredicate as any)); // Fix predicate type
 
             this._automatic =
                 typeof this._automatic === 'boolean'
@@ -192,10 +193,6 @@ class RetryManual {
     hasValue() {
         return !this.allowed || this.permitOnPassed;
     }
-}
-
-class RetryAutomatic {
-    statuses: Map<ExitStatus, number> = new Map();
 }
 
 @Exclude()
@@ -383,8 +380,8 @@ export class Step extends DefaultStep {
     }
 
     withSoftFail(fail: ExitStatus | true): this {
-        if (fail !== '*' && fail !== true) {
-            ow(fail, ow.number.integer);
+        if (fail !== true) {
+            ow(fail, exitStatusPredicate);
         }
         this._softFail.add(fail === true ? '*' : fail);
         return this;
