@@ -225,30 +225,30 @@ describe('buildkite-graph', () => {
     ]);
 
     createTest('retry', () => [
-        new Entity('whatever').add(new Step('noop').automaticRetry(true)),
+        new Entity('whatever').add(new Step('noop').retry.automatic(true)),
         new Entity('whatever').add(
-            new Step('noop').automaticRetry(
+            new Step('noop').retry.automatic(
                 new Map<ExitStatus, number>([['*', 2], [255, 2]]),
             ),
         ),
-        new Entity('whatever').add(new Step('noop').manualRetry(false)),
+        new Entity('whatever').add(new Step('noop').retry.manual(false)),
         new Entity('whatever').add(
-            new Step('noop').manualRetry(
+            new Step('noop').retry.manual(
                 false,
                 false,
                 "Sorry, you can't retry a deployment",
             ),
         ),
         new Entity('whatever').add(
-            new Step('noop').manualRetry(
+            new Step('noop').retry.manual(
                 true,
                 false,
                 "Sorry, you can't retry a deployment",
             ),
         ),
-        new Entity('whatever').add(new Step('noop').manualRetry(true, true)),
+        new Entity('whatever').add(new Step('noop').retry.manual(true, true)),
         new Entity('whatever').add(
-            new Step('noop').automaticRetry(true).manualRetry(true, true),
+            new Step('noop').retry.automatic(true).retry.manual(true, true),
         ),
     ]);
 });

@@ -824,6 +824,9 @@ Object {
   "steps": Array [
     Object {
       "command": "noop",
+      "retry": Object {
+        "automatic": true,
+      },
     },
   ],
 }
@@ -834,6 +837,18 @@ Object {
   "steps": Array [
     Object {
       "command": "noop",
+      "retry": Object {
+        "automatic": Array [
+          Object {
+            "exit_status": "*",
+            "limit": 2,
+          },
+          Object {
+            "exit_status": 255,
+            "limit": 2,
+          },
+        ],
+      },
     },
   ],
 }
@@ -844,6 +859,11 @@ Object {
   "steps": Array [
     Object {
       "command": "noop",
+      "retry": Object {
+        "manual": Object {
+          "allowed": false,
+        },
+      },
     },
   ],
 }
@@ -854,6 +874,12 @@ Object {
   "steps": Array [
     Object {
       "command": "noop",
+      "retry": Object {
+        "manual": Object {
+          "allowed": false,
+          "reason": "Sorry, you can't retry a deployment",
+        },
+      },
     },
   ],
 }
@@ -874,6 +900,11 @@ Object {
   "steps": Array [
     Object {
       "command": "noop",
+      "retry": Object {
+        "manual": Object {
+          "permit_on_passed": true,
+        },
+      },
     },
   ],
 }
@@ -884,6 +915,12 @@ Object {
   "steps": Array [
     Object {
       "command": "noop",
+      "retry": Object {
+        "automatic": true,
+        "manual": Object {
+          "permit_on_passed": true,
+        },
+      },
     },
   ],
 }
@@ -892,24 +929,39 @@ Object {
 exports[`buildkite-graph retry yaml 1`] = `
 "steps:
   - command: noop
+    retry:
+      automatic: true
 "
 `;
 
 exports[`buildkite-graph retry yaml 2`] = `
 "steps:
   - command: noop
+    retry:
+      automatic:
+        - exit_status: '*'
+          limit: 2
+        - exit_status: 255
+          limit: 2
 "
 `;
 
 exports[`buildkite-graph retry yaml 3`] = `
 "steps:
   - command: noop
+    retry:
+      manual:
+        allowed: false
 "
 `;
 
 exports[`buildkite-graph retry yaml 4`] = `
 "steps:
   - command: noop
+    retry:
+      manual:
+        allowed: false
+        reason: 'Sorry, you can''t retry a deployment'
 "
 `;
 
@@ -922,12 +974,19 @@ exports[`buildkite-graph retry yaml 5`] = `
 exports[`buildkite-graph retry yaml 6`] = `
 "steps:
   - command: noop
+    retry:
+      manual:
+        permit_on_passed: true
 "
 `;
 
 exports[`buildkite-graph retry yaml 7`] = `
 "steps:
   - command: noop
+    retry:
+      manual:
+        permit_on_passed: true
+      automatic: true
 "
 `;
 
