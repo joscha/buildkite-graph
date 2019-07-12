@@ -31,7 +31,22 @@ abstract class DefaultStep implements BaseStep {
     }
 }
 
-class LabeledStep extends DefaultStep {
+@Exclude()
+class BranchLimitedStep extends DefaultStep {
+    @Expose({ name: 'branches' })
+    @Transform((branches: Set<string>) =>
+        branches.size ? [...branches].sort().join(' ') : undefined,
+    )
+    private _branches: Set<string> = new Set();
+
+    withBranch(pattern: string): this {
+        ow(pattern, ow.string.nonEmpty);
+        this._branches.add(pattern);
+        return this;
+    }
+}
+
+class LabeledStep extends BranchLimitedStep {
     private _label?: string;
 
     @Expose()
@@ -269,12 +284,6 @@ export class Step extends LabeledStep {
         }
     }
 
-    @Expose({ name: 'branches' })
-    @Transform((branches: Set<string>) =>
-        branches.size ? [...branches].sort().join(' ') : undefined,
-    )
-    private _branches: Set<string> = new Set();
-
     @Expose({ name: 'plugins' })
     @Transform(transformPlugins)
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
@@ -353,12 +362,6 @@ export class Step extends LabeledStep {
         ow(key, ow.string.nonEmpty);
         ow(value, ow.string.nonEmpty);
         this._agents.set(key, value);
-        return this;
-    }
-
-    withBranch(pattern: string): this {
-        ow(pattern, ow.string.nonEmpty);
-        this._branches.add(pattern);
         return this;
     }
 
@@ -564,13 +567,38 @@ export class Plugin {
     }
 }
 
+interface Fields<T> {
+    addText(): T;
+
+    addSelect(): T;
+}
+
+class FieldsImpl extends Chainable<BlockStep> implements Fields<BlockStep> {
+    addText() {
+        return this.parent;
+    }
+
+    addSelect() {
+        return this.parent;
+    }
+
+    hasFields(): boolean {
+        // TODO
+        return false;
+    }
+}
+
 @Exclude()
-export class BlockStep extends DefaultStep {
+export class BlockStep extends BranchLimitedStep {
     @Expose({ name: 'block' })
     private readonly title: string;
 
     @Expose()
     private readonly prompt?: string;
+
+    @Expose()
+    @Transform((value: FieldsImpl) => (value.hasFields() ? value : undefined))
+    public readonly fields: Fields<BlockStep> = new FieldsImpl(this);
 
     constructor(title: string, prompt?: string) {
         super();

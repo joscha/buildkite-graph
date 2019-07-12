@@ -1,5 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`buildkite-graph Block step branches dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Block step branches json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+      "branches": "!release/* master stable/*",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Block step branches yaml 1`] = `
+"steps:
+  - branches: '!release/* master stable/*'
+    block: my title
+"
+`;
+
 exports[`buildkite-graph Block step can be added dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -55,6 +85,34 @@ exports[`buildkite-graph Block step can be added yaml 2`] = `
 "steps:
   - block: ':rocket: Release!'
     prompt: Release to production?
+"
+`;
+
+exports[`buildkite-graph Block step with fields dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Block step with fields json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Block step with fields yaml 1`] = `
+"steps:
+  - block: my title
 "
 `;
 
@@ -151,8 +209,8 @@ Object {
 
 exports[`buildkite-graph Command step branches yaml 1`] = `
 "steps:
-  - command: noop
-    branches: '!release/* master stable/*'
+  - branches: '!release/* master stable/*'
+    command: noop
 "
 `;
 

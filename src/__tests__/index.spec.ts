@@ -272,5 +272,20 @@ describe('buildkite-graph', () => {
                 new BlockStep(':rocket: Release!', 'Release to production?'),
             ),
         ]);
+
+        createTest('branches', () =>
+            new Entity('whatever').add(
+                new BlockStep('my title')
+                    .withBranch('master')
+                    .withBranch('stable/*')
+                    .withBranch('!release/*'),
+            ),
+        );
+
+        createTest('with fields', () => [
+            new Entity('whatever').add(
+                new BlockStep('my title').fields.addSelect().fields.addText(),
+            ),
+        ]);
     });
 });
