@@ -1,6 +1,64 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildkite-graph agents dot 1`] = `
+exports[`buildkite-graph Block step can be added dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for ':rocket: Release!']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Block step can be added dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for ':rocket: Release!']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Block step can be added json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": ":rocket: Release!",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Block step can be added json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": ":rocket: Release!",
+      "prompt": "Release to production?",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Block step can be added yaml 1`] = `
+"steps:
+  - block: ':rocket: Release!'
+"
+`;
+
+exports[`buildkite-graph Block step can be added yaml 2`] = `
+"steps:
+  - block: ':rocket: Release!'
+    prompt: Release to production?
+"
+`;
+
+exports[`buildkite-graph Command step agents dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -12,7 +70,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph agents json 1`] = `
+exports[`buildkite-graph Command step agents json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -25,7 +83,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph agents yaml 1`] = `
+exports[`buildkite-graph Command step agents yaml 1`] = `
 "steps:
   - command: noop
     agents:
@@ -33,7 +91,7 @@ exports[`buildkite-graph agents yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph artifact_paths dot 1`] = `
+exports[`buildkite-graph Command step artifact_paths dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -45,7 +103,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph artifact_paths json 1`] = `
+exports[`buildkite-graph Command step artifact_paths json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -59,7 +117,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph artifact_paths yaml 1`] = `
+exports[`buildkite-graph Command step artifact_paths yaml 1`] = `
 "steps:
   - command: noop
     artifact_paths:
@@ -68,7 +126,7 @@ exports[`buildkite-graph artifact_paths yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph branches dot 1`] = `
+exports[`buildkite-graph Command step branches dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -80,7 +138,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph branches json 1`] = `
+exports[`buildkite-graph Command step branches json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -91,14 +149,14 @@ Object {
 }
 `;
 
-exports[`buildkite-graph branches yaml 1`] = `
+exports[`buildkite-graph Command step branches yaml 1`] = `
 "steps:
   - command: noop
     branches: '!release/* master stable/*'
 "
 `;
 
-exports[`buildkite-graph concurrency dot 1`] = `
+exports[`buildkite-graph Command step concurrency dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -110,7 +168,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph concurrency json 1`] = `
+exports[`buildkite-graph Command step concurrency json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -122,7 +180,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph concurrency yaml 1`] = `
+exports[`buildkite-graph Command step concurrency yaml 1`] = `
 "steps:
   - command: noop
     concurrency: 3
@@ -130,7 +188,7 @@ exports[`buildkite-graph concurrency yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step dot 1`] = `
+exports[`buildkite-graph Command step continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -156,7 +214,7 @@ subgraph cluster_1 {
 "
 `;
 
-exports[`buildkite-graph continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step json 1`] = `
+exports[`buildkite-graph Command step continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -179,7 +237,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step yaml 1`] = `
+exports[`buildkite-graph Command step continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step yaml 1`] = `
 "steps:
   - command: command.sh
   - wait: ~
@@ -190,7 +248,7 @@ exports[`buildkite-graph continue on failure multiple subsequent always-executed
 "
 `;
 
-exports[`buildkite-graph continue on failure subsequent depending steps that are not always executed get an additional wait step dot 1`] = `
+exports[`buildkite-graph Command step continue on failure subsequent depending steps that are not always executed get an additional wait step dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -213,7 +271,7 @@ subgraph cluster_1 {
 "
 `;
 
-exports[`buildkite-graph continue on failure subsequent depending steps that are not always executed get an additional wait step json 1`] = `
+exports[`buildkite-graph Command step continue on failure subsequent depending steps that are not always executed get an additional wait step json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -236,7 +294,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph continue on failure subsequent depending steps that are not always executed get an additional wait step yaml 1`] = `
+exports[`buildkite-graph Command step continue on failure subsequent depending steps that are not always executed get an additional wait step yaml 1`] = `
 "steps:
   - command: command.sh
   - wait: ~
@@ -247,7 +305,7 @@ exports[`buildkite-graph continue on failure subsequent depending steps that are
 "
 `;
 
-exports[`buildkite-graph env dot 1`] = `
+exports[`buildkite-graph Command step env dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -259,7 +317,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph env json 1`] = `
+exports[`buildkite-graph Command step env json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -273,12 +331,761 @@ Object {
 }
 `;
 
-exports[`buildkite-graph env yaml 1`] = `
+exports[`buildkite-graph Command step env yaml 1`] = `
 "steps:
   - command: noop
     env:
       RAILS_ENV: test
       DEBUG: 'true'
+"
+`;
+
+exports[`buildkite-graph Command step id dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step id json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "id": "my-id",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step id yaml 1`] = `
+"steps:
+  - command: noop
+    id: my-id
+"
+`;
+
+exports[`buildkite-graph Command step label dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"my label\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step label json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "label": "my label",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step label yaml 1`] = `
+"steps:
+  - label: my label
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Command step parallelism dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step parallelism json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "parallelism": 123,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step parallelism yaml 1`] = `
+"steps:
+  - command: noop
+    parallelism: 123
+"
+`;
+
+exports[`buildkite-graph Command step plugins dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step plugins json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "plugins": Array [
+        Object {
+          "bugcrowd/test-summary#v1.5.0": Object {
+            "inputs": Array [
+              Object {
+                "artifact_path": "web/target/htmllint-*.txt",
+                "label": ":htmllint: HTML lint",
+                "type": "oneline",
+              },
+            ],
+          },
+        },
+        Object {
+          "detect-clowns#v1.0.0": null,
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step plugins yaml 1`] = `
+"steps:
+  - command: noop
+    plugins:
+      - 'bugcrowd/test-summary#v1.5.0':
+          inputs:
+            - label: ':htmllint: HTML lint'
+              artifact_path: web/target/htmllint-*.txt
+              type: oneline
+      - 'detect-clowns#v1.0.0': ~
+"
+`;
+
+exports[`buildkite-graph Command step retry dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step retry dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step retry dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step retry dot 4`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step retry dot 5`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step retry dot 6`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step retry dot 7`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step retry json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "retry": Object {
+        "automatic": true,
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step retry json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "retry": Object {
+        "automatic": Array [
+          Object {
+            "exit_status": "*",
+            "limit": 2,
+          },
+          Object {
+            "exit_status": 255,
+            "limit": 2,
+          },
+        ],
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step retry json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "retry": Object {
+        "manual": Object {
+          "allowed": false,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step retry json 4`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "retry": Object {
+        "manual": Object {
+          "allowed": false,
+          "reason": "Sorry, you can't retry a deployment",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step retry json 5`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step retry json 6`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "retry": Object {
+        "manual": Object {
+          "permit_on_passed": true,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step retry json 7`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "retry": Object {
+        "automatic": true,
+        "manual": Object {
+          "permit_on_passed": true,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step retry yaml 1`] = `
+"steps:
+  - command: noop
+    retry:
+      automatic: true
+"
+`;
+
+exports[`buildkite-graph Command step retry yaml 2`] = `
+"steps:
+  - command: noop
+    retry:
+      automatic:
+        - exit_status: '*'
+          limit: 2
+        - exit_status: 255
+          limit: 2
+"
+`;
+
+exports[`buildkite-graph Command step retry yaml 3`] = `
+"steps:
+  - command: noop
+    retry:
+      manual:
+        allowed: false
+"
+`;
+
+exports[`buildkite-graph Command step retry yaml 4`] = `
+"steps:
+  - command: noop
+    retry:
+      manual:
+        allowed: false
+        reason: 'Sorry, you can''t retry a deployment'
+"
+`;
+
+exports[`buildkite-graph Command step retry yaml 5`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph Command step retry yaml 6`] = `
+"steps:
+  - command: noop
+    retry:
+      manual:
+        permit_on_passed: true
+"
+`;
+
+exports[`buildkite-graph Command step retry yaml 7`] = `
+"steps:
+  - command: noop
+    retry:
+      manual:
+        permit_on_passed: true
+      automatic: true
+"
+`;
+
+exports[`buildkite-graph Command step skip dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step skip dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step skip json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "skip": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step skip json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "skip": "my reason",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step skip yaml 1`] = `
+"steps:
+  - command: noop
+    skip: true
+"
+`;
+
+exports[`buildkite-graph Command step skip yaml 2`] = `
+"steps:
+  - command: noop
+    skip: my reason
+"
+`;
+
+exports[`buildkite-graph Command step soft_fail boolean dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step soft_fail boolean dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step soft_fail boolean json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "soft_fail": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step soft_fail boolean json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "soft_fail": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step soft_fail boolean yaml 1`] = `
+"steps:
+  - command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph Command step soft_fail boolean yaml 2`] = `
+"steps:
+  - command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph Command step soft_fail multiple dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step soft_fail multiple json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "soft_fail": Array [
+        Object {
+          "exit_status": 1,
+        },
+        Object {
+          "exit_status": -127,
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step soft_fail multiple yaml 1`] = `
+"steps:
+  - command: noop
+    soft_fail:
+      - exit_status: 1
+      - exit_status: -127
+"
+`;
+
+exports[`buildkite-graph Command step soft_fail star dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step soft_fail star json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "soft_fail": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step soft_fail star yaml 1`] = `
+"steps:
+  - command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph Command step step addition dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step step addition json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step step addition yaml 1`] = `
+"steps:
+  - command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Command step timeouts can be infinite dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step timeouts can be infinite json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step timeouts can be infinite yaml 1`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph Command step timeouts commands with timeouts set step timeout total dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step timeouts commands with timeouts set step timeout total json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn install",
+        "yarn test",
+      ],
+      "timeout_in_minutes": 20,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step timeouts commands with timeouts set step timeout total yaml 1`] = `
+"steps:
+  - command:
+      - yarn install
+      - yarn test
+    timeout_in_minutes: 20
+"
+`;
+
+exports[`buildkite-graph Command step timeouts one infinite timeout will cancel out the others dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step timeouts one infinite timeout will cancel out the others json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn install",
+        "yarn test",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step timeouts one infinite timeout will cancel out the others yaml 1`] = `
+"steps:
+  - command:
+      - yarn install
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Command step timeouts step timeout total trumps commands dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Command step timeouts step timeout total trumps commands json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn install",
+        "yarn test",
+      ],
+      "timeout_in_minutes": 2,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Command step timeouts step timeout total trumps commands yaml 1`] = `
+"steps:
+  - command:
+      - yarn install
+      - yarn test
+    timeout_in_minutes: 2
 "
 `;
 
@@ -550,66 +1357,6 @@ steps:
 "
 `;
 
-exports[`buildkite-graph id dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph id json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "id": "my-id",
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph id yaml 1`] = `
-"steps:
-  - command: noop
-    id: my-id
-"
-`;
-
-exports[`buildkite-graph label dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"my label\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph label json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "label": "my label",
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph label yaml 1`] = `
-"steps:
-  - label: my label
-    command: noop
-"
-`;
-
 exports[`buildkite-graph missing transitive steps get added to the graph dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
@@ -651,694 +1398,5 @@ exports[`buildkite-graph missing transitive steps get added to the graph yaml 1`
   - command: yarn
   - wait: ~
   - command: yarn test
-"
-`;
-
-exports[`buildkite-graph parallelism dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph parallelism json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "parallelism": 123,
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph parallelism yaml 1`] = `
-"steps:
-  - command: noop
-    parallelism: 123
-"
-`;
-
-exports[`buildkite-graph plugins dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph plugins json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "plugins": Array [
-        Object {
-          "bugcrowd/test-summary#v1.5.0": Object {
-            "inputs": Array [
-              Object {
-                "artifact_path": "web/target/htmllint-*.txt",
-                "label": ":htmllint: HTML lint",
-                "type": "oneline",
-              },
-            ],
-          },
-        },
-        Object {
-          "detect-clowns#v1.0.0": null,
-        },
-      ],
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph plugins yaml 1`] = `
-"steps:
-  - command: noop
-    plugins:
-      - 'bugcrowd/test-summary#v1.5.0':
-          inputs:
-            - label: ':htmllint: HTML lint'
-              artifact_path: web/target/htmllint-*.txt
-              type: oneline
-      - 'detect-clowns#v1.0.0': ~
-"
-`;
-
-exports[`buildkite-graph retry dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph retry dot 2`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph retry dot 3`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph retry dot 4`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph retry dot 5`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph retry dot 6`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph retry dot 7`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph retry json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "retry": Object {
-        "automatic": true,
-      },
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph retry json 2`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "retry": Object {
-        "automatic": Array [
-          Object {
-            "exit_status": "*",
-            "limit": 2,
-          },
-          Object {
-            "exit_status": 255,
-            "limit": 2,
-          },
-        ],
-      },
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph retry json 3`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "retry": Object {
-        "manual": Object {
-          "allowed": false,
-        },
-      },
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph retry json 4`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "retry": Object {
-        "manual": Object {
-          "allowed": false,
-          "reason": "Sorry, you can't retry a deployment",
-        },
-      },
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph retry json 5`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph retry json 6`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "retry": Object {
-        "manual": Object {
-          "permit_on_passed": true,
-        },
-      },
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph retry json 7`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "retry": Object {
-        "automatic": true,
-        "manual": Object {
-          "permit_on_passed": true,
-        },
-      },
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph retry yaml 1`] = `
-"steps:
-  - command: noop
-    retry:
-      automatic: true
-"
-`;
-
-exports[`buildkite-graph retry yaml 2`] = `
-"steps:
-  - command: noop
-    retry:
-      automatic:
-        - exit_status: '*'
-          limit: 2
-        - exit_status: 255
-          limit: 2
-"
-`;
-
-exports[`buildkite-graph retry yaml 3`] = `
-"steps:
-  - command: noop
-    retry:
-      manual:
-        allowed: false
-"
-`;
-
-exports[`buildkite-graph retry yaml 4`] = `
-"steps:
-  - command: noop
-    retry:
-      manual:
-        allowed: false
-        reason: 'Sorry, you can''t retry a deployment'
-"
-`;
-
-exports[`buildkite-graph retry yaml 5`] = `
-"steps:
-  - command: noop
-"
-`;
-
-exports[`buildkite-graph retry yaml 6`] = `
-"steps:
-  - command: noop
-    retry:
-      manual:
-        permit_on_passed: true
-"
-`;
-
-exports[`buildkite-graph retry yaml 7`] = `
-"steps:
-  - command: noop
-    retry:
-      manual:
-        permit_on_passed: true
-      automatic: true
-"
-`;
-
-exports[`buildkite-graph skip dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph skip dot 2`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph skip json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "skip": true,
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph skip json 2`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "skip": "my reason",
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph skip yaml 1`] = `
-"steps:
-  - command: noop
-    skip: true
-"
-`;
-
-exports[`buildkite-graph skip yaml 2`] = `
-"steps:
-  - command: noop
-    skip: my reason
-"
-`;
-
-exports[`buildkite-graph soft_fail boolean dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph soft_fail boolean dot 2`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph soft_fail boolean json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "soft_fail": true,
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph soft_fail boolean json 2`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "soft_fail": true,
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph soft_fail boolean yaml 1`] = `
-"steps:
-  - command: noop
-    soft_fail: true
-"
-`;
-
-exports[`buildkite-graph soft_fail boolean yaml 2`] = `
-"steps:
-  - command: noop
-    soft_fail: true
-"
-`;
-
-exports[`buildkite-graph soft_fail multiple dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph soft_fail multiple json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "soft_fail": Array [
-        Object {
-          "exit_status": 1,
-        },
-        Object {
-          "exit_status": -127,
-        },
-      ],
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph soft_fail multiple yaml 1`] = `
-"steps:
-  - command: noop
-    soft_fail:
-      - exit_status: 1
-      - exit_status: -127
-"
-`;
-
-exports[`buildkite-graph soft_fail star dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph soft_fail star json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-      "soft_fail": true,
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph soft_fail star yaml 1`] = `
-"steps:
-  - command: noop
-    soft_fail: true
-"
-`;
-
-exports[`buildkite-graph step addition dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<yarn && yarn test>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph step addition json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": Array [
-        "yarn",
-        "yarn test",
-      ],
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph step addition yaml 1`] = `
-"steps:
-  - command:
-      - yarn
-      - yarn test
-"
-`;
-
-exports[`buildkite-graph timeouts can be infinite dot 1`] = `
-"digraph \\"test\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph timeouts can be infinite json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "noop",
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph timeouts can be infinite yaml 1`] = `
-"steps:
-  - command: noop
-"
-`;
-
-exports[`buildkite-graph timeouts commands with timeouts set step timeout total dot 1`] = `
-"digraph \\"test\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph timeouts commands with timeouts set step timeout total json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": Array [
-        "yarn install",
-        "yarn test",
-      ],
-      "timeout_in_minutes": 20,
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph timeouts commands with timeouts set step timeout total yaml 1`] = `
-"steps:
-  - command:
-      - yarn install
-      - yarn test
-    timeout_in_minutes: 20
-"
-`;
-
-exports[`buildkite-graph timeouts one infinite timeout will cancel out the others dot 1`] = `
-"digraph \\"test\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph timeouts one infinite timeout will cancel out the others json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": Array [
-        "yarn install",
-        "yarn test",
-      ],
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph timeouts one infinite timeout will cancel out the others yaml 1`] = `
-"steps:
-  - command:
-      - yarn install
-      - yarn test
-"
-`;
-
-exports[`buildkite-graph timeouts step timeout total trumps commands dot 1`] = `
-"digraph \\"test\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<yarn install && yarn test>\\" [ color = \\"grey\\" ];
-}
-
-}
-"
-`;
-
-exports[`buildkite-graph timeouts step timeout total trumps commands json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": Array [
-        "yarn install",
-        "yarn test",
-      ],
-      "timeout_in_minutes": 2,
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph timeouts step timeout total trumps commands yaml 1`] = `
-"steps:
-  - command:
-      - yarn install
-      - yarn test
-    timeout_in_minutes: 2
 "
 `;

@@ -17,13 +17,6 @@ abstract class DefaultStep implements BaseStep {
     @Exclude()
     public readonly dependencies: Set<DefaultStep> = new Set();
 
-    private _label?: string;
-
-    @Expose()
-    get label() {
-        return this._label;
-    }
-
     dependsOn(step: DefaultStep): this {
         this.dependencies.add(step);
         return this;
@@ -35,6 +28,15 @@ abstract class DefaultStep implements BaseStep {
     alwaysExecute() {
         this.always = true;
         return this;
+    }
+}
+
+class LabeledStep extends DefaultStep {
+    private _label?: string;
+
+    @Expose()
+    get label() {
+        return this._label;
     }
 
     withLabel(label: string) {
@@ -196,7 +198,7 @@ class RetryManual {
 }
 
 @Exclude()
-export class Step extends DefaultStep {
+export class Step extends LabeledStep {
     @Expose({ name: 'command' })
     @Transform((value: Command[]) => {
         if (!value || value.length === 0) {
@@ -413,7 +415,7 @@ class Build {
 }
 
 @Exclude()
-export class TriggerStep extends DefaultStep {
+export class TriggerStep extends LabeledStep {
     public readonly build = new Build(this);
 
     @Expose()
@@ -434,7 +436,7 @@ export class TriggerStep extends DefaultStep {
     }
 
     toString() {
-        return this.label || `Trigger ${this.triggeredEntity.name}`;
+        return this.label || `[trigger ${this.triggeredEntity.name}]`;
     }
 }
 
@@ -559,5 +561,24 @@ export class Plugin {
         public readonly configuration?: object,
     ) {
         ow(pluginNameOrPath, ow.string.not.empty);
+    }
+}
+
+@Exclude()
+export class BlockStep extends DefaultStep {
+    @Expose({ name: 'block' })
+    private readonly title: string;
+
+    @Expose()
+    private readonly prompt?: string;
+
+    constructor(title: string, prompt?: string) {
+        super();
+        this.title = title;
+        this.prompt = prompt;
+    }
+
+    toString() {
+        return `[block for '${this.title}']`;
     }
 }
