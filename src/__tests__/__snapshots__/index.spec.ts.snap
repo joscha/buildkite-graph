@@ -1,6 +1,61 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildkite-graph Block step branches dot 1`] = `
+exports[`buildkite-graph Pipeline env dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Pipeline env json 1`] = `
+Object {
+  "env": Object {
+    "COLOR": "1",
+  },
+  "steps": Array [],
+}
+`;
+
+exports[`buildkite-graph Pipeline env yaml 1`] = `
+"env:
+  COLOR: '1'
+steps: []
+"
+`;
+
+exports[`buildkite-graph Pipeline steps dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<command>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Pipeline steps json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "command",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Pipeline steps yaml 1`] = `
+"steps:
+  - command: command
+"
+`;
+
+exports[`buildkite-graph Steps Block branches dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -12,7 +67,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Block step branches json 1`] = `
+exports[`buildkite-graph Steps Block branches json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -23,14 +78,14 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Block step branches yaml 1`] = `
+exports[`buildkite-graph Steps Block branches yaml 1`] = `
 "steps:
   - branches: '!release/* master stable/*'
     block: my title
 "
 `;
 
-exports[`buildkite-graph Block step can be added dot 1`] = `
+exports[`buildkite-graph Steps Block can be added dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -42,7 +97,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Block step can be added dot 2`] = `
+exports[`buildkite-graph Steps Block can be added dot 2`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -54,7 +109,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Block step can be added json 1`] = `
+exports[`buildkite-graph Steps Block can be added json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -64,7 +119,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Block step can be added json 2`] = `
+exports[`buildkite-graph Steps Block can be added json 2`] = `
 Object {
   "steps": Array [
     Object {
@@ -75,20 +130,20 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Block step can be added yaml 1`] = `
+exports[`buildkite-graph Steps Block can be added yaml 1`] = `
 "steps:
   - block: ':rocket: Release!'
 "
 `;
 
-exports[`buildkite-graph Block step can be added yaml 2`] = `
+exports[`buildkite-graph Steps Block can be added yaml 2`] = `
 "steps:
   - block: ':rocket: Release!'
     prompt: Release to production?
 "
 `;
 
-exports[`buildkite-graph Block step with fields dot 1`] = `
+exports[`buildkite-graph Steps Block with fields dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -100,23 +155,220 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Block step with fields json 1`] = `
+exports[`buildkite-graph Steps Block with fields dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields dot 4`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields json 1`] = `
 Object {
   "steps": Array [
     Object {
       "block": "my title",
+      "fields": Array [
+        Object {
+          "key": "field-1",
+        },
+        Object {
+          "key": "field-2",
+          "options": Array [],
+        },
+        Object {
+          "key": "field-3",
+        },
+      ],
     },
   ],
 }
 `;
 
-exports[`buildkite-graph Block step with fields yaml 1`] = `
+exports[`buildkite-graph Steps Block with fields json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+      "fields": Array [
+        Object {
+          "default": "Flying Dolphin",
+          "hint": "What’s the code name for this release? :name_badge:",
+          "key": "release-name",
+          "label": "Code Name",
+          "required": false,
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block with fields json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+      "fields": Array [
+        Object {
+          "default": "beta",
+          "hint": "What’s the release stream?",
+          "key": "release-stream",
+          "label": "Stream",
+          "options": Array [
+            Object {
+              "label": "Beta",
+              "value": "beta",
+            },
+            Object {
+              "label": "Stable",
+              "value": "stable",
+            },
+          ],
+          "required": false,
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block with fields json 4`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+      "fields": Array [
+        Object {
+          "default": Array [
+            "na",
+            "eur",
+            "asia",
+            "aunz",
+          ],
+          "hint": "Which regions should we deploy this to? :earth_asia:",
+          "key": "regions",
+          "label": "Regions",
+          "multiple": true,
+          "options": Array [
+            Object {
+              "label": "North America",
+              "value": "na",
+            },
+            Object {
+              "label": "Europe",
+              "value": "eur",
+            },
+            Object {
+              "label": "Asia",
+              "value": "asia",
+            },
+            Object {
+              "label": "Oceania",
+              "value": "aunz",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block with fields yaml 1`] = `
 "steps:
   - block: my title
+    fields:
+      - key: field-1
+      - key: field-2
+        options: []
+      - key: field-3
 "
 `;
 
-exports[`buildkite-graph Command step agents dot 1`] = `
+exports[`buildkite-graph Steps Block with fields yaml 2`] = `
+"steps:
+  - block: my title
+    fields:
+      - key: release-name
+        label: Code Name
+        hint: 'What’s the code name for this release? :name_badge:'
+        required: false
+        default: Flying Dolphin
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields yaml 3`] = `
+"steps:
+  - block: my title
+    fields:
+      - key: release-stream
+        label: Stream
+        hint: What’s the release stream?
+        required: false
+        options:
+          - label: Beta
+            value: beta
+          - label: Stable
+            value: stable
+        default: beta
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields yaml 4`] = `
+"steps:
+  - block: my title
+    fields:
+      - key: regions
+        label: Regions
+        hint: 'Which regions should we deploy this to? :earth_asia:'
+        options:
+          - label: North America
+            value: na
+          - label: Europe
+            value: eur
+          - label: Asia
+            value: asia
+          - label: Oceania
+            value: aunz
+        default:
+          - na
+          - eur
+          - asia
+          - aunz
+        multiple: true
+"
+`;
+
+exports[`buildkite-graph Steps Command agents dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -128,7 +380,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step agents json 1`] = `
+exports[`buildkite-graph Steps Command agents json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -141,7 +393,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step agents yaml 1`] = `
+exports[`buildkite-graph Steps Command agents yaml 1`] = `
 "steps:
   - command: noop
     agents:
@@ -149,7 +401,7 @@ exports[`buildkite-graph Command step agents yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Command step artifact_paths dot 1`] = `
+exports[`buildkite-graph Steps Command artifact_paths dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -161,7 +413,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step artifact_paths json 1`] = `
+exports[`buildkite-graph Steps Command artifact_paths json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -175,7 +427,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step artifact_paths yaml 1`] = `
+exports[`buildkite-graph Steps Command artifact_paths yaml 1`] = `
 "steps:
   - command: noop
     artifact_paths:
@@ -184,7 +436,7 @@ exports[`buildkite-graph Command step artifact_paths yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Command step branches dot 1`] = `
+exports[`buildkite-graph Steps Command branches dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -196,7 +448,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step branches json 1`] = `
+exports[`buildkite-graph Steps Command branches json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -207,14 +459,14 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step branches yaml 1`] = `
+exports[`buildkite-graph Steps Command branches yaml 1`] = `
 "steps:
   - branches: '!release/* master stable/*'
     command: noop
 "
 `;
 
-exports[`buildkite-graph Command step concurrency dot 1`] = `
+exports[`buildkite-graph Steps Command concurrency dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -226,7 +478,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step concurrency json 1`] = `
+exports[`buildkite-graph Steps Command concurrency json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -238,7 +490,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step concurrency yaml 1`] = `
+exports[`buildkite-graph Steps Command concurrency yaml 1`] = `
 "steps:
   - command: noop
     concurrency: 3
@@ -246,7 +498,7 @@ exports[`buildkite-graph Command step concurrency yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Command step continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step dot 1`] = `
+exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -272,7 +524,7 @@ subgraph cluster_1 {
 "
 `;
 
-exports[`buildkite-graph Command step continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step json 1`] = `
+exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -295,7 +547,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step yaml 1`] = `
+exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step yaml 1`] = `
 "steps:
   - command: command.sh
   - wait: ~
@@ -306,7 +558,7 @@ exports[`buildkite-graph Command step continue on failure multiple subsequent al
 "
 `;
 
-exports[`buildkite-graph Command step continue on failure subsequent depending steps that are not always executed get an additional wait step dot 1`] = `
+exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -329,7 +581,7 @@ subgraph cluster_1 {
 "
 `;
 
-exports[`buildkite-graph Command step continue on failure subsequent depending steps that are not always executed get an additional wait step json 1`] = `
+exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -352,7 +604,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step continue on failure subsequent depending steps that are not always executed get an additional wait step yaml 1`] = `
+exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step yaml 1`] = `
 "steps:
   - command: command.sh
   - wait: ~
@@ -363,7 +615,7 @@ exports[`buildkite-graph Command step continue on failure subsequent depending s
 "
 `;
 
-exports[`buildkite-graph Command step env dot 1`] = `
+exports[`buildkite-graph Steps Command env dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -375,7 +627,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step env json 1`] = `
+exports[`buildkite-graph Steps Command env json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -389,7 +641,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step env yaml 1`] = `
+exports[`buildkite-graph Steps Command env yaml 1`] = `
 "steps:
   - command: noop
     env:
@@ -398,7 +650,7 @@ exports[`buildkite-graph Command step env yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Command step id dot 1`] = `
+exports[`buildkite-graph Steps Command id dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -410,7 +662,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step id json 1`] = `
+exports[`buildkite-graph Steps Command id json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -421,14 +673,14 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step id yaml 1`] = `
+exports[`buildkite-graph Steps Command id yaml 1`] = `
 "steps:
   - command: noop
     id: my-id
 "
 `;
 
-exports[`buildkite-graph Command step label dot 1`] = `
+exports[`buildkite-graph Steps Command label dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -440,7 +692,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step label json 1`] = `
+exports[`buildkite-graph Steps Command label json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -451,14 +703,14 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step label yaml 1`] = `
+exports[`buildkite-graph Steps Command label yaml 1`] = `
 "steps:
   - label: my label
     command: noop
 "
 `;
 
-exports[`buildkite-graph Command step parallelism dot 1`] = `
+exports[`buildkite-graph Steps Command parallelism dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -470,7 +722,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step parallelism json 1`] = `
+exports[`buildkite-graph Steps Command parallelism json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -481,14 +733,14 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step parallelism yaml 1`] = `
+exports[`buildkite-graph Steps Command parallelism yaml 1`] = `
 "steps:
   - command: noop
     parallelism: 123
 "
 `;
 
-exports[`buildkite-graph Command step plugins dot 1`] = `
+exports[`buildkite-graph Steps Command plugins dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -500,7 +752,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step plugins json 1`] = `
+exports[`buildkite-graph Steps Command plugins json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -526,7 +778,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step plugins yaml 1`] = `
+exports[`buildkite-graph Steps Command plugins yaml 1`] = `
 "steps:
   - command: noop
     plugins:
@@ -539,7 +791,7 @@ exports[`buildkite-graph Command step plugins yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Command step retry dot 1`] = `
+exports[`buildkite-graph Steps Command retry dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -551,7 +803,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step retry dot 2`] = `
+exports[`buildkite-graph Steps Command retry dot 2`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -563,7 +815,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step retry dot 3`] = `
+exports[`buildkite-graph Steps Command retry dot 3`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -575,7 +827,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step retry dot 4`] = `
+exports[`buildkite-graph Steps Command retry dot 4`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -587,7 +839,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step retry dot 5`] = `
+exports[`buildkite-graph Steps Command retry dot 5`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -599,7 +851,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step retry dot 6`] = `
+exports[`buildkite-graph Steps Command retry dot 6`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -611,7 +863,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step retry dot 7`] = `
+exports[`buildkite-graph Steps Command retry dot 7`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -623,7 +875,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step retry json 1`] = `
+exports[`buildkite-graph Steps Command retry json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -636,7 +888,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step retry json 2`] = `
+exports[`buildkite-graph Steps Command retry json 2`] = `
 Object {
   "steps": Array [
     Object {
@@ -658,7 +910,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step retry json 3`] = `
+exports[`buildkite-graph Steps Command retry json 3`] = `
 Object {
   "steps": Array [
     Object {
@@ -673,7 +925,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step retry json 4`] = `
+exports[`buildkite-graph Steps Command retry json 4`] = `
 Object {
   "steps": Array [
     Object {
@@ -689,7 +941,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step retry json 5`] = `
+exports[`buildkite-graph Steps Command retry json 5`] = `
 Object {
   "steps": Array [
     Object {
@@ -699,7 +951,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step retry json 6`] = `
+exports[`buildkite-graph Steps Command retry json 6`] = `
 Object {
   "steps": Array [
     Object {
@@ -714,7 +966,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step retry json 7`] = `
+exports[`buildkite-graph Steps Command retry json 7`] = `
 Object {
   "steps": Array [
     Object {
@@ -730,7 +982,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step retry yaml 1`] = `
+exports[`buildkite-graph Steps Command retry yaml 1`] = `
 "steps:
   - command: noop
     retry:
@@ -738,7 +990,7 @@ exports[`buildkite-graph Command step retry yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Command step retry yaml 2`] = `
+exports[`buildkite-graph Steps Command retry yaml 2`] = `
 "steps:
   - command: noop
     retry:
@@ -750,7 +1002,7 @@ exports[`buildkite-graph Command step retry yaml 2`] = `
 "
 `;
 
-exports[`buildkite-graph Command step retry yaml 3`] = `
+exports[`buildkite-graph Steps Command retry yaml 3`] = `
 "steps:
   - command: noop
     retry:
@@ -759,7 +1011,7 @@ exports[`buildkite-graph Command step retry yaml 3`] = `
 "
 `;
 
-exports[`buildkite-graph Command step retry yaml 4`] = `
+exports[`buildkite-graph Steps Command retry yaml 4`] = `
 "steps:
   - command: noop
     retry:
@@ -769,13 +1021,13 @@ exports[`buildkite-graph Command step retry yaml 4`] = `
 "
 `;
 
-exports[`buildkite-graph Command step retry yaml 5`] = `
+exports[`buildkite-graph Steps Command retry yaml 5`] = `
 "steps:
   - command: noop
 "
 `;
 
-exports[`buildkite-graph Command step retry yaml 6`] = `
+exports[`buildkite-graph Steps Command retry yaml 6`] = `
 "steps:
   - command: noop
     retry:
@@ -784,7 +1036,7 @@ exports[`buildkite-graph Command step retry yaml 6`] = `
 "
 `;
 
-exports[`buildkite-graph Command step retry yaml 7`] = `
+exports[`buildkite-graph Steps Command retry yaml 7`] = `
 "steps:
   - command: noop
     retry:
@@ -794,7 +1046,7 @@ exports[`buildkite-graph Command step retry yaml 7`] = `
 "
 `;
 
-exports[`buildkite-graph Command step skip dot 1`] = `
+exports[`buildkite-graph Steps Command skip dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -806,7 +1058,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step skip dot 2`] = `
+exports[`buildkite-graph Steps Command skip dot 2`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -818,7 +1070,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step skip json 1`] = `
+exports[`buildkite-graph Steps Command skip json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -829,7 +1081,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step skip json 2`] = `
+exports[`buildkite-graph Steps Command skip json 2`] = `
 Object {
   "steps": Array [
     Object {
@@ -840,21 +1092,21 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step skip yaml 1`] = `
+exports[`buildkite-graph Steps Command skip yaml 1`] = `
 "steps:
   - command: noop
     skip: true
 "
 `;
 
-exports[`buildkite-graph Command step skip yaml 2`] = `
+exports[`buildkite-graph Steps Command skip yaml 2`] = `
 "steps:
   - command: noop
     skip: my reason
 "
 `;
 
-exports[`buildkite-graph Command step soft_fail boolean dot 1`] = `
+exports[`buildkite-graph Steps Command soft_fail boolean dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -866,7 +1118,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step soft_fail boolean dot 2`] = `
+exports[`buildkite-graph Steps Command soft_fail boolean dot 2`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -878,7 +1130,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step soft_fail boolean json 1`] = `
+exports[`buildkite-graph Steps Command soft_fail boolean json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -889,7 +1141,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step soft_fail boolean json 2`] = `
+exports[`buildkite-graph Steps Command soft_fail boolean json 2`] = `
 Object {
   "steps": Array [
     Object {
@@ -900,21 +1152,21 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step soft_fail boolean yaml 1`] = `
+exports[`buildkite-graph Steps Command soft_fail boolean yaml 1`] = `
 "steps:
   - command: noop
     soft_fail: true
 "
 `;
 
-exports[`buildkite-graph Command step soft_fail boolean yaml 2`] = `
+exports[`buildkite-graph Steps Command soft_fail boolean yaml 2`] = `
 "steps:
   - command: noop
     soft_fail: true
 "
 `;
 
-exports[`buildkite-graph Command step soft_fail multiple dot 1`] = `
+exports[`buildkite-graph Steps Command soft_fail multiple dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -926,7 +1178,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step soft_fail multiple json 1`] = `
+exports[`buildkite-graph Steps Command soft_fail multiple json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -944,7 +1196,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step soft_fail multiple yaml 1`] = `
+exports[`buildkite-graph Steps Command soft_fail multiple yaml 1`] = `
 "steps:
   - command: noop
     soft_fail:
@@ -953,7 +1205,7 @@ exports[`buildkite-graph Command step soft_fail multiple yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Command step soft_fail star dot 1`] = `
+exports[`buildkite-graph Steps Command soft_fail star dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -965,7 +1217,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step soft_fail star json 1`] = `
+exports[`buildkite-graph Steps Command soft_fail star json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -976,14 +1228,14 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step soft_fail star yaml 1`] = `
+exports[`buildkite-graph Steps Command soft_fail star yaml 1`] = `
 "steps:
   - command: noop
     soft_fail: true
 "
 `;
 
-exports[`buildkite-graph Command step step addition dot 1`] = `
+exports[`buildkite-graph Steps Command step addition dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -995,7 +1247,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step step addition json 1`] = `
+exports[`buildkite-graph Steps Command step addition json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -1008,7 +1260,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step step addition yaml 1`] = `
+exports[`buildkite-graph Steps Command step addition yaml 1`] = `
 "steps:
   - command:
       - yarn
@@ -1016,7 +1268,7 @@ exports[`buildkite-graph Command step step addition yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Command step timeouts can be infinite dot 1`] = `
+exports[`buildkite-graph Steps Command timeouts can be infinite dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -1028,7 +1280,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step timeouts can be infinite json 1`] = `
+exports[`buildkite-graph Steps Command timeouts can be infinite json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -1038,13 +1290,13 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step timeouts can be infinite yaml 1`] = `
+exports[`buildkite-graph Steps Command timeouts can be infinite yaml 1`] = `
 "steps:
   - command: noop
 "
 `;
 
-exports[`buildkite-graph Command step timeouts commands with timeouts set step timeout total dot 1`] = `
+exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -1056,7 +1308,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step timeouts commands with timeouts set step timeout total json 1`] = `
+exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -1070,7 +1322,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step timeouts commands with timeouts set step timeout total yaml 1`] = `
+exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total yaml 1`] = `
 "steps:
   - command:
       - yarn install
@@ -1079,7 +1331,7 @@ exports[`buildkite-graph Command step timeouts commands with timeouts set step t
 "
 `;
 
-exports[`buildkite-graph Command step timeouts one infinite timeout will cancel out the others dot 1`] = `
+exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -1091,7 +1343,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step timeouts one infinite timeout will cancel out the others json 1`] = `
+exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -1104,7 +1356,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step timeouts one infinite timeout will cancel out the others yaml 1`] = `
+exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others yaml 1`] = `
 "steps:
   - command:
       - yarn install
@@ -1112,7 +1364,7 @@ exports[`buildkite-graph Command step timeouts one infinite timeout will cancel 
 "
 `;
 
-exports[`buildkite-graph Command step timeouts step timeout total trumps commands dot 1`] = `
+exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -1124,7 +1376,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Command step timeouts step timeout total trumps commands json 1`] = `
+exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -1138,12 +1390,419 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Command step timeouts step timeout total trumps commands yaml 1`] = `
+exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands yaml 1`] = `
 "steps:
   - command:
       - yarn install
       - yarn test
     timeout_in_minutes: 2
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"Label\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"Label\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"Label\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"Label\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "async": true,
+      "label": "Label",
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger async json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "label": "Label",
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger async json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "async": true,
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger async yaml 1`] = `
+"steps:
+  - label: Label
+    async: true
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async yaml 2`] = `
+"steps:
+  - label: Label
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async yaml 3`] = `
+"steps:
+  - async: true
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 4`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 5`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "env": Object {
+          "ANOTHER_KEY": "VALUE",
+          "KEY": "VALUE",
+        },
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "branch": "rease-bla",
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "commit": "c0ffee",
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build json 4`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "message": "My messge",
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build json 5`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "meta_data": Object {
+          "release-version": "1.1",
+          "some-other": "value",
+        },
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 1`] = `
+"steps:
+  - build:
+      env:
+        KEY: VALUE
+        ANOTHER_KEY: VALUE
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 2`] = `
+"steps:
+  - build:
+      branch: rease-bla
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 3`] = `
+"steps:
+  - build:
+      commit: c0ffee
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 4`] = `
+"steps:
+  - build:
+      message: My messge
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 5`] = `
+"steps:
+  - build:
+      meta_data:
+        release-version: '1.1'
+        some-other: value
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another-build]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another-build\\" [ shape =Msquare ];
+  \\"[trigger another-build]\\" -> \\"another-build\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another-build]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another-build\\" [ shape =Msquare ];
+  \\"[trigger another-build]\\" -> \\"another-build\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "trigger": "another-build",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "trigger": "another-build",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline yaml 1`] = `
+"steps:
+  - trigger: another-build
+"
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline yaml 2`] = `
+"steps:
+  - trigger: another-build
+"
+`;
+
+exports[`buildkite-graph Steps Trigger limit branches dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger limit branches json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "branches": "master",
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger limit branches yaml 1`] = `
+"steps:
+  - branches: master
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger with a label dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"Trigger another pipeline\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"Trigger another pipeline\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger with a label json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "label": "Trigger another pipeline",
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger with a label yaml 1`] = `
+"steps:
+  - label: Trigger another pipeline
+    trigger: another
 "
 `;
 
@@ -1364,17 +2023,17 @@ exports[`buildkite-graph general serialization complex yaml 1`] = `
   - label: Update checkpoint
     command: production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"
   - label: Deploy to tech
-    trigger: web-deploy
     build:
       env:
         FLAVOR: tech
         RELEASE_PATH: some/path/
-  - label: Deploy to usertesting
     trigger: web-deploy
+  - label: Deploy to usertesting
     build:
       env:
         FLAVOR: usertesting
         RELEASE_PATH: some/path/
+    trigger: web-deploy
 "
 `;
 

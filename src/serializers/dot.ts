@@ -30,7 +30,7 @@ export class DotSerializer implements Serializer<string> {
             lastNode.set('color', 'grey');
 
             if (step instanceof TriggerStep) {
-                const triggered = graph.addNode(step.triggeredEntity.name);
+                const triggered = graph.addNode(step.trigger);
                 triggered.set('shape', 'Msquare');
                 const edge = graph.addEdge(lastNode, triggered);
                 edge.set('label', 'triggers');

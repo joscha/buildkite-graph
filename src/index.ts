@@ -226,8 +226,8 @@ export class Step extends LabeledStep {
     public readonly command: Command[] = [];
 
     @Expose()
-    @Transform(value => transformEnv(value))
-    public readonly env: Env<this>;
+    @Transform(transformKeyValueImpl)
+    public readonly env: KeyValue<this>;
 
     private _id?: string;
     @Expose({ name: 'id' })
@@ -317,7 +317,7 @@ export class Step extends LabeledStep {
         label?: string,
     ) {
         super();
-        this.env = new EnvImpl(this);
+        this.env = new KeyValueImpl(this);
         if (label) {
             this.withLabel(label);
         }
@@ -410,46 +410,111 @@ export class Step extends LabeledStep {
     }
 }
 
-class Build {
-    public readonly env: Env<TriggerStep>;
-    constructor(triggerStep: TriggerStep) {
-        this.env = new EnvImpl(triggerStep);
+interface Build<T> {
+    env: KeyValue<T>;
+    metadata: KeyValue<T>;
+
+    withMessage(message: string): T;
+
+    withCommit(commit: string): T;
+    withBranch(branch: string): T;
+}
+
+@Exclude()
+class BuildImpl<T> implements Build<T> {
+    @Expose({ name: 'message' })
+    private _message?: string;
+
+    @Expose({ name: 'commit' })
+    private _commit?: string;
+
+    @Expose({ name: 'branch' })
+    private _branch?: string;
+
+    @Expose()
+    @Transform(transformKeyValueImpl)
+    public readonly env: KeyValue<T>;
+
+    @Expose({ name: 'meta_data' })
+    @Transform(transformKeyValueImpl)
+    public readonly metadata: KeyValue<T>;
+
+    constructor(private readonly triggerStep: T) {
+        this.env = new KeyValueImpl(triggerStep);
+        this.metadata = new KeyValueImpl(triggerStep);
+    }
+
+    withMessage(message: string): T {
+        this._message = message;
+        return this.triggerStep;
+    }
+
+    withCommit(commit: string): T {
+        this._commit = commit;
+        return this.triggerStep;
+    }
+
+    withBranch(branch: string): T {
+        this._branch = branch;
+        return this.triggerStep;
+    }
+
+    hasData() {
+        return (
+            this._branch ||
+            this._commit ||
+            typeof this._message !== 'undefined' ||
+            (this.env as KeyValueImpl<T>).vars.size ||
+            (this.metadata as KeyValueImpl<T>).vars.size
+        );
     }
 }
 
 @Exclude()
 export class TriggerStep extends LabeledStep {
-    public readonly build = new Build(this);
+    @Expose()
+    @Transform((value: BuildImpl<any>) => (value.hasData() ? value : undefined))
+    public readonly build: Build<TriggerStep> = new BuildImpl(this);
+
+    @Expose({ name: 'async' })
+    @Transform((value: boolean) => (value ? value : undefined))
+    private _async: boolean = false;
 
     @Expose()
     get trigger() {
-        return slug(this.triggeredEntity.name, { lower: true });
+        return this._trigger instanceof Entity
+            ? slug(this._trigger.name, { lower: true })
+            : this._trigger;
     }
 
-    @Expose({ name: 'build' })
-    private get _build() {
-        return { env: (this.build.env as EnvImpl<any>).vars };
-    }
-
-    constructor(public readonly triggeredEntity: Entity, label?: string) {
+    constructor(
+        private readonly _trigger: Entity | string,
+        label?: string,
+        async: boolean = false,
+    ) {
         super();
         if (label) {
             this.withLabel(label);
         }
+        this._async = async;
+    }
+
+    async(async: boolean): this {
+        this._async = async;
+        return this;
     }
 
     toString() {
-        return this.label || `[trigger ${this.triggeredEntity.name}]`;
+        return this.label || `[trigger ${this.trigger}]`;
     }
 }
 
-interface Env<T> {
+interface KeyValue<T> {
     set(name: string, value: string): T;
 }
 
 @Exclude()
-class EnvImpl<T> extends Chainable<T> implements Env<T> {
-    @Expose({ name: 'env' })
+class KeyValueImpl<T> extends Chainable<T> implements KeyValue<T> {
     public readonly vars: Map<string, string> = new Map();
 
     set(name: string, value: string): T {
@@ -463,8 +528,8 @@ class EnvImpl<T> extends Chainable<T> implements Env<T> {
 // TODO: remove this once
 // https://github.com/typestack/class-transformer/issues/274
 // is fixed
-function transformEnv(env: EnvImpl<any>) {
-    return env.vars.size ? env.vars : undefined;
+function transformKeyValueImpl(kv: KeyValueImpl<any>) {
+    return kv.vars.size ? kv.vars : undefined;
 }
 
 @Exclude()
@@ -474,12 +539,12 @@ export class Entity {
     public readonly steps: DefaultStep[] = [];
 
     @Expose()
-    @Transform(value => transformEnv(value))
-    public readonly env: Env<this>;
+    @Transform(transformKeyValueImpl)
+    public readonly env: KeyValue<this>;
 
     constructor(name: string) {
         this.name = name;
-        this.env = new EnvImpl(this);
+        this.env = new KeyValueImpl(this);
     }
 
     add(...step: DefaultStep[]) {
@@ -567,24 +632,108 @@ export class Plugin {
     }
 }
 
-interface Fields<T> {
-    addText(): T;
+@Expose()
+abstract class Field {
+    public readonly required?: false;
 
-    addSelect(): T;
+    constructor(
+        public readonly key: string,
+        public readonly label?: string,
+        public readonly hint?: string,
+        required: boolean = false,
+    ) {
+        ow(key, ow.string.nonEmpty);
+        ow(key, ow.string.matches(/[0-9a-z-\/]+/i));
+        if (!required) {
+            this.required = required;
+        }
+    }
 }
 
-class FieldsImpl extends Chainable<BlockStep> implements Fields<BlockStep> {
-    addText() {
-        return this.parent;
+@Expose()
+export class TextField extends Field {
+    private readonly default?: string;
+
+    constructor(
+        key: string,
+        label?: string,
+        hint?: string,
+        required: boolean = true,
+        defaultValue?: string,
+    ) {
+        super(key, label, hint, required);
+        this.default = defaultValue;
+    }
+}
+
+export class Option {
+    constructor(
+        private readonly label: string,
+        private readonly value: string,
+    ) {
+        ow(label, ow.string.nonEmpty);
+        ow(value, ow.string.nonEmpty);
+    }
+}
+
+@Expose()
+export class SelectField extends Field {
+    private options: Option[] = [];
+    private readonly multiple?: true;
+    private readonly default?: string | string[];
+
+    constructor(
+        key: string,
+        label?: string,
+        hint?: string,
+        required?: boolean,
+        multiple?: false,
+        defaultValue?: string,
+    );
+    constructor(
+        key: string,
+        label?: string,
+        hint?: string,
+        required?: boolean,
+        multiple?: true,
+        defaultValue?: string | string[],
+    );
+    constructor(
+        key: string,
+        label?: string,
+        hint?: string,
+        required: boolean = true,
+        multiple: boolean = false,
+        defaultValue?: string | string[],
+    ) {
+        super(key, label, hint, required);
+        this.default = defaultValue;
+        if (multiple) {
+            this.multiple = multiple;
+        }
     }
 
-    addSelect() {
+    addOption(option: Option) {
+        this.options.push(option);
+        return this;
+    }
+}
+
+interface Fields<T> {
+    add(field: Field): T;
+}
+
+@Exclude()
+class FieldsImpl extends Chainable<BlockStep> implements Fields<BlockStep> {
+    fields: Map<string, Field> = new Map();
+
+    add(field: Field) {
+        this.fields.set(field.key, field);
         return this.parent;
     }
 
     hasFields(): boolean {
-        // TODO
-        return false;
+        return this.fields.size > 0;
     }
 }
 
@@ -597,7 +746,9 @@ export class BlockStep extends BranchLimitedStep {
     private readonly prompt?: string;
 
     @Expose()
-    @Transform((value: FieldsImpl) => (value.hasFields() ? value : undefined))
+    @Transform((value: FieldsImpl) =>
+        value.hasFields() ? [...value.fields.values()] : undefined,
+    )
     public readonly fields: Fields<BlockStep> = new FieldsImpl(this);
 
     constructor(title: string, prompt?: string) {
