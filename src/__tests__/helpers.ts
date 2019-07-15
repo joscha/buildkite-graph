@@ -1,4 +1,4 @@
-import { Entity, Step, TriggerStep, Plugin } from '../';
+import { Entity, Step, TriggerStep, Plugin, BlockStep } from '../';
 
 export function createSimple() {
     return new Entity('web-deploy').env
@@ -95,10 +95,9 @@ export function createComplex() {
         .build.env.set('RELEASE_PATH', 'some/path/')
         .dependsOn(copyToDeployBucketStep);
 
-    /*
-const releaseStep = new ManualStep('Release editor', options)
-  .dependsOn(updateCheckpointStep)
-*/
+    const releaseStep = new BlockStep('Release editor').dependsOn(
+        updateCheckpointStep,
+    );
 
     const webBuildEditor = new Entity('web-build-editor')
         .add(buildEditorStep)
@@ -112,7 +111,7 @@ const releaseStep = new ManualStep('Release editor', options)
         .add(copyToDeployBucketStep)
         .add(updateCheckpointStep)
         .add(deployEditorToTechStep)
-        .add(deployEditorToUserTestingStep);
-    // .add(releaseStep)
+        .add(deployEditorToUserTestingStep)
+        .add(releaseStep);
     return webBuildEditor;
 }

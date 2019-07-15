@@ -1841,6 +1841,11 @@ subgraph cluster_4 {
   \\"Deploy to usertesting\\" [ color = \\"grey\\" ];
 }
 
+subgraph cluster_5 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'Release editor']\\" [ color = \\"grey\\" ];
+}
+
   \\"Test Editor\\";
   \\"Annotate failures\\";
   \\"Upload coverage\\";
@@ -1854,6 +1859,7 @@ subgraph cluster_4 {
   \\"Deploy to tech\\";
   \\"web-deploy\\" [ shape =Msquare ];
   \\"Deploy to usertesting\\";
+  \\"[block for 'Release editor']\\";
   \\"Test Editor\\" -> \\"Annotate failures\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
   \\"Test Editor\\" -> \\"Upload coverage\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
   \\"Build Editor\\" -> \\"Integration tests\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
@@ -1867,6 +1873,7 @@ subgraph cluster_4 {
   \\"Deploy to tech\\" -> \\"web-deploy\\" [ label = \\"triggers\\" ];
   \\"Copy to deploy bucket\\" -> \\"Deploy to usertesting\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
   \\"Deploy to usertesting\\" -> \\"web-deploy\\" [ label = \\"triggers\\" ];
+  \\"Update checkpoint\\" -> \\"[block for 'Release editor']\\" [ ltail = \\"cluster_4\\", lhead = \\"cluster_5\\" ];
 }
 "
 `;
@@ -1975,6 +1982,12 @@ Object {
       "label": "Deploy to usertesting",
       "trigger": "web-deploy",
     },
+    Object {
+      "wait": null,
+    },
+    Object {
+      "block": "Release editor",
+    },
   ],
 }
 `;
@@ -2034,6 +2047,8 @@ exports[`buildkite-graph general serialization complex yaml 1`] = `
         FLAVOR: usertesting
         RELEASE_PATH: some/path/
     trigger: web-deploy
+  - wait: ~
+  - block: Release editor
 "
 `;
 
