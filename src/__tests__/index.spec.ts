@@ -2,7 +2,6 @@ import {
     Command,
     Entity,
     Step,
-    Plugin,
     ExitStatus,
     BlockStep,
     SelectField,
@@ -10,6 +9,7 @@ import {
     Option,
     TriggerStep,
 } from '../';
+import { Plugin } from '../plugins';
 import { createTest } from './helpers';
 import { createSimple, createComplex } from './samples';
 

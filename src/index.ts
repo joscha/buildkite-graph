@@ -10,34 +10,9 @@ import {
     BranchLimitedStep,
 } from './steps/base';
 import { WaitStep } from './steps/wait';
+import { transformPlugins, Plugin, Plugins, PluginsImpl } from './plugins';
 
 const exitStatusPredicate = ow.any(ow.string.equals('*'), ow.number.integer);
-
-interface Plugins<T> {
-    add(plugin: Plugin): T;
-}
-
-function transformPlugins(value: PluginsImpl<any>) {
-    if (!value.plugins.length) {
-        return undefined;
-    }
-
-    return value.plugins.map(plugin => {
-        return {
-            [plugin.pluginNameOrPath]: plugin.configuration || null,
-        };
-    });
-}
-
-@Exclude()
-class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
-    public plugins: Plugin[] = [];
-
-    add(plugin: Plugin) {
-        this.plugins.push(plugin);
-        return this.parent;
-    }
-}
 
 function assertTimeout(timeout: number) {
     ow(timeout, ow.number.integerOrInfinite.positive);
@@ -548,15 +523,6 @@ export function stortedWithBlocks(e: Entity) {
         allSteps.push(step);
     }
     return allSteps;
-}
-
-export class Plugin {
-    constructor(
-        public readonly pluginNameOrPath: string,
-        public readonly configuration?: object,
-    ) {
-        ow(pluginNameOrPath, ow.string.not.empty);
-    }
 }
 
 @Expose()

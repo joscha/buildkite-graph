@@ -1,4 +1,5 @@
-import { Entity, Step, TriggerStep, Plugin, BlockStep } from '..';
+import { Entity, Step, TriggerStep, BlockStep } from '..';
+import { Plugin } from '../plugins';
 
 export function createSimple() {
     return new Entity('web-deploy').env
