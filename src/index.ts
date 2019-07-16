@@ -4,33 +4,14 @@ import 'reflect-metadata';
 import { Expose, Exclude, Transform } from 'class-transformer';
 import slug from 'slug';
 import {
-    BaseStep,
     Chainable,
     LabeledStep,
     DefaultStep,
     BranchLimitedStep,
 } from './steps/base';
+import { WaitStep } from './steps/wait';
 
 const exitStatusPredicate = ow.any(ow.string.equals('*'), ow.number.integer);
-
-class WaitStep implements BaseStep {
-    public readonly wait: null = null;
-
-    // TODO: Omit this when not true once
-    // https://github.com/typestack/class-transformer/issues/273
-    // has been fixed
-    @Expose({ name: 'continue_on_failure' })
-    public continueOnFailure?: true;
-
-    constructor(continueOnFailure?: true) {
-        this.continueOnFailure = continueOnFailure;
-    }
-
-    toString() {
-        /* istanbul ignore next */
-        return '[wait]';
-    }
-}
 
 interface Plugins<T> {
     add(plugin: Plugin): T;
