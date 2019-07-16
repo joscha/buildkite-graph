@@ -16,7 +16,7 @@ export const createTest = (
     name: string,
     gen: EntityGenerator,
     describeFn = describe,
-) =>
+): void =>
     describeFn(name, () => {
         test.each(Object.keys(serializers))('%s', type => {
             let entities = gen();

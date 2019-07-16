@@ -13,6 +13,10 @@
         "@types/js-yaml": "^3.12.1",
         "@types/node": "^12.0.10",
         "@types/slug": "^0.9.1",
+        "@typescript-eslint/eslint-plugin": "^1.12.0",
+        "@typescript-eslint/parser": "^1.12.0",
+        "eslint": "^6.0.1",
+        "eslint-config-prettier": "^6.0.0",
         "husky": "^2.5.0",
         "jest": "^24.8.0",
         "prettier": "^1.18.2",
@@ -23,6 +27,8 @@
     },
     "scripts": {
         "prepare": "tsc",
+        "pretest": "eslint",
+        "lint": "eslint --ext .ts src",
         "test": "jest --ci --coverage",
         "test:watch": "jest --watch"
     },

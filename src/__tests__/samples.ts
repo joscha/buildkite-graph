@@ -4,14 +4,14 @@ import { TriggerStep } from '../steps/trigger';
 import { Step } from '../steps/command';
 import { Plugin } from '../plugins';
 
-export function createSimple() {
+export function createSimple(): Entity {
     return new Entity('web-deploy').env
         .set('USE_COLOR', '1')
         .env.set('DEBUG', 'true')
         .add(new Step('buildkite/deploy_web.sh', 'Deploy'));
 }
 
-export function createComplex() {
+export function createComplex(): Entity {
     const webDeploy = createSimple();
     const buildEditorStep = new Step(
         'web/bin/buildkite/run_web_step.sh build editor',
