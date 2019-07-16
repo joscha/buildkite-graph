@@ -1,10 +1,6 @@
 import { Entity } from '../';
-import { ExitStatus } from '../steps/base';
-import { Step, Command } from '../steps/command';
 import { TriggerStep } from '../steps/trigger';
-import { Plugin } from '../plugins';
 import { createTest } from './helpers';
-import { createSimple, createComplex } from './samples';
 
 describe('buildkite-graph', () => {
     describe('Steps', () => {

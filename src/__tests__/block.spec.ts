@@ -1,11 +1,7 @@
 import { Entity } from '../';
-import { ExitStatus } from '../steps/base';
-import { Step, Command } from '../steps/command';
 import { BlockStep } from '../steps/block';
 import { TextField, SelectField, Option } from '../steps/block/fields';
-import { Plugin } from '../plugins';
 import { createTest } from './helpers';
-import { createSimple, createComplex } from './samples';
 
 describe('buildkite-graph', () => {
     describe('Steps', () => {

@@ -2,7 +2,6 @@ import ow from 'ow';
 import 'reflect-metadata';
 import { Expose, Exclude, Transform } from 'class-transformer';
 import { ExitStatus, exitStatusPredicate, Chainable } from '../base';
-import { Step } from '../command';
 
 export interface Retry<T> {
     automatic(statuses: boolean | Map<ExitStatus, number>): T;
