@@ -1,4 +1,5 @@
-import { Entity, Step, TriggerStep, BlockStep } from '..';
+import { Entity, TriggerStep, BlockStep } from '..';
+import { Step } from '../steps/command';
 import { Plugin } from '../plugins';
 
 export function createSimple() {

@@ -59,3 +59,10 @@ export abstract class Chainable<T> {
         this.parent = parent;
     }
 }
+
+export type ExitStatus = number | '*';
+
+export const exitStatusPredicate = ow.any(
+    ow.string.equals('*'),
+    ow.number.integer,
+);

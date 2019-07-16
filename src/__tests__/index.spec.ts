@@ -1,14 +1,13 @@
 import {
-    Command,
     Entity,
-    Step,
-    ExitStatus,
     BlockStep,
     SelectField,
     TextField,
     Option,
     TriggerStep,
 } from '../';
+import { ExitStatus } from '../steps/base';
+import { Step, Command } from '../steps/command';
 import { Plugin } from '../plugins';
 import { createTest } from './helpers';
 import { createSimple, createComplex } from './samples';
