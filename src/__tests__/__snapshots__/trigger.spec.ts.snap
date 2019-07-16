@@ -1,0 +1,408 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildkite-graph Steps Trigger async dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"Label\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"Label\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"Label\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"Label\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "async": true,
+      "label": "Label",
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger async json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "label": "Label",
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger async json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "async": true,
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger async yaml 1`] = `
+"steps:
+  - label: Label
+    async: true
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async yaml 2`] = `
+"steps:
+  - label: Label
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async yaml 3`] = `
+"steps:
+  - async: true
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 4`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build dot 5`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "env": Object {
+          "ANOTHER_KEY": "VALUE",
+          "KEY": "VALUE",
+        },
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "branch": "rease-bla",
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "commit": "c0ffee",
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build json 4`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "message": "My messge",
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build json 5`] = `
+Object {
+  "steps": Array [
+    Object {
+      "build": Object {
+        "meta_data": Object {
+          "release-version": "1.1",
+          "some-other": "value",
+        },
+      },
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 1`] = `
+"steps:
+  - build:
+      env:
+        KEY: VALUE
+        ANOTHER_KEY: VALUE
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 2`] = `
+"steps:
+  - build:
+      branch: rease-bla
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 3`] = `
+"steps:
+  - build:
+      commit: c0ffee
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 4`] = `
+"steps:
+  - build:
+      message: My messge
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build yaml 5`] = `
+"steps:
+  - build:
+      meta_data:
+        release-version: '1.1'
+        some-other: value
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another-build]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another-build\\" [ shape =Msquare ];
+  \\"[trigger another-build]\\" -> \\"another-build\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another-build]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another-build\\" [ shape =Msquare ];
+  \\"[trigger another-build]\\" -> \\"another-build\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "trigger": "another-build",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "trigger": "another-build",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline yaml 1`] = `
+"steps:
+  - trigger: another-build
+"
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline yaml 2`] = `
+"steps:
+  - trigger: another-build
+"
+`;
+
+exports[`buildkite-graph Steps Trigger limit branches dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[trigger another]\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"[trigger another]\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger limit branches json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "branches": "master",
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger limit branches yaml 1`] = `
+"steps:
+  - branches: master
+    trigger: another
+"
+`;
+
+exports[`buildkite-graph Steps Trigger with a label dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"Trigger another pipeline\\" [ color = \\"grey\\" ];
+}
+
+  \\"another\\" [ shape =Msquare ];
+  \\"Trigger another pipeline\\" -> \\"another\\" [ label = \\"triggers\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Trigger with a label json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "label": "Trigger another pipeline",
+      "trigger": "another",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Trigger with a label yaml 1`] = `
+"steps:
+  - label: Trigger another pipeline
+    trigger: another
+"
+`;

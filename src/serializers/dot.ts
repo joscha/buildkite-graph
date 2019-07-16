@@ -1,6 +1,7 @@
 import * as graphviz from 'graphviz';
 import { Serializer } from '../serializer';
-import { Entity, stortedWithBlocks, TriggerStep } from '../';
+import { Entity, stortedWithBlocks } from '../';
+import { TriggerStep } from '../steps/trigger';
 
 export class DotSerializer implements Serializer<string> {
     serialize(e: Entity) {

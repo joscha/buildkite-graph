@@ -118,7 +118,9 @@ export class Step extends LabeledStep {
     private _skip?: boolean | string;
 
     @Expose()
-    @Transform((value: RetryImpl) => (value.hasValue() ? value : undefined))
+    @Transform((value: RetryImpl<any>) =>
+        value.hasValue() ? value : undefined,
+    )
     public readonly retry: Retry<Step> = new RetryImpl(this);
 
     constructor(plugin: Plugin, label?: string);

@@ -10,7 +10,7 @@ export interface Retry<T> {
 }
 
 @Exclude()
-export class RetryImpl extends Chainable<Step> implements Retry<Step> {
+export class RetryImpl<T> extends Chainable<T> implements Retry<T> {
     @Expose({ name: 'manual' })
     @Transform((value: RetryManual) => (value.hasValue() ? value : undefined))
     private readonly _manual = new RetryManual();
@@ -34,7 +34,7 @@ export class RetryImpl extends Chainable<Step> implements Retry<Step> {
         return !!(this._manual.hasValue() || this._automatic);
     }
 
-    automatic(statuses: boolean | Map<ExitStatus, number> = true): Step {
+    automatic(statuses: boolean | Map<ExitStatus, number> = true): T {
         if (typeof statuses !== 'boolean') {
             ow(statuses, ow.map.nonEmpty);
             ow(statuses, ow.map.valuesOfType(ow.number.integer.positive));
@@ -58,7 +58,7 @@ export class RetryImpl extends Chainable<Step> implements Retry<Step> {
         allowed: boolean = true,
         permitOnPassed: boolean = false,
         reason?: string,
-    ): Step {
+    ): T {
         ow(allowed, ow.boolean);
         ow(permitOnPassed, ow.boolean);
         ow(reason, ow.any(ow.undefined, ow.string.nonEmpty));

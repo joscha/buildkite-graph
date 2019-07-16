@@ -1,4 +1,6 @@
-import { Entity, TriggerStep, BlockStep } from '..';
+import { Entity } from '..';
+import { BlockStep } from '../steps/block';
+import { TriggerStep } from '../steps/trigger';
 import { Step } from '../steps/command';
 import { Plugin } from '../plugins';
 

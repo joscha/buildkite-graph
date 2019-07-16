@@ -1,0 +1,314 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildkite-graph Steps Block branches dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block branches json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+      "branches": "!release/* master stable/*",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block branches yaml 1`] = `
+"steps:
+  - branches: '!release/* master stable/*'
+    block: my title
+"
+`;
+
+exports[`buildkite-graph Steps Block can be added dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for ':rocket: Release!']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block can be added dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for ':rocket: Release!']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block can be added json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": ":rocket: Release!",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block can be added json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": ":rocket: Release!",
+      "prompt": "Release to production?",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block can be added yaml 1`] = `
+"steps:
+  - block: ':rocket: Release!'
+"
+`;
+
+exports[`buildkite-graph Steps Block can be added yaml 2`] = `
+"steps:
+  - block: ':rocket: Release!'
+    prompt: Release to production?
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields dot 4`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[block for 'my title']\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+      "fields": Array [
+        Object {
+          "key": "field-1",
+        },
+        Object {
+          "key": "field-2",
+          "options": Array [],
+        },
+        Object {
+          "key": "field-3",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block with fields json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+      "fields": Array [
+        Object {
+          "default": "Flying Dolphin",
+          "hint": "What’s the code name for this release? :name_badge:",
+          "key": "release-name",
+          "label": "Code Name",
+          "required": false,
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block with fields json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+      "fields": Array [
+        Object {
+          "default": "beta",
+          "hint": "What’s the release stream?",
+          "key": "release-stream",
+          "label": "Stream",
+          "options": Array [
+            Object {
+              "label": "Beta",
+              "value": "beta",
+            },
+            Object {
+              "label": "Stable",
+              "value": "stable",
+            },
+          ],
+          "required": false,
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block with fields json 4`] = `
+Object {
+  "steps": Array [
+    Object {
+      "block": "my title",
+      "fields": Array [
+        Object {
+          "default": Array [
+            "na",
+            "eur",
+            "asia",
+            "aunz",
+          ],
+          "hint": "Which regions should we deploy this to? :earth_asia:",
+          "key": "regions",
+          "label": "Regions",
+          "multiple": true,
+          "options": Array [
+            Object {
+              "label": "North America",
+              "value": "na",
+            },
+            Object {
+              "label": "Europe",
+              "value": "eur",
+            },
+            Object {
+              "label": "Asia",
+              "value": "asia",
+            },
+            Object {
+              "label": "Oceania",
+              "value": "aunz",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Block with fields yaml 1`] = `
+"steps:
+  - block: my title
+    fields:
+      - key: field-1
+      - key: field-2
+        options: []
+      - key: field-3
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields yaml 2`] = `
+"steps:
+  - block: my title
+    fields:
+      - key: release-name
+        label: Code Name
+        hint: 'What’s the code name for this release? :name_badge:'
+        required: false
+        default: Flying Dolphin
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields yaml 3`] = `
+"steps:
+  - block: my title
+    fields:
+      - key: release-stream
+        label: Stream
+        hint: What’s the release stream?
+        required: false
+        options:
+          - label: Beta
+            value: beta
+          - label: Stable
+            value: stable
+        default: beta
+"
+`;
+
+exports[`buildkite-graph Steps Block with fields yaml 4`] = `
+"steps:
+  - block: my title
+    fields:
+      - key: regions
+        label: Regions
+        hint: 'Which regions should we deploy this to? :earth_asia:'
+        options:
+          - label: North America
+            value: na
+          - label: Europe
+            value: eur
+          - label: Asia
+            value: asia
+          - label: Oceania
+            value: aunz
+        default:
+          - na
+          - eur
+          - asia
+          - aunz
+        multiple: true
+"
+`;
