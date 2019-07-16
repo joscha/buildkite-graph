@@ -3,66 +3,15 @@ import ow from 'ow';
 import 'reflect-metadata';
 import { Expose, Exclude, Transform } from 'class-transformer';
 import slug from 'slug';
+import {
+    BaseStep,
+    Chainable,
+    LabeledStep,
+    DefaultStep,
+    BranchLimitedStep,
+} from './steps/base';
 
 const exitStatusPredicate = ow.any(ow.string.equals('*'), ow.number.integer);
-
-interface BaseStep {}
-
-// see https://github.com/microsoft/TypeScript/issues/22815#issuecomment-375766197
-interface DefaultStep extends BaseStep {}
-abstract class DefaultStep implements BaseStep {
-    @Exclude()
-    public readonly dependencies: Set<DefaultStep> = new Set();
-
-    dependsOn(step: DefaultStep): this {
-        this.dependencies.add(step);
-        return this;
-    }
-
-    @Exclude()
-    public always: boolean = false;
-
-    alwaysExecute() {
-        this.always = true;
-        return this;
-    }
-}
-
-@Exclude()
-class BranchLimitedStep extends DefaultStep {
-    @Expose({ name: 'branches' })
-    @Transform((branches: Set<string>) =>
-        branches.size ? [...branches].sort().join(' ') : undefined,
-    )
-    private _branches: Set<string> = new Set();
-
-    withBranch(pattern: string): this {
-        ow(pattern, ow.string.nonEmpty);
-        this._branches.add(pattern);
-        return this;
-    }
-}
-
-class LabeledStep extends BranchLimitedStep {
-    private _label?: string;
-
-    @Expose()
-    get label() {
-        return this._label;
-    }
-
-    withLabel(label: string) {
-        this._label = label;
-        return this;
-    }
-}
-
-@Exclude()
-abstract class Chainable<T> {
-    constructor(protected readonly parent: T) {
-        this.parent = parent;
-    }
-}
 
 class WaitStep implements BaseStep {
     public readonly wait: null = null;
