@@ -1,15 +1,19 @@
-import TopologicalSort from 'topological-sort';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import 'reflect-metadata';
-import { Expose, Exclude, Transform } from 'class-transformer';
+import TopologicalSort from 'topological-sort';
+import { Conditional } from './conditional';
+import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
 import { DefaultStep } from './steps/base';
 import { WaitStep } from './steps/wait';
-import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
+import { Step } from './steps/command';
+
+type PotentialStep = DefaultStep | Conditional<DefaultStep>;
 
 @Exclude()
 export class Entity {
     public readonly name: string;
 
-    public readonly steps: DefaultStep[] = [];
+    public readonly steps: PotentialStep[] = [];
 
     @Expose()
     @Transform(transformKeyValueImpl)
@@ -20,7 +24,7 @@ export class Entity {
         this.env = new KeyValueImpl(this);
     }
 
-    add(...step: DefaultStep[]) {
+    add(...step: PotentialStep[]) {
         this.steps.push(...step);
         return this;
     }
@@ -58,17 +62,27 @@ export class Entity {
 }
 
 function sortedSteps(e: Entity) {
+    const steps = e.steps.reduce<DefaultStep[]>((acc, potentialStep) => {
+        if (potentialStep instanceof Conditional) {
+            if (potentialStep.accept()) {
+                acc.push(potentialStep.getStep());
+            }
+        } else {
+            acc.push(potentialStep);
+        }
+        return acc;
+    }, []);
     const sortOp = new TopologicalSort<DefaultStep, DefaultStep>(
-        new Map(e.steps.map(step => [step, step])),
+        new Map(steps.map(step => [step, step])),
     );
 
-    for (const step of e.steps) {
+    for (let step of steps) {
         for (const dependency of step.dependencies) {
-            if (e.steps.indexOf(dependency) === -1) {
+            if (steps.indexOf(dependency) === -1) {
                 // a dependency has not been added to the graph explicitly,
                 // so we add it implicitly
                 sortOp.addNode(dependency, dependency);
-                e.steps.push(dependency);
+                steps.push(dependency);
                 // maybe we want to rather throw here?
                 // Unsure...there could be a strict mode where we:
                 // throw new Error(`Step not part of the graph: '${dependency}'`);
@@ -81,6 +95,7 @@ function sortedSteps(e: Entity) {
 
 export function stortedWithBlocks(e: Entity) {
     const sorted = sortedSteps(e);
+    // null denotes a block
     const allSteps: (DefaultStep | null)[] = [];
     let lastWaitStep = -1;
     for (const step of sorted) {

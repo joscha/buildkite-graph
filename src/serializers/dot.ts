@@ -6,7 +6,9 @@ import { TriggerStep } from '../steps/trigger';
 export class DotSerializer implements Serializer<string> {
     serialize(e: Entity) {
         const allSteps = stortedWithBlocks(e);
-        allSteps.unshift(null);
+        if (allSteps.length > 0) {
+            allSteps.unshift(null);
+        }
 
         const graph = graphviz.digraph(`"${e.name}"`);
         graph.set('compound', true);

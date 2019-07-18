@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildkite-graph Steps Command step addition dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command step addition json 2`] = `
+Object {
+  "steps": Array [],
+}
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml 1`] = `
+"steps:
+  - command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml 2`] = `
+"steps: []
+"
+`;
