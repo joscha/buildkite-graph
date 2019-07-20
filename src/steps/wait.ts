@@ -1,17 +1,15 @@
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import 'reflect-metadata';
 import { BaseStep } from '../base';
 
 export class WaitStep implements BaseStep {
     public readonly wait: null = null;
 
-    // TODO: Omit this when not true once
-    // https://github.com/typestack/class-transformer/issues/273
-    // has been fixed
     @Expose({ name: 'continue_on_failure' })
-    public continueOnFailure?: true;
+    @Transform((value: boolean) => value || undefined)
+    public continueOnFailure: boolean;
 
-    constructor(continueOnFailure?: true) {
+    constructor(continueOnFailure: boolean = false) {
         this.continueOnFailure = continueOnFailure;
     }
 
