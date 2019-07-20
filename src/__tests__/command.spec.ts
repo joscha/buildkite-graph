@@ -1,4 +1,4 @@
-import { Entity } from '../';
+import { Pipeline } from '../';
 import { ExitStatus } from '../steps/base';
 import { Step, Command } from '../steps/command';
 import { Plugin } from '../plugins';
@@ -8,7 +8,7 @@ describe('buildkite-graph', () => {
     describe('Steps', () => {
         describe('Command', () => {
             createTest('step addition', () =>
-                new Entity('whatever').add(new Step('yarn').add('yarn test')),
+                new Pipeline('whatever').add(new Step('yarn').add('yarn test')),
             );
 
             describe('continue on failure', () => {
@@ -32,7 +32,7 @@ describe('buildkite-graph', () => {
                             .alwaysExecute()
                             .dependsOn(command);
 
-                        return new Entity('test')
+                        return new Pipeline('test')
                             .add(command)
                             .add(always)
                             .add(always2)
@@ -53,7 +53,7 @@ describe('buildkite-graph', () => {
                             'echo The command passed',
                         ).dependsOn(command);
 
-                        return new Entity('test')
+                        return new Pipeline('test')
                             .add(command)
                             .add(always)
                             .add(passed);
@@ -67,7 +67,7 @@ describe('buildkite-graph', () => {
                     () => {
                         const command1 = new Command('yarn install', 10);
                         const command2 = new Command('yarn test', 10);
-                        return new Entity('test').add(
+                        return new Pipeline('test').add(
                             new Step([command1, command2]),
                         );
                     },
@@ -76,7 +76,7 @@ describe('buildkite-graph', () => {
                 createTest('step timeout total trumps commands', () => {
                     const command1 = new Command('yarn install', 10);
                     const command2 = new Command('yarn test', 10);
-                    return new Entity('test').add(
+                    return new Pipeline('test').add(
                         new Step([command1, command2])
                             .withTimeout(100)
                             .withTimeout(2),
@@ -88,27 +88,27 @@ describe('buildkite-graph', () => {
                     () => {
                         const command1 = new Command('yarn install', 10);
                         const command2 = new Command('yarn test');
-                        return new Entity('test').add(
+                        return new Pipeline('test').add(
                             new Step([command1, command2]),
                         );
                     },
                 );
 
                 createTest('can be infinite', () => {
-                    return new Entity('test').add(
+                    return new Pipeline('test').add(
                         new Step('noop').withTimeout(),
                     );
                 });
             });
 
             createTest('agents', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').withAgent('npm', 'true'),
                 ),
             );
 
             createTest('artifact_paths', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop')
                         .withArtifactPath('logs/**/*')
                         .withArtifactPath('coverage/**/*'),
@@ -116,7 +116,7 @@ describe('buildkite-graph', () => {
             );
 
             createTest('branches', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop')
                         .withBranch('master')
                         .withBranch('stable/*')
@@ -125,7 +125,7 @@ describe('buildkite-graph', () => {
             );
 
             createTest('concurrency', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop')
                         .withConcurrency(10, 'will/be/overridden')
                         .withConcurrency(3, 'my-app/deploy'),
@@ -133,7 +133,7 @@ describe('buildkite-graph', () => {
             );
 
             createTest('env', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').env
                         .set('RAILS_ENV', 'test')
                         .env.set('DEBUG', 'true'),
@@ -141,13 +141,13 @@ describe('buildkite-graph', () => {
             );
 
             createTest('id', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').withId('my-id-overridden').withId('my-id'),
                 ),
             );
 
             createTest('label', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop')
                         .withLabel('my label overridden')
                         .withLabel('my label'),
@@ -155,13 +155,13 @@ describe('buildkite-graph', () => {
             );
 
             createTest('parallelism', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').withParallelism(100).withParallelism(123),
                 ),
             );
 
             createTest('plugins', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').plugins
                         .add(
                             new Plugin('bugcrowd/test-summary#v1.5.0', {
@@ -181,64 +181,66 @@ describe('buildkite-graph', () => {
 
             describe('soft_fail', () => {
                 createTest('boolean', () => [
-                    new Entity('whatever').add(
+                    new Pipeline('whatever').add(
                         new Step('noop').withSoftFail('*'),
                     ),
-                    new Entity('whatever').add(
+                    new Pipeline('whatever').add(
                         new Step('noop').withSoftFail(true),
                     ),
                 ]);
 
                 createTest('multiple', () =>
-                    new Entity('whatever').add(
+                    new Pipeline('whatever').add(
                         new Step('noop').withSoftFail(1).withSoftFail(-127),
                     ),
                 );
 
                 createTest('star', () =>
-                    new Entity('whatever').add(
+                    new Pipeline('whatever').add(
                         new Step('noop').withSoftFail(1).withSoftFail('*'),
                     ),
                 );
             });
 
             createTest('skip', () => [
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').skip(false).skip(true),
                 ),
-                new Entity('whatever').add(new Step('noop').skip('my reason')),
+                new Pipeline('whatever').add(
+                    new Step('noop').skip('my reason'),
+                ),
             ]);
 
             createTest('retry', () => [
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').retry.automatic(true),
                 ),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').retry.automatic(
                         new Map<ExitStatus, number>([['*', 2], [255, 2]]),
                     ),
                 ),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').retry.manual(false),
                 ),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').retry.manual(
                         false,
                         false,
                         "Sorry, you can't retry a deployment",
                     ),
                 ),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').retry.manual(
                         true,
                         false,
                         "Sorry, you can't retry a deployment",
                     ),
                 ),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').retry.manual(true, true),
                 ),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new Step('noop').retry
                         .automatic(true)
                         .retry.manual(true, true),

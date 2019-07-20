@@ -1,11 +1,11 @@
 import { Serializer } from '../serializer';
-import { Entity } from '../';
+import { Pipeline } from '../';
 import * as jsyaml from 'js-yaml';
 import { JsonSerializer } from './json';
 
 export class YamlSerializer extends JsonSerializer
     implements Serializer<string> {
-    serialize(e: Entity) {
+    serialize(e: Pipeline) {
         return jsyaml.safeDump(super.serialize(e), {
             skipInvalid: true,
             styles: {

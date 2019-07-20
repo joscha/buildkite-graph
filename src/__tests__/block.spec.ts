@@ -1,4 +1,4 @@
-import { Entity } from '../';
+import { Pipeline } from '../';
 import { BlockStep } from '../steps/block';
 import { TextField, SelectField, Option } from '../steps/block/fields';
 import { createTest } from './helpers';
@@ -7,8 +7,10 @@ describe('buildkite-graph', () => {
     describe('Steps', () => {
         describe('Block', () => {
             createTest('can be added', () => [
-                new Entity('whatever').add(new BlockStep(':rocket: Release!')),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
+                    new BlockStep(':rocket: Release!'),
+                ),
+                new Pipeline('whatever').add(
                     new BlockStep(
                         ':rocket: Release!',
                         'Release to production?',
@@ -17,7 +19,7 @@ describe('buildkite-graph', () => {
             ]);
 
             createTest('branches', () =>
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new BlockStep('my title')
                         .withBranch('master')
                         .withBranch('stable/*')
@@ -26,13 +28,13 @@ describe('buildkite-graph', () => {
             );
 
             createTest('with fields', () => [
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new BlockStep('my title').fields
                         .add(new TextField('field-1'))
                         .fields.add(new SelectField('field-2'))
                         .fields.add(new TextField('field-3')),
                 ),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new BlockStep('my title').fields.add(
                         new TextField(
                             'release-name',
@@ -43,7 +45,7 @@ describe('buildkite-graph', () => {
                         ),
                     ),
                 ),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new BlockStep('my title').fields.add(
                         new SelectField(
                             'release-stream',
@@ -57,7 +59,7 @@ describe('buildkite-graph', () => {
                             .addOption(new Option('Stable', 'stable')),
                     ),
                 ),
-                new Entity('whatever').add(
+                new Pipeline('whatever').add(
                     new BlockStep('my title').fields.add(
                         new SelectField(
                             'regions',

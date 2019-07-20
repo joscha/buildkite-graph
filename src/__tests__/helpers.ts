@@ -1,4 +1,4 @@
-import { Entity } from '../';
+import { Pipeline } from '../';
 import { Serializer } from '../serializer';
 import { DotSerializer } from '../serializers/dot';
 import { JsonSerializer } from '../serializers/json';
@@ -10,7 +10,7 @@ const serializers: Record<string, Serializer<any>> = {
     dot: new DotSerializer(),
 };
 
-type EntityGenerator = () => Entity | Entity[];
+type EntityGenerator = () => Pipeline | Pipeline[];
 
 export const createTest = (
     name: string,

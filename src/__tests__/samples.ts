@@ -1,17 +1,17 @@
-import { Entity } from '..';
+import { Pipeline } from '..';
 import { BlockStep } from '../steps/block';
 import { TriggerStep } from '../steps/trigger';
 import { Step } from '../steps/command';
 import { Plugin } from '../plugins';
 
-export function createSimple(): Entity {
-    return new Entity('web-deploy').env
+export function createSimple(): Pipeline {
+    return new Pipeline('web-deploy').env
         .set('USE_COLOR', '1')
         .env.set('DEBUG', 'true')
         .add(new Step('buildkite/deploy_web.sh', 'Deploy'));
 }
 
-export function createComplex(): Entity {
+export function createComplex(): Pipeline {
     const webDeploy = createSimple();
     const buildEditorStep = new Step(
         'web/bin/buildkite/run_web_step.sh build editor',
@@ -103,7 +103,7 @@ export function createComplex(): Entity {
         updateCheckpointStep,
     );
 
-    const webBuildEditor = new Entity('web-build-editor')
+    const webBuildEditor = new Pipeline('web-build-editor')
         .add(buildEditorStep)
         .add(testEditorStep)
         .add(annotateFailuresStep)

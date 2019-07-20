@@ -1,10 +1,10 @@
 import * as graphviz from 'graphviz';
 import { Serializer } from '../serializer';
-import { Entity, stortedWithBlocks } from '../';
+import { Pipeline, stortedWithBlocks } from '../';
 import { TriggerStep } from '../steps/trigger';
 
 export class DotSerializer implements Serializer<string> {
-    serialize(e: Entity) {
+    serialize(e: Pipeline) {
         const allSteps = stortedWithBlocks(e);
         if (allSteps.length > 0) {
             allSteps.unshift(null);

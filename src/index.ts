@@ -7,10 +7,13 @@ import { DefaultStep } from './steps/base';
 import { WaitStep } from './steps/wait';
 import { Step } from './steps/command';
 
-type PotentialStep = DefaultStep | Conditional<DefaultStep | Entity> | Entity;
+type PotentialStep =
+    | DefaultStep
+    | Conditional<DefaultStep | Pipeline>
+    | Pipeline;
 
 @Exclude()
-export class Entity {
+export class Pipeline {
     public readonly name: string;
 
     public readonly steps: PotentialStep[] = [];
@@ -64,12 +67,12 @@ export class Entity {
 function unwrapSteps(steps: PotentialStep[]): DefaultStep[] {
     const ret: DefaultStep[] = [];
     for (const s of steps) {
-        if (s instanceof Entity) {
+        if (s instanceof Pipeline) {
             ret.push(...unwrapSteps(s.steps));
         } else if (s instanceof Conditional) {
             if (s.accept()) {
                 const cond = s.get();
-                if (cond instanceof Entity) {
+                if (cond instanceof Pipeline) {
                     ret.push(...unwrapSteps(cond.steps));
                 } else {
                     ret.push(cond);
@@ -82,7 +85,7 @@ function unwrapSteps(steps: PotentialStep[]): DefaultStep[] {
     return ret;
 }
 
-function sortedSteps(e: Entity) {
+function sortedSteps(e: Pipeline) {
     const steps = unwrapSteps(e.steps);
     const sortOp = new TopologicalSort<DefaultStep, DefaultStep>(
         new Map(steps.map(step => [step, step])),
@@ -105,7 +108,7 @@ function sortedSteps(e: Entity) {
     return Array.from(sortOp.sort().values()).map(i => i.node);
 }
 
-export function stortedWithBlocks(e: Entity) {
+export function stortedWithBlocks(e: Pipeline) {
     const sorted = sortedSteps(e);
     // null denotes a block
     const allSteps: (DefaultStep | null)[] = [];

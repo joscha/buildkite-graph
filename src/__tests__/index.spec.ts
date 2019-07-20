@@ -1,4 +1,4 @@
-import { Entity } from '../';
+import { Pipeline } from '../';
 import { Step } from '../steps/command';
 import { createTest } from './helpers';
 import { createSimple, createComplex } from './samples';
@@ -12,21 +12,23 @@ describe('buildkite-graph', () => {
     createTest('missing transitive steps get added to the graph', () => {
         const step1 = new Step('yarn');
         const step2 = new Step('yarn test').dependsOn(step1);
-        return new Entity('test').add(step2);
+        return new Pipeline('test').add(step2);
     });
 
     describe('Pipeline', () => {
-        createTest('env', () => [new Entity('whatever').env.set('COLOR', '1')]);
+        createTest('env', () => [
+            new Pipeline('whatever').env.set('COLOR', '1'),
+        ]);
 
         createTest('steps', () => [
-            new Entity('whatever').add(new Step('command')),
+            new Pipeline('whatever').add(new Step('command')),
         ]);
 
         createTest('can be augmented', () => [
-            new Entity('a')
+            new Pipeline('a')
                 .add(new Step('a'))
                 .add(new Step('b'))
-                .add(new Entity('a').add(new Step('c')).add(new Step('d'))),
+                .add(new Pipeline('a').add(new Step('c')).add(new Step('d'))),
         ]);
     });
 });

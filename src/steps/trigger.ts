@@ -2,7 +2,7 @@ import { Expose, Exclude, Transform } from 'class-transformer';
 import slug from 'slug';
 import { LabeledStep } from './base';
 import { BuildImpl, Build } from './trigger/build';
-import { Entity } from '../';
+import { Pipeline } from '../';
 
 @Exclude()
 export class TriggerStep extends LabeledStep {
@@ -14,12 +14,12 @@ export class TriggerStep extends LabeledStep {
     private _async: boolean = false;
     @Expose()
     get trigger() {
-        return this._trigger instanceof Entity
+        return this._trigger instanceof Pipeline
             ? slug(this._trigger.name, { lower: true })
             : this._trigger;
     }
     constructor(
-        private readonly _trigger: Entity | string,
+        private readonly _trigger: Pipeline | string,
         label?: string,
         async: boolean = false,
     ) {

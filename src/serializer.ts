@@ -1,5 +1,5 @@
-import { Entity } from './';
+import { Pipeline } from './';
 
 export interface Serializer<T> {
-    serialize(e: Entity): T;
+    serialize(e: Pipeline): T;
 }
