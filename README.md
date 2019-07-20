@@ -32,7 +32,7 @@ const pipeline = new Pipeline('My pipeline').add(test).add(integration);
 console.log(new YamlSerializer().serialize(pipeline));
 ```
 
-> Do you see how we don't have to add the `lint` step? Because other steps depend on it, it will become part of the graph automatically. This allows you to define graphs with complex dependencies and only add the steps which have an important signal - no more manually adding auxiliary steps.
+> Do you see how we don't have to add the `lint` or `build`step? Because other steps depend on them, they will become part of the graph automatically in the right place. This allows you to define graphs with complex dependencies and only add the steps which have an important signal - no more manually adding auxiliary steps.
 
 will serialize to:
 
@@ -59,6 +59,7 @@ steps:
 ```
 
 > Did you see how the `wait` step got added for you? How cool is that, hey :)
+
 > And did you also see how the timeouts for the steps are derived from the commands?
 
 and
@@ -95,3 +96,5 @@ subgraph cluster_2 {
 which will visualize to:
 
 <img src="https://user-images.githubusercontent.com/188038/61578524-b6cfc280-ab3b-11e9-87ab-28fa6be480ff.png" width="500">
+
+> See the clusters (the square boxes)? The are legs of multiple steps in your pipeline, each separated by a wait step.
