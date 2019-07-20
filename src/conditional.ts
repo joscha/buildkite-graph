@@ -1,15 +1,10 @@
 import { DefaultStep } from './steps/base';
 
-// export interface Conditional<DefaultStep> {
-//     accept(): boolean;
-//     getStep(): DefaultStep;
-// }
-
 export abstract class Conditional<T extends DefaultStep> {
-    constructor(private readonly step: T) {}
+    constructor(private readonly guarded: T) {}
 
-    getStep() {
-        return this.step;
+    get() {
+        return this.guarded;
     }
 
     abstract accept(): boolean;

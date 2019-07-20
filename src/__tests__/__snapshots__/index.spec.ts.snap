@@ -1,5 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`buildkite-graph Pipeline can be augmented dot 1`] = `
+"digraph \\"a\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<a>\\" [ color = \\"grey\\" ];
+  \\"<b>\\" [ color = \\"grey\\" ];
+  \\"<c>\\" [ color = \\"grey\\" ];
+  \\"<d>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Pipeline can be augmented json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+    },
+    Object {
+      "command": "b",
+    },
+    Object {
+      "command": "c",
+    },
+    Object {
+      "command": "d",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Pipeline can be augmented yaml 1`] = `
+"steps:
+  - command: a
+  - command: b
+  - command: c
+  - command: d
+"
+`;
+
 exports[`buildkite-graph Pipeline env dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];

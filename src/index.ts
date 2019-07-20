@@ -7,7 +7,7 @@ import { DefaultStep } from './steps/base';
 import { WaitStep } from './steps/wait';
 import { Step } from './steps/command';
 
-type PotentialStep = DefaultStep | Conditional<DefaultStep>;
+type PotentialStep = DefaultStep | Conditional<DefaultStep> | Entity;
 
 @Exclude()
 export class Entity {
@@ -61,17 +61,28 @@ export class Entity {
     }
 }
 
-function sortedSteps(e: Entity) {
-    const steps = e.steps.reduce<DefaultStep[]>((acc, potentialStep) => {
-        if (potentialStep instanceof Conditional) {
-            if (potentialStep.accept()) {
-                acc.push(potentialStep.getStep());
-            }
+function unwrapConditional<T extends DefaultStep>(
+    conditional: Conditional<T>,
+): T | null {
+    return conditional.accept() ? conditional.get() : null;
+}
+
+function unwrapSteps(steps: PotentialStep[]): DefaultStep[] {
+    const ret = [];
+    for (const s of steps) {
+        if (s instanceof Entity) {
+            ret.push(...unwrapSteps(s.steps));
+        } else if (s instanceof Conditional) {
+            ret.push(unwrapConditional(s));
         } else {
-            acc.push(potentialStep);
+            ret.push(s);
         }
-        return acc;
-    }, []);
+    }
+    return ret.filter((s: DefaultStep | null): s is DefaultStep => !!s);
+}
+
+function sortedSteps(e: Entity) {
+    const steps = unwrapSteps(e.steps);
     const sortOp = new TopologicalSort<DefaultStep, DefaultStep>(
         new Map(steps.map(step => [step, step])),
     );

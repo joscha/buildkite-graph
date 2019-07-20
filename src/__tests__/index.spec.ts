@@ -21,5 +21,12 @@ describe('buildkite-graph', () => {
         createTest('steps', () => [
             new Entity('whatever').add(new Step('command')),
         ]);
+
+        createTest('can be augmented', () => {
+            const a = new Entity('a').add(new Step('a')).add(new Step('b'));
+            const b = new Entity('a').add(new Step('c')).add(new Step('d'));
+
+            return a.add(b);
+        });
     });
 });
