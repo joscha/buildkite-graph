@@ -8,6 +8,22 @@ export interface Retry<T> {
     manual(allowed: boolean, permitOnPassed?: boolean, reason?: string): T;
 }
 
+class RetryManual {
+    @Transform((value: boolean) => (value ? undefined : false))
+    allowed: boolean = true;
+
+    @Expose({ name: 'permit_on_passed' })
+    @Transform((value: boolean) => (value ? true : undefined))
+    permitOnPassed: boolean = false;
+
+    @Transform((value: string) => value || undefined)
+    reason?: string;
+
+    hasValue(): boolean {
+        return !this.allowed || this.permitOnPassed;
+    }
+}
+
 @Exclude()
 export class RetryImpl<T> extends Chainable<T> implements Retry<T> {
     @Expose({ name: 'manual' })
@@ -22,8 +38,8 @@ export class RetryImpl<T> extends Chainable<T> implements Retry<T> {
         if (typeof value === 'boolean') {
             return value;
         }
-        return [...value.entries()].map(([exit_status, limit]) => ({
-            exit_status,
+        return [...value.entries()].map(([s, limit]) => ({
+            exit_status: s,
             limit,
         }));
     })
@@ -67,21 +83,5 @@ export class RetryImpl<T> extends Chainable<T> implements Retry<T> {
         this._manual.reason = reason;
 
         return this.parent;
-    }
-}
-
-class RetryManual {
-    @Transform((value: boolean) => (value ? undefined : false))
-    allowed: boolean = true;
-
-    @Expose({ name: 'permit_on_passed' })
-    @Transform((value: boolean) => (value ? true : undefined))
-    permitOnPassed: boolean = false;
-
-    @Transform((value: string) => value || undefined)
-    reason?: string;
-
-    hasValue() {
-        return !this.allowed || this.permitOnPassed;
     }
 }

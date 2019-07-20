@@ -6,11 +6,11 @@ import { Plugin, Plugins, PluginsImpl, transformPlugins } from '../plugins';
 import { ExitStatus, exitStatusPredicate, LabeledStep } from '../base';
 import { Retry, RetryImpl } from './command/retry';
 
-function assertTimeout(timeout: number) {
+function assertTimeout(timeout: number): void {
     ow(timeout, ow.number.integerOrInfinite.positive);
 }
 
-function assertSkipValue(value: SkipValue) {
+function assertSkipValue(value: SkipValue): void {
     if (typeof value === 'string') {
         ow(value, ow.string.nonEmpty);
     }
@@ -25,10 +25,12 @@ export class Command {
         assertTimeout(timeout);
     }
 
-    toString() {
+    toString(): string {
         return this.command;
     }
 }
+
+type Agents = Map<string, string>;
 
 @Exclude()
 export class Step extends LabeledStep {
@@ -49,14 +51,14 @@ export class Step extends LabeledStep {
 
     private _id?: string;
     @Expose({ name: 'id' })
-    get id() {
+    private get id(): string | undefined {
         return this._id;
     }
 
     private _parallelism?: number;
 
     @Expose({ name: 'parallelism' })
-    get paralellism() {
+    private get paralellism(): number | undefined {
         return this._parallelism;
     }
 
@@ -70,20 +72,18 @@ export class Step extends LabeledStep {
     @Transform((paths: Set<string>) => (paths.size ? paths : undefined))
     private _artifactPaths: Set<string> = new Set();
 
-    private _agents: Map<string, string> = new Map();
+    private _agents: Agents = new Map();
 
     @Expose()
-    @Transform((agents: Map<string, string>) =>
-        agents.size ? agents : undefined,
-    )
-    get agents() {
+    @Transform((agents: Agents) => (agents.size ? agents : undefined))
+    get agents(): Agents {
         return this._agents;
     }
 
     private _timeout?: number;
 
     @Expose({ name: 'timeout_in_minutes' })
-    get timeout() {
+    get timeout(): number | undefined {
         if (this._timeout === Infinity || this._timeout === 0) {
             return undefined;
         } else if (this._timeout) {
@@ -113,7 +113,7 @@ export class Step extends LabeledStep {
         } else if (value.has('*')) {
             return true;
         } else {
-            return [...value].map(exit_status => ({ exit_status }));
+            return [...value].map(s => ({ exit_status: s }));
         }
     })
     private _softFail: Set<ExitStatus> = new Set();
@@ -157,7 +157,7 @@ export class Step extends LabeledStep {
         }
     }
 
-    add(c: string | Plugin | Command) {
+    add(c: string | Plugin | Command): this {
         if (c instanceof Plugin) {
             this.plugins.add(c);
         } else if (typeof c === 'string') {
@@ -227,7 +227,7 @@ export class Step extends LabeledStep {
         return this;
     }
 
-    toString() {
+    toString(): string {
         return (
             this.label ||
             (this.command

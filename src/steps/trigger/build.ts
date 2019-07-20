@@ -38,8 +38,8 @@ export class BuildImpl<T> implements Build<T> {
         this._branch = branch;
         return this.triggerStep;
     }
-    hasData() {
-        return (
+    hasData(): boolean {
+        return !!(
             this._branch ||
             this._commit ||
             typeof this._message !== 'undefined' ||

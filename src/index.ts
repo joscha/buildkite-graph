@@ -26,13 +26,14 @@ export class Pipeline {
         this.env = new KeyValueImpl(this);
     }
 
-    add(...step: PotentialStep[]) {
+    add(...step: PotentialStep[]): this {
         this.steps.push(...step);
         return this;
     }
 
     @Expose({ name: 'steps' })
-    private get _steps() {
+    private get _steps(): (WaitStep | DefaultStep)[] {
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         const stepsWithBlocks = stortedWithBlocks(this);
 
         // TODO: when step.always = true,
@@ -40,7 +41,7 @@ export class Pipeline {
         // if step after does not have .always = true a wait step needs to be
         // inserted.
         // See: https://buildkite.com/docs/pipelines/wait-step#continuing-on-failure
-        const steps = [];
+        const steps: (WaitStep | DefaultStep)[] = [];
         let lastWait: WaitStep | undefined = undefined;
         for (const s of stepsWithBlocks) {
             if (s === null) {
@@ -84,7 +85,7 @@ function unwrapSteps(steps: PotentialStep[]): DefaultStep[] {
     return ret;
 }
 
-function sortedSteps(e: Pipeline) {
+function sortedSteps(e: Pipeline): DefaultStep[] {
     const steps = unwrapSteps(e.steps);
     const sortOp = new TopologicalSort<DefaultStep, DefaultStep>(
         new Map(steps.map(step => [step, step])),
@@ -107,7 +108,7 @@ function sortedSteps(e: Pipeline) {
     return Array.from(sortOp.sort().values()).map(i => i.node);
 }
 
-export function stortedWithBlocks(e: Pipeline) {
+export function stortedWithBlocks(e: Pipeline): (DefaultStep | null)[] {
     const sorted = sortedSteps(e);
     // null denotes a block
     const allSteps: (DefaultStep | null)[] = [];

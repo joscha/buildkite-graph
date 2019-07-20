@@ -3,7 +3,7 @@ import { Pipeline } from '../';
 import { Serializer } from '../serializer';
 
 export class JsonSerializer implements Serializer<object> {
-    serialize(e: Pipeline) {
+    serialize(e: Pipeline): object {
         // Workaround to get rid of undefined values
         return JSON.parse(JSON.stringify(classToPlain(e)));
     }

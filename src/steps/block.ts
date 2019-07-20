@@ -18,7 +18,7 @@ export class BlockStep extends BranchLimitedStep {
         this.title = title;
         this.prompt = prompt;
     }
-    toString() {
+    toString(): string {
         return `[block for '${this.title}']`;
     }
 }

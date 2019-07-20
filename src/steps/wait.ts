@@ -13,8 +13,7 @@ export class WaitStep implements BaseStep {
         this.continueOnFailure = continueOnFailure;
     }
 
-    toString() {
-        /* istanbul ignore next */
+    toString(): string {
         return '[wait]';
     }
 }

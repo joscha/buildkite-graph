@@ -76,7 +76,7 @@ export class SelectField extends Field {
             this.multiple = multiple;
         }
     }
-    addOption(option: Option) {
+    addOption(option: Option): this {
         this.options.push(option);
         return this;
     }

@@ -4,7 +4,7 @@ import { Serializer } from '../serializer';
 import { TriggerStep } from '../steps/trigger';
 
 export class DotSerializer implements Serializer<string> {
-    serialize(e: Pipeline) {
+    serialize(e: Pipeline): string {
         const allSteps = stortedWithBlocks(e);
         if (allSteps.length > 0) {
             allSteps.unshift(null);
@@ -29,6 +29,7 @@ export class DotSerializer implements Serializer<string> {
                 edge.set('ltail', `cluster_${i - 2}`);
                 edge.set('lhead', `cluster_${i - 1}`);
             }
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             lastNode = currentCluster!.addNode(step.toString());
             lastNode.set('color', 'grey');
 

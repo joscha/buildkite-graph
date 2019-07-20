@@ -13,7 +13,7 @@ export class TriggerStep extends LabeledStep {
     @Transform((value: boolean) => (value ? value : undefined))
     private _async: boolean = false;
     @Expose()
-    get trigger() {
+    get trigger(): string {
         return this._trigger instanceof Pipeline
             ? slug(this._trigger.name, { lower: true })
             : this._trigger;
@@ -33,7 +33,7 @@ export class TriggerStep extends LabeledStep {
         this._async = async;
         return this;
     }
-    toString() {
+    toString(): string {
         return this.label || `[trigger ${this.trigger}]`;
     }
 }

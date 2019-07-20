@@ -9,7 +9,7 @@ class MyConditional<T extends DefaultStep | Pipeline> extends Conditional<T> {
         super(step);
     }
 
-    accept() {
+    accept(): boolean {
         return this.accepted;
     }
 }

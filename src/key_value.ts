@@ -21,6 +21,8 @@ export class KeyValueImpl<T> extends Chainable<T> implements KeyValue<T> {
 // TODO: remove this once
 // https://github.com/typestack/class-transformer/issues/274
 // is fixed
-export function transformKeyValueImpl(kv: KeyValueImpl<any>) {
+export function transformKeyValueImpl(
+    kv: KeyValueImpl<any>,
+): Map<string, string> | undefined {
     return kv.vars.size ? kv.vars : undefined;
 }

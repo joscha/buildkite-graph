@@ -2,9 +2,11 @@ import { Exclude, Expose, Transform } from 'class-transformer';
 import ow from 'ow';
 import 'reflect-metadata';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BaseStep {}
 
 // see https://github.com/microsoft/TypeScript/issues/22815#issuecomment-375766197
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DefaultStep extends BaseStep {}
 export abstract class DefaultStep implements BaseStep {
     @Exclude()
@@ -18,7 +20,7 @@ export abstract class DefaultStep implements BaseStep {
     @Exclude()
     public always: boolean = false;
 
-    alwaysExecute() {
+    alwaysExecute(): this {
         this.always = true;
         return this;
     }
@@ -43,11 +45,11 @@ export class LabeledStep extends BranchLimitedStep {
     private _label?: string;
 
     @Expose()
-    get label() {
+    protected get label(): string | undefined {
         return this._label;
     }
 
-    withLabel(label: string) {
+    withLabel(label: string): this {
         this._label = label;
         return this;
     }

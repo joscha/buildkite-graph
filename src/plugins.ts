@@ -16,7 +16,7 @@ export interface Plugins<T> {
     add(plugin: Plugin): T;
 }
 
-export function transformPlugins(value: PluginsImpl<any>) {
+export function transformPlugins(value: PluginsImpl<any>): object | undefined {
     if (!value.plugins.length) {
         return undefined;
     }
@@ -32,7 +32,7 @@ export function transformPlugins(value: PluginsImpl<any>) {
 export class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
     public plugins: Plugin[] = [];
 
-    add(plugin: Plugin) {
+    add(plugin: Plugin): T {
         this.plugins.push(plugin);
         return this.parent;
     }
