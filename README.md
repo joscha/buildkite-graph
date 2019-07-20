@@ -52,6 +52,8 @@ steps:
       timeout_in_minutes: 12
 ```
 
+> Do you see how the `wait` step got added for you? How cool is that, hey :)
+
 and
 
 ```dot
@@ -76,4 +78,6 @@ subgraph cluster_1 {
 }
 ```
 
-![graphviz](https://user-images.githubusercontent.com/188038/61578197-699d2200-ab36-11e9-9b9e-48ee773a2d86.png)
+which will visualize to:
+
+![graphviz](https://user-images.githubusercontent.com/188038/61578197-699d2200-ab36-11e9-9b9e-48ee773a2d86.png | width=200)
