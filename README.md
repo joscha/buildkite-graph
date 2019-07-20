@@ -80,4 +80,4 @@ subgraph cluster_1 {
 
 which will visualize to:
 
-![graphviz](https://user-images.githubusercontent.com/188038/61578197-699d2200-ab36-11e9-9b9e-48ee773a2d86.png | width=200)
+<img src="https://user-images.githubusercontent.com/188038/61578197-699d2200-ab36-11e9-9b9e-48ee773a2d86.png" width="200">
