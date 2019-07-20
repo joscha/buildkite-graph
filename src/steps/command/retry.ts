@@ -39,6 +39,7 @@ export class RetryImpl<T> extends Chainable<T> implements Retry<T> {
             return value;
         }
         return [...value.entries()].map(([s, limit]) => ({
+            // eslint-disable-next-line @typescript-eslint/camelcase
             exit_status: s,
             limit,
         }));

@@ -113,7 +113,10 @@ export class Step extends LabeledStep {
         } else if (value.has('*')) {
             return true;
         } else {
-            return [...value].map(s => ({ exit_status: s }));
+            return [...value].map(s => ({
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                exit_status: s,
+            }));
         }
     })
     private _softFail: Set<ExitStatus> = new Set();
