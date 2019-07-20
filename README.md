@@ -20,8 +20,10 @@ The main advantage of using this module is:
 const install = new Command('yarn', 2);
 
 const lint = new Step([install, new Command('yarn lint', 1)]);
+
 const test = new Step([install, new Command('yarn test', 2)]).dependsOn(lint);
 const build = new Step([install, new Command('yarn build', 5)]).dependsOn(lint);
+
 const integration = new Step([
     install,
     new Command('yarn integration', 10),
