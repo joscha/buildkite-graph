@@ -68,6 +68,7 @@ export function createComplex(): Pipeline {
 
     const annotateCucumberFailuresStep = new Step(
         'web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases',
+        'Annotate cucumber failures',
     )
         .alwaysExecute()
         .dependsOn(integrationTestStep)
