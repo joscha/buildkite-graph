@@ -1,6 +1,6 @@
 import { Pipeline } from '../';
 import { Plugin } from '../plugins';
-import { ExitStatus } from '../steps/base';
+import { ExitStatus } from '../base';
 import { Command, Step } from '../steps/command';
 import { createTest } from './helpers';
 

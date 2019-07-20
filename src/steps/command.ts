@@ -3,7 +3,7 @@ import ow from 'ow';
 import 'reflect-metadata';
 import { KeyValue, KeyValueImpl, transformKeyValueImpl } from '../key_value';
 import { Plugin, Plugins, PluginsImpl, transformPlugins } from '../plugins';
-import { ExitStatus, exitStatusPredicate, LabeledStep } from './base';
+import { ExitStatus, exitStatusPredicate, LabeledStep } from '../base';
 import { Retry, RetryImpl } from './command/retry';
 
 function assertTimeout(timeout: number) {

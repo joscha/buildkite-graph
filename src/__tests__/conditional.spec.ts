@@ -1,6 +1,6 @@
 import { Pipeline } from '../';
 import { Conditional } from '../conditional';
-import { DefaultStep } from '../steps/base';
+import { DefaultStep } from '../base';
 import { Step } from '../steps/command';
 import { createTest } from './helpers';
 

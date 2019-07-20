@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import TopologicalSort from 'topological-sort';
 import { Conditional } from './conditional';
 import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
-import { DefaultStep } from './steps/base';
+import { DefaultStep } from './base';
 import { WaitStep } from './steps/wait';
 
 type PotentialStep =

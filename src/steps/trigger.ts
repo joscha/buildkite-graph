@@ -1,7 +1,7 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
 import slug from 'slug';
 import { Pipeline } from '../';
-import { LabeledStep } from './base';
+import { LabeledStep } from '../base';
 import { Build, BuildImpl } from './trigger/build';
 
 @Exclude()

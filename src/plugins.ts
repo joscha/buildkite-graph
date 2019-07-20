@@ -1,7 +1,7 @@
 import { Exclude } from 'class-transformer';
 import ow from 'ow';
 import 'reflect-metadata';
-import { Chainable } from './steps/base';
+import { Chainable } from './base';
 
 export class Plugin {
     constructor(

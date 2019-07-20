@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 import 'reflect-metadata';
-import { BaseStep } from './base';
+import { BaseStep } from '../base';
 
 export class WaitStep implements BaseStep {
     public readonly wait: null = null;

@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
 import ow from 'ow';
-import { Chainable } from './steps/base';
+import { Chainable } from './base';
 
 export interface KeyValue<T> {
     set(name: string, value: string): T;

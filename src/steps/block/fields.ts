@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import ow from 'ow';
-import { Chainable } from '../base';
+import { Chainable } from '../../base';
 
 @Expose()
 abstract class Field {
