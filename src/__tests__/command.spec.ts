@@ -1,7 +1,7 @@
 import { Pipeline } from '../';
-import { ExitStatus } from '../steps/base';
-import { Step, Command } from '../steps/command';
 import { Plugin } from '../plugins';
+import { ExitStatus } from '../steps/base';
+import { Command, Step } from '../steps/command';
 import { createTest } from './helpers';
 
 describe('buildkite-graph', () => {

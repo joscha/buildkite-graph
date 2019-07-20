@@ -27,7 +27,7 @@ describe('buildkite-graph', () => {
             ]);
         });
     });
-    describe('Entitites', () => {
+    describe('Pipelines', () => {
         createTest('can be conditional', () => [
             new Pipeline('a')
                 .add(new Step('a'))

@@ -1,7 +1,7 @@
 import { Pipeline } from '../';
 import { Step } from '../steps/command';
 import { createTest } from './helpers';
-import { createSimple, createComplex } from './samples';
+import { createComplex, createSimple } from './samples';
 
 describe('buildkite-graph', () => {
     describe('general serialization', () => {

@@ -1,6 +1,6 @@
-import { Serializer } from '../serializer';
-import { Pipeline } from '../';
 import * as jsyaml from 'js-yaml';
+import { Pipeline } from '../';
+import { Serializer } from '../serializer';
 import { JsonSerializer } from './json';
 
 export class YamlSerializer extends JsonSerializer

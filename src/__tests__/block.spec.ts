@@ -1,6 +1,6 @@
 import { Pipeline } from '../';
 import { BlockStep } from '../steps/block';
-import { TextField, SelectField, Option } from '../steps/block/fields';
+import { Option, SelectField, TextField } from '../steps/block/fields';
 import { createTest } from './helpers';
 
 describe('buildkite-graph', () => {

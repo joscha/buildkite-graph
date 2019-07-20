@@ -1,4 +1,4 @@
-import { Expose, Exclude, Transform } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import { KeyValue, KeyValueImpl, transformKeyValueImpl } from '../../key_value';
 
 export interface Build<T> {

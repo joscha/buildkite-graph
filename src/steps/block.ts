@@ -1,6 +1,6 @@
-import { Expose, Exclude, Transform } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import { BranchLimitedStep } from './base';
-import { FieldsImpl, Fields } from './block/fields';
+import { Fields, FieldsImpl } from './block/fields';
 
 @Exclude()
 export class BlockStep extends BranchLimitedStep {

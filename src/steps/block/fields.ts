@@ -1,5 +1,5 @@
+import { Exclude, Expose } from 'class-transformer';
 import ow from 'ow';
-import { Expose, Exclude } from 'class-transformer';
 import { Chainable } from '../base';
 
 @Expose()

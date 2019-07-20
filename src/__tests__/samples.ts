@@ -1,8 +1,8 @@
 import { Pipeline } from '..';
-import { BlockStep } from '../steps/block';
-import { TriggerStep } from '../steps/trigger';
-import { Step } from '../steps/command';
 import { Plugin } from '../plugins';
+import { BlockStep } from '../steps/block';
+import { Step } from '../steps/command';
+import { TriggerStep } from '../steps/trigger';
 
 export function createSimple(): Pipeline {
     return new Pipeline('web-deploy').env

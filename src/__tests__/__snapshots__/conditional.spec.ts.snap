@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildkite-graph Entitites can be conditional dot 1`] = `
+exports[`buildkite-graph Pipelines can be conditional dot 1`] = `
 "digraph \\"a\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -15,7 +15,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Entitites can be conditional dot 2`] = `
+exports[`buildkite-graph Pipelines can be conditional dot 2`] = `
 "digraph \\"a\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -28,7 +28,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Entitites can be conditional json 1`] = `
+exports[`buildkite-graph Pipelines can be conditional json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -47,7 +47,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Entitites can be conditional json 2`] = `
+exports[`buildkite-graph Pipelines can be conditional json 2`] = `
 Object {
   "steps": Array [
     Object {
@@ -60,7 +60,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Entitites can be conditional yaml 1`] = `
+exports[`buildkite-graph Pipelines can be conditional yaml 1`] = `
 "steps:
   - command: a
   - command: b
@@ -69,7 +69,7 @@ exports[`buildkite-graph Entitites can be conditional yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Entitites can be conditional yaml 2`] = `
+exports[`buildkite-graph Pipelines can be conditional yaml 2`] = `
 "steps:
   - command: a
   - command: b

@@ -1,7 +1,7 @@
+import { Exclude, Expose, Transform } from 'class-transformer';
 import ow from 'ow';
 import 'reflect-metadata';
-import { Expose, Exclude, Transform } from 'class-transformer';
-import { ExitStatus, exitStatusPredicate, Chainable } from '../base';
+import { Chainable, ExitStatus, exitStatusPredicate } from '../base';
 
 export interface Retry<T> {
     automatic(statuses: boolean | Map<ExitStatus, number>): T;

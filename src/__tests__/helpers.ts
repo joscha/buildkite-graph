@@ -10,11 +10,11 @@ const serializers: Record<string, Serializer<any>> = {
     dot: new DotSerializer(),
 };
 
-type EntityGenerator = () => Pipeline | Pipeline[];
+type PipelineGenerator = () => Pipeline | Pipeline[];
 
 export const createTest = (
     name: string,
-    gen: EntityGenerator,
+    gen: PipelineGenerator,
     describeFn = describe,
 ): void =>
     describeFn(name, () => {
@@ -29,5 +29,5 @@ export const createTest = (
         });
     });
 
-createTest.only = (name: string, gen: EntityGenerator) =>
+createTest.only = (name: string, gen: PipelineGenerator) =>
     createTest(name, gen, describe.only);

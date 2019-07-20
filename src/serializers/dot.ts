@@ -1,6 +1,6 @@
 import * as graphviz from 'graphviz';
-import { Serializer } from '../serializer';
 import { Pipeline, stortedWithBlocks } from '../';
+import { Serializer } from '../serializer';
 import { TriggerStep } from '../steps/trigger';
 
 export class DotSerializer implements Serializer<string> {

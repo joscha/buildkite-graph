@@ -1,6 +1,6 @@
+import { Exclude, Expose, Transform } from 'class-transformer';
 import ow from 'ow';
 import 'reflect-metadata';
-import { Expose, Exclude, Transform } from 'class-transformer';
 
 export interface BaseStep {}
 

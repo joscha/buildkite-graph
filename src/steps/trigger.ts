@@ -1,8 +1,8 @@
-import { Expose, Exclude, Transform } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import slug from 'slug';
-import { LabeledStep } from './base';
-import { BuildImpl, Build } from './trigger/build';
 import { Pipeline } from '../';
+import { LabeledStep } from './base';
+import { Build, BuildImpl } from './trigger/build';
 
 @Exclude()
 export class TriggerStep extends LabeledStep {

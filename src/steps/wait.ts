@@ -1,5 +1,5 @@
-import 'reflect-metadata';
 import { Expose } from 'class-transformer';
+import 'reflect-metadata';
 import { BaseStep } from './base';
 
 export class WaitStep implements BaseStep {

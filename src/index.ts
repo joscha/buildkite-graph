@@ -5,7 +5,6 @@ import { Conditional } from './conditional';
 import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
 import { DefaultStep } from './steps/base';
 import { WaitStep } from './steps/wait';
-import { Step } from './steps/command';
 
 type PotentialStep =
     | DefaultStep
