@@ -17,21 +17,22 @@ The main advantage of using this module is:
 ## Example in a nutshell
 
 ```ts
-const yarnInstall = new Command('yarn', 2);
+const install = new Command('yarn', 2);
 
-const lintStep = new Step([yarnInstall, new Command('yarn lint', 1)]);
-const testStep = new Step([yarnInstall, new Command('yarn test', 5)]).dependsOn(
-    lintStep,
-);
-const buildStep = new Step([
-    yarnInstall,
-    new Command('yarn build', 10),
-]).dependsOn(lintStep);
+const lint = new Step([install, new Command('yarn lint', 1)]);
+const test = new Step([install, new Command('yarn test', 2)]).dependsOn(lint);
+const build = new Step([install, new Command('yarn build', 5)]).dependsOn(lint);
+const integration = new Step([
+    install,
+    new Command('yarn integration', 10),
+]).dependsOn(build);
 
-const pipeline = new Pipeline('My pipeline').add(testStep).add(buildStep);
+const pipeline = new Pipeline('My pipeline').add(test).add(integration);
 
 console.log(new YamlSerializer().serialize(pipeline));
 ```
+
+> Do you see how we don't have to add the `lint` step? Because other steps depend on it, it will become part of the graph automatically. This allows you to define graphs with complex dependencies and only add the steps which have an important signal - no more manually adding auxiliary steps.
 
 will serialize to:
 
@@ -44,15 +45,21 @@ steps:
     - wait: ~
     - command:
           - yarn
-          - yarn test
+          - yarn build
       timeout_in_minutes: 7
     - command:
           - yarn
-          - yarn build
+          - yarn test
+      timeout_in_minutes: 4
+    - wait: ~
+    - command:
+          - yarn
+          - yarn integration
       timeout_in_minutes: 12
 ```
 
-> Do you see how the `wait` step got added for you? How cool is that, hey :)
+> Did you see how the `wait` step got added for you? How cool is that, hey :)
+> And did you also see how the timeouts for the steps are derived from the commands?
 
 and
 
@@ -66,18 +73,25 @@ subgraph cluster_0 {
 
 subgraph cluster_1 {
   graph [ color = "black" ];
-  "<yarn && yarn test>" [ color = "grey" ];
   "<yarn && yarn build>" [ color = "grey" ];
+  "<yarn && yarn test>" [ color = "grey" ];
+}
+
+subgraph cluster_2 {
+  graph [ color = "black" ];
+  "<yarn && yarn integration>" [ color = "grey" ];
 }
 
   "<yarn && yarn lint>";
-  "<yarn && yarn test>";
   "<yarn && yarn build>";
-  "<yarn && yarn lint>" -> "<yarn && yarn test>" [ ltail = "cluster_0", lhead = "cluster_1" ];
+  "<yarn && yarn test>";
+  "<yarn && yarn integration>";
   "<yarn && yarn lint>" -> "<yarn && yarn build>" [ ltail = "cluster_0", lhead = "cluster_1" ];
+  "<yarn && yarn lint>" -> "<yarn && yarn test>" [ ltail = "cluster_0", lhead = "cluster_1" ];
+  "<yarn && yarn build>" -> "<yarn && yarn integration>" [ ltail = "cluster_1", lhead = "cluster_2" ];
 }
 ```
 
 which will visualize to:
 
-<img src="https://user-images.githubusercontent.com/188038/61578197-699d2200-ab36-11e9-9b9e-48ee773a2d86.png" width="500">
+<img src="https://user-images.githubusercontent.com/188038/61578524-b6cfc280-ab3b-11e9-87ab-28fa6be480ff.png" width="500">
