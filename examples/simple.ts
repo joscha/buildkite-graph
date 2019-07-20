@@ -1,5 +1,7 @@
-import { Pipeline } from 'src';
-import { Step, Command } from 'src/steps/command';
+import { Pipeline } from '../src';
+import { Step, Command } from '../src/steps/command';
+import { YamlSerializer } from '../src/serializers/yaml';
+import { DotSerializer } from '../src/serializers/dot';
 
 const yarnInstall = new Command('yarn', 2);
 
@@ -12,4 +14,7 @@ const buildStep = new Step([
     new Command('yarn build', 10),
 ]).dependsOn(lintStep);
 
-new Pipeline('My pipeline').add(testStep).add(buildStep);
+const pipeline = new Pipeline('My pipeline').add(testStep).add(buildStep);
+
+console.log(new YamlSerializer().serialize(pipeline));
+// console.log(new DotSerializer().serialize(pipeline));
