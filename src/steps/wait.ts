@@ -14,6 +14,7 @@ export class WaitStep implements BaseStep {
     }
 
     toString(): string {
+        /* istanbul ignore next */
         return '[wait]';
     }
 }
