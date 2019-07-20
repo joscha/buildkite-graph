@@ -678,7 +678,7 @@ exports[`buildkite-graph Steps Command retry yaml 7`] = `
 "
 `;
 
-exports[`buildkite-graph Steps Command skip dot 1`] = `
+exports[`buildkite-graph Steps Command skip function dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -690,7 +690,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Steps Command skip dot 2`] = `
+exports[`buildkite-graph Steps Command skip function dot 2`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -702,7 +702,29 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Steps Command skip json 1`] = `
+exports[`buildkite-graph Steps Command skip function dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command skip function json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command skip function json 2`] = `
 Object {
   "steps": Array [
     Object {
@@ -713,7 +735,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Steps Command skip json 2`] = `
+exports[`buildkite-graph Steps Command skip function json 3`] = `
 Object {
   "steps": Array [
     Object {
@@ -724,14 +746,108 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Steps Command skip yaml 1`] = `
+exports[`buildkite-graph Steps Command skip function yaml 1`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command skip function yaml 2`] = `
 "steps:
   - command: noop
     skip: true
 "
 `;
 
-exports[`buildkite-graph Steps Command skip yaml 2`] = `
+exports[`buildkite-graph Steps Command skip function yaml 3`] = `
+"steps:
+  - command: noop
+    skip: my reason
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command skip value json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "skip": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command skip value json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "skip": "my reason",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command skip value yaml 1`] = `
+"steps:
+  - command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value yaml 2`] = `
+"steps:
+  - command: noop
+    skip: true
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value yaml 3`] = `
 "steps:
   - command: noop
     skip: my reason

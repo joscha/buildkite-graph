@@ -10,6 +10,15 @@ function assertTimeout(timeout: number) {
     ow(timeout, ow.number.integerOrInfinite.positive);
 }
 
+function assertSkipValue(value: SkipValue) {
+    if (typeof value === 'string') {
+        ow(value, ow.string.nonEmpty);
+    }
+}
+
+type SkipValue = boolean | string;
+export type SkipFunction = () => SkipValue;
+
 export class Command {
     constructor(public command: string, public timeout: number = Infinity) {
         ow(command, ow.string.not.empty);
@@ -110,8 +119,14 @@ export class Step extends LabeledStep {
     private _softFail: Set<ExitStatus> = new Set();
 
     @Expose({ name: 'skip' })
-    @Transform((value: boolean) => (value ? value : undefined))
-    private _skip?: boolean | string;
+    @Transform((value: SkipValue | SkipFunction) => {
+        if (typeof value === 'function') {
+            value = value();
+            assertSkipValue(value);
+        }
+        return value || undefined;
+    })
+    private _skip?: SkipValue | SkipFunction;
 
     @Expose()
     @Transform((value: RetryImpl<any>) =>
@@ -203,10 +218,11 @@ export class Step extends LabeledStep {
         return this;
     }
 
-    skip(skip: boolean | string): this {
-        if (typeof skip !== 'boolean') {
-            ow(skip, ow.string.nonEmpty);
+    skip(skip: SkipValue | SkipFunction): this {
+        if (typeof skip !== 'function') {
+            assertSkipValue(skip);
         }
+
         this._skip = skip;
         return this;
     }

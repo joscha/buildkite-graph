@@ -202,14 +202,29 @@ describe('buildkite-graph', () => {
                 );
             });
 
-            createTest('skip', () => [
-                new Pipeline('whatever').add(
-                    new Step('noop').skip(false).skip(true),
-                ),
-                new Pipeline('whatever').add(
-                    new Step('noop').skip('my reason'),
-                ),
-            ]);
+            describe('skip', () => {
+                createTest('value', () => [
+                    new Pipeline('whatever').add(new Step('noop').skip(false)),
+                    new Pipeline('whatever').add(
+                        new Step('noop').skip(false).skip(true),
+                    ),
+                    new Pipeline('whatever').add(
+                        new Step('noop').skip('my reason'),
+                    ),
+                ]);
+
+                createTest('function', () => [
+                    new Pipeline('whatever').add(
+                        new Step('noop').skip(() => false),
+                    ),
+                    new Pipeline('whatever').add(
+                        new Step('noop').skip(() => true),
+                    ),
+                    new Pipeline('whatever').add(
+                        new Step('noop').skip(() => 'my reason'),
+                    ),
+                ]);
+            });
 
             createTest('retry', () => [
                 new Pipeline('whatever').add(
