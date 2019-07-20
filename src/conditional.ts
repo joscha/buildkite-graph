@@ -1,9 +1,7 @@
-import { DefaultStep } from './steps/base';
-
-export abstract class Conditional<T extends DefaultStep> {
+export abstract class Conditional<T> {
     constructor(private readonly guarded: T) {}
 
-    get() {
+    get(): T {
         return this.guarded;
     }
 

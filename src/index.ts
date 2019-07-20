@@ -7,7 +7,7 @@ import { DefaultStep } from './steps/base';
 import { WaitStep } from './steps/wait';
 import { Step } from './steps/command';
 
-type PotentialStep = DefaultStep | Conditional<DefaultStep> | Entity;
+type PotentialStep = DefaultStep | Conditional<DefaultStep | Entity> | Entity;
 
 @Exclude()
 export class Entity {
@@ -61,24 +61,25 @@ export class Entity {
     }
 }
 
-function unwrapConditional<T extends DefaultStep>(
-    conditional: Conditional<T>,
-): T | null {
-    return conditional.accept() ? conditional.get() : null;
-}
-
 function unwrapSteps(steps: PotentialStep[]): DefaultStep[] {
-    const ret = [];
+    const ret: DefaultStep[] = [];
     for (const s of steps) {
         if (s instanceof Entity) {
             ret.push(...unwrapSteps(s.steps));
         } else if (s instanceof Conditional) {
-            ret.push(unwrapConditional(s));
+            if (s.accept()) {
+                const cond = s.get();
+                if (cond instanceof Entity) {
+                    ret.push(...unwrapSteps(cond.steps));
+                } else {
+                    ret.push(cond);
+                }
+            }
         } else {
             ret.push(s);
         }
     }
-    return ret.filter((s: DefaultStep | null): s is DefaultStep => !!s);
+    return ret;
 }
 
 function sortedSteps(e: Entity) {

@@ -4,7 +4,7 @@ import { DefaultStep } from '../steps/base';
 import { Step } from '../steps/command';
 import { createTest } from './helpers';
 
-class MyConditional<T extends DefaultStep> extends Conditional<T> {
+class MyConditional<T extends DefaultStep | Entity> extends Conditional<T> {
     constructor(step: T, private readonly accepted: boolean) {
         super(step);
     }
@@ -26,5 +26,27 @@ describe('buildkite-graph', () => {
                 ),
             ]);
         });
+    });
+    describe('Entitites', () => {
+        createTest('can be conditional', () => [
+            new Entity('a')
+                .add(new Step('a'))
+                .add(new Step('b'))
+                .add(
+                    new MyConditional(
+                        new Entity('a').add(new Step('c')).add(new Step('d')),
+                        true,
+                    ),
+                ),
+            new Entity('a')
+                .add(new Step('a'))
+                .add(new Step('b'))
+                .add(
+                    new MyConditional(
+                        new Entity('a').add(new Step('c')).add(new Step('d')),
+                        false,
+                    ),
+                ),
+        ]);
     });
 });
