@@ -7,12 +7,12 @@ export interface BaseStep {}
 
 // see https://github.com/microsoft/TypeScript/issues/22815#issuecomment-375766197
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface DefaultStep extends BaseStep {}
-export abstract class DefaultStep implements BaseStep {
+export interface Step extends BaseStep {}
+export abstract class Step implements BaseStep {
     @Exclude()
-    public readonly dependencies: Set<DefaultStep> = new Set();
+    public readonly dependencies: Set<Step> = new Set();
 
-    dependsOn(step: DefaultStep): this {
+    dependsOn(step: Step): this {
         this.dependencies.add(step);
         return this;
     }
@@ -27,7 +27,7 @@ export abstract class DefaultStep implements BaseStep {
 }
 
 @Exclude()
-export class BranchLimitedStep extends DefaultStep {
+export class BranchLimitedStep extends Step {
     @Expose({ name: 'branches' })
     @Transform((branches: Set<string>) =>
         branches.size ? [...branches].sort().join(' ') : undefined,

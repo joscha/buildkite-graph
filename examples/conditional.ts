@@ -1,10 +1,8 @@
-import { Pipeline } from '../src';
-import { Step, Command } from '../src/steps/command';
-import { YamlSerializer } from '../src/serializers/yaml';
-import { Conditional } from '../src/conditional';
 import { execSync } from 'child_process';
 import { EOL } from 'os';
 import { extname } from 'path';
+import { Command, CommandStep, Conditional, Pipeline } from '../src';
+import { YamlSerializer } from '../src/serializers/yaml';
 
 /**
  * This Conditional will accept when there is at least one changed file ending in .feature
@@ -26,12 +24,14 @@ class FeatureFileChangedConditional<T> extends Conditional<T> {
 
 const install = new Command('yarn', 2);
 
-const lint = new Step([install, new Command('yarn lint', 1)]);
+const lint = new CommandStep([install, new Command('yarn lint', 1)]);
 
-const test = new Step([install, new Command('yarn test', 2)]).dependsOn(lint);
-const build = new Step([install, new Command('yarn build', 5)]);
+const test = new CommandStep([install, new Command('yarn test', 2)]).dependsOn(
+    lint,
+);
+const build = new CommandStep([install, new Command('yarn build', 5)]);
 
-const integration = new Step([
+const integration = new CommandStep([
     install,
     new Command('yarn integration', 10),
 ]).dependsOn(build);

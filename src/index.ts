@@ -1,15 +1,19 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
 import 'reflect-metadata';
-import TopologicalSort from 'topological-sort';
+import { Step } from './base';
 import { Conditional } from './conditional';
 import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
-import { DefaultStep } from './base';
 import { WaitStep } from './steps/wait';
+import { stortedWithBlocks } from './stortedWithBlocks';
+export { ExitStatus, Step } from './base';
+export { Conditional } from './conditional';
+export { BlockStep } from './steps/block';
+export { Option, SelectField, TextField } from './steps/block/fields';
+export { Command, CommandStep } from './steps/command';
+export { Plugin } from './steps/command/plugins';
+export { TriggerStep } from './steps/trigger';
 
-type PotentialStep =
-    | DefaultStep
-    | Conditional<DefaultStep | Pipeline>
-    | Pipeline;
+export type PotentialStep = Step | Conditional<Step | Pipeline> | Pipeline;
 
 @Exclude()
 export class Pipeline {
@@ -32,7 +36,7 @@ export class Pipeline {
     }
 
     @Expose({ name: 'steps' })
-    private get _steps(): (WaitStep | DefaultStep)[] {
+    private get _steps(): (WaitStep | Step)[] {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         const stepsWithBlocks = stortedWithBlocks(this);
 
@@ -41,7 +45,7 @@ export class Pipeline {
         // if step after does not have .always = true a wait step needs to be
         // inserted.
         // See: https://buildkite.com/docs/pipelines/wait-step#continuing-on-failure
-        const steps: (WaitStep | DefaultStep)[] = [];
+        const steps: (WaitStep | Step)[] = [];
         let lastWait: WaitStep | undefined = undefined;
         for (const s of stepsWithBlocks) {
             if (s === null) {
@@ -62,66 +66,4 @@ export class Pipeline {
 
         return steps;
     }
-}
-
-function unwrapSteps(steps: PotentialStep[]): DefaultStep[] {
-    const ret: DefaultStep[] = [];
-    for (const s of steps) {
-        if (s instanceof Pipeline) {
-            ret.push(...unwrapSteps(s.steps));
-        } else if (s instanceof Conditional) {
-            if (s.accept()) {
-                const cond = s.get();
-                if (cond instanceof Pipeline) {
-                    ret.push(...unwrapSteps(cond.steps));
-                } else {
-                    ret.push(cond);
-                }
-            }
-        } else {
-            ret.push(s);
-        }
-    }
-    return ret;
-}
-
-function sortedSteps(e: Pipeline): DefaultStep[] {
-    const steps = unwrapSteps(e.steps);
-    const sortOp = new TopologicalSort<DefaultStep, DefaultStep>(
-        new Map(steps.map(step => [step, step])),
-    );
-
-    for (let step of steps) {
-        for (const dependency of step.dependencies) {
-            if (steps.indexOf(dependency) === -1) {
-                // a dependency has not been added to the graph explicitly,
-                // so we add it implicitly
-                sortOp.addNode(dependency, dependency);
-                steps.push(dependency);
-                // maybe we want to rather throw here?
-                // Unsure...there could be a strict mode where we:
-                // throw new Error(`Step not part of the graph: '${dependency}'`);
-            }
-            sortOp.addEdge(dependency, step);
-        }
-    }
-    return Array.from(sortOp.sort().values()).map(i => i.node);
-}
-
-export function stortedWithBlocks(e: Pipeline): (DefaultStep | null)[] {
-    const sorted = sortedSteps(e);
-    // null denotes a block
-    const allSteps: (DefaultStep | null)[] = [];
-    let lastWaitStep = -1;
-    for (const step of sorted) {
-        dep: for (const dependency of step.dependencies) {
-            const dependentStep = allSteps.indexOf(dependency);
-            if (dependentStep !== -1 && dependentStep > lastWaitStep) {
-                lastWaitStep = allSteps.push(null) - 1;
-                break dep;
-            }
-        }
-        allSteps.push(step);
-    }
-    return allSteps;
 }

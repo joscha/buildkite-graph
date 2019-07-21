@@ -1,5 +1,4 @@
-import { Pipeline } from '../';
-import { TriggerStep } from '../steps/trigger';
+import { Pipeline, TriggerStep } from '../';
 import { createTest } from './helpers';
 
 describe('buildkite-graph', () => {

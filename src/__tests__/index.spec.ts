@@ -1,5 +1,4 @@
-import { Pipeline } from '../';
-import { Step } from '../steps/command';
+import { CommandStep, Pipeline } from '../';
 import { createTest } from './helpers';
 import { createComplex, createSimple } from './samples';
 
@@ -10,8 +9,8 @@ describe('buildkite-graph', () => {
     });
 
     createTest('missing transitive steps get added to the graph', () => {
-        const step1 = new Step('yarn');
-        const step2 = new Step('yarn test').dependsOn(step1);
+        const step1 = new CommandStep('yarn');
+        const step2 = new CommandStep('yarn test').dependsOn(step1);
         return new Pipeline('test').add(step2);
     });
 
@@ -21,14 +20,18 @@ describe('buildkite-graph', () => {
         ]);
 
         createTest('steps', () => [
-            new Pipeline('whatever').add(new Step('command')),
+            new Pipeline('whatever').add(new CommandStep('command')),
         ]);
 
         createTest('can be augmented', () => [
             new Pipeline('a')
-                .add(new Step('a'))
-                .add(new Step('b'))
-                .add(new Pipeline('a').add(new Step('c')).add(new Step('d'))),
+                .add(new CommandStep('a'))
+                .add(new CommandStep('b'))
+                .add(
+                    new Pipeline('a')
+                        .add(new CommandStep('c'))
+                        .add(new CommandStep('d')),
+                ),
         ]);
     });
 });

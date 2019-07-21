@@ -1,6 +1,6 @@
 import { classToPlain } from 'class-transformer';
 import { Pipeline } from '../';
-import { Serializer } from '../serializer';
+import { Serializer } from '.';
 
 export class JsonSerializer implements Serializer<object> {
     serialize(e: Pipeline): object {

@@ -2,7 +2,12 @@ import { Exclude, Expose, Transform } from 'class-transformer';
 import ow from 'ow';
 import 'reflect-metadata';
 import { KeyValue, KeyValueImpl, transformKeyValueImpl } from '../key_value';
-import { Plugin, Plugins, PluginsImpl, transformPlugins } from '../plugins';
+import {
+    Plugin,
+    Plugins,
+    PluginsImpl,
+    transformPlugins,
+} from './command/plugins';
 import { ExitStatus, exitStatusPredicate, LabeledStep } from '../base';
 import { Retry, RetryImpl } from './command/retry';
 
@@ -33,7 +38,7 @@ export class Command {
 type Agents = Map<string, string>;
 
 @Exclude()
-export class Step extends LabeledStep {
+export class CommandStep extends LabeledStep {
     @Expose({ name: 'command' })
     @Transform((value: Command[]) => {
         if (!value || value.length === 0) {
@@ -135,7 +140,7 @@ export class Step extends LabeledStep {
     @Transform((value: RetryImpl<any>) =>
         value.hasValue() ? value : undefined,
     )
-    public readonly retry: Retry<Step> = new RetryImpl(this);
+    public readonly retry: Retry<CommandStep> = new RetryImpl(this);
 
     constructor(plugin: Plugin, label?: string);
     constructor(command: string, label?: string);

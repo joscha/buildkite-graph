@@ -1,10 +1,7 @@
-import { Pipeline } from '../';
-import { Conditional } from '../conditional';
-import { DefaultStep } from '../base';
-import { Step } from '../steps/command';
+import { CommandStep, Conditional, Pipeline, Step } from '../';
 import { createTest } from './helpers';
 
-class MyConditional<T extends DefaultStep | Pipeline> extends Conditional<T> {
+class MyConditional<T extends Step | Pipeline> extends Conditional<T> {
     constructor(step: T, private readonly accepted: boolean) {
         super(step);
     }
@@ -19,10 +16,16 @@ describe('buildkite-graph', () => {
         describe('Command', () => {
             createTest('step addition', () => [
                 new Pipeline('whatever').add(
-                    new MyConditional(new Step('yarn').add('yarn test'), true),
+                    new MyConditional(
+                        new CommandStep('yarn').add('yarn test'),
+                        true,
+                    ),
                 ),
                 new Pipeline('whatever').add(
-                    new MyConditional(new Step('yarn').add('yarn test'), false),
+                    new MyConditional(
+                        new CommandStep('yarn').add('yarn test'),
+                        false,
+                    ),
                 ),
             ]);
         });
@@ -30,20 +33,24 @@ describe('buildkite-graph', () => {
     describe('Pipelines', () => {
         createTest('can be conditional', () => [
             new Pipeline('a')
-                .add(new Step('a'))
-                .add(new Step('b'))
+                .add(new CommandStep('a'))
+                .add(new CommandStep('b'))
                 .add(
                     new MyConditional(
-                        new Pipeline('a').add(new Step('c')).add(new Step('d')),
+                        new Pipeline('a')
+                            .add(new CommandStep('c'))
+                            .add(new CommandStep('d')),
                         true,
                     ),
                 ),
             new Pipeline('a')
-                .add(new Step('a'))
-                .add(new Step('b'))
+                .add(new CommandStep('a'))
+                .add(new CommandStep('b'))
                 .add(
                     new MyConditional(
-                        new Pipeline('a').add(new Step('c')).add(new Step('d')),
+                        new Pipeline('a')
+                            .add(new CommandStep('c'))
+                            .add(new CommandStep('d')),
                         false,
                     ),
                 ),

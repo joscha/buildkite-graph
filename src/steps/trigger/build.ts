@@ -8,6 +8,7 @@ export interface Build<T> {
     withCommit(commit: string): T;
     withBranch(branch: string): T;
 }
+
 @Exclude()
 export class BuildImpl<T> implements Build<T> {
     @Expose({ name: 'message' })

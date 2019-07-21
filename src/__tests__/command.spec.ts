@@ -1,32 +1,31 @@
-import { Pipeline } from '../';
-import { Plugin } from '../plugins';
-import { ExitStatus } from '../base';
-import { Command, Step } from '../steps/command';
+import { Command, CommandStep, ExitStatus, Pipeline, Plugin } from '../';
 import { createTest } from './helpers';
 
 describe('buildkite-graph', () => {
     describe('Steps', () => {
         describe('Command', () => {
             createTest('step addition', () =>
-                new Pipeline('whatever').add(new Step('yarn').add('yarn test')),
+                new Pipeline('whatever').add(
+                    new CommandStep('yarn').add('yarn test'),
+                ),
             );
 
             describe('continue on failure', () => {
                 createTest(
                     'multiple subsequent always-executed subsequent steps do not get an additional wait step',
                     () => {
-                        const command = new Step('command.sh');
-                        const always = new Step(
+                        const command = new CommandStep('command.sh');
+                        const always = new CommandStep(
                             'echo This runs regardless of the success or failure',
                         )
                             .alwaysExecute()
                             .dependsOn(command);
-                        const always2 = new Step(
+                        const always2 = new CommandStep(
                             'echo This runs regardless of the success or failure 2',
                         )
                             .alwaysExecute()
                             .dependsOn(command);
-                        const always3 = new Step(
+                        const always3 = new CommandStep(
                             'echo This runs regardless of the success or failure 3',
                         )
                             .alwaysExecute()
@@ -43,13 +42,13 @@ describe('buildkite-graph', () => {
                 createTest(
                     'subsequent depending steps that are not always executed get an additional wait step',
                     () => {
-                        const command = new Step('command.sh');
-                        const always = new Step(
+                        const command = new CommandStep('command.sh');
+                        const always = new CommandStep(
                             'echo This runs regardless of the success or failure',
                         )
                             .alwaysExecute()
                             .dependsOn(command);
-                        const passed = new Step(
+                        const passed = new CommandStep(
                             'echo The command passed',
                         ).dependsOn(command);
 
@@ -68,7 +67,7 @@ describe('buildkite-graph', () => {
                         const command1 = new Command('yarn install', 10);
                         const command2 = new Command('yarn test', 10);
                         return new Pipeline('test').add(
-                            new Step([command1, command2]),
+                            new CommandStep([command1, command2]),
                         );
                     },
                 );
@@ -77,7 +76,7 @@ describe('buildkite-graph', () => {
                     const command1 = new Command('yarn install', 10);
                     const command2 = new Command('yarn test', 10);
                     return new Pipeline('test').add(
-                        new Step([command1, command2])
+                        new CommandStep([command1, command2])
                             .withTimeout(100)
                             .withTimeout(2),
                     );
@@ -89,27 +88,27 @@ describe('buildkite-graph', () => {
                         const command1 = new Command('yarn install', 10);
                         const command2 = new Command('yarn test');
                         return new Pipeline('test').add(
-                            new Step([command1, command2]),
+                            new CommandStep([command1, command2]),
                         );
                     },
                 );
 
                 createTest('can be infinite', () => {
                     return new Pipeline('test').add(
-                        new Step('noop').withTimeout(),
+                        new CommandStep('noop').withTimeout(),
                     );
                 });
             });
 
             createTest('agents', () =>
                 new Pipeline('whatever').add(
-                    new Step('noop').withAgent('npm', 'true'),
+                    new CommandStep('noop').withAgent('npm', 'true'),
                 ),
             );
 
             createTest('artifact_paths', () =>
                 new Pipeline('whatever').add(
-                    new Step('noop')
+                    new CommandStep('noop')
                         .withArtifactPath('logs/**/*')
                         .withArtifactPath('coverage/**/*'),
                 ),
@@ -117,7 +116,7 @@ describe('buildkite-graph', () => {
 
             createTest('branches', () =>
                 new Pipeline('whatever').add(
-                    new Step('noop')
+                    new CommandStep('noop')
                         .withBranch('master')
                         .withBranch('stable/*')
                         .withBranch('!release/*'),
@@ -126,7 +125,7 @@ describe('buildkite-graph', () => {
 
             createTest('concurrency', () =>
                 new Pipeline('whatever').add(
-                    new Step('noop')
+                    new CommandStep('noop')
                         .withConcurrency(10, 'will/be/overridden')
                         .withConcurrency(3, 'my-app/deploy'),
                 ),
@@ -134,7 +133,7 @@ describe('buildkite-graph', () => {
 
             createTest('env', () =>
                 new Pipeline('whatever').add(
-                    new Step('noop').env
+                    new CommandStep('noop').env
                         .set('RAILS_ENV', 'test')
                         .env.set('DEBUG', 'true'),
                 ),
@@ -142,13 +141,15 @@ describe('buildkite-graph', () => {
 
             createTest('id', () =>
                 new Pipeline('whatever').add(
-                    new Step('noop').withId('my-id-overridden').withId('my-id'),
+                    new CommandStep('noop')
+                        .withId('my-id-overridden')
+                        .withId('my-id'),
                 ),
             );
 
             createTest('label', () =>
                 new Pipeline('whatever').add(
-                    new Step('noop')
+                    new CommandStep('noop')
                         .withLabel('my label overridden')
                         .withLabel('my label'),
                 ),
@@ -156,13 +157,15 @@ describe('buildkite-graph', () => {
 
             createTest('parallelism', () =>
                 new Pipeline('whatever').add(
-                    new Step('noop').withParallelism(100).withParallelism(123),
+                    new CommandStep('noop')
+                        .withParallelism(100)
+                        .withParallelism(123),
                 ),
             );
 
             createTest('plugins', () =>
                 new Pipeline('whatever').add(
-                    new Step('noop').plugins
+                    new CommandStep('noop').plugins
                         .add(
                             new Plugin('bugcrowd/test-summary#v1.5.0', {
                                 inputs: [
@@ -182,81 +185,87 @@ describe('buildkite-graph', () => {
             describe('soft_fail', () => {
                 createTest('boolean', () => [
                     new Pipeline('whatever').add(
-                        new Step('noop').withSoftFail('*'),
+                        new CommandStep('noop').withSoftFail('*'),
                     ),
                     new Pipeline('whatever').add(
-                        new Step('noop').withSoftFail(true),
+                        new CommandStep('noop').withSoftFail(true),
                     ),
                 ]);
 
                 createTest('multiple', () =>
                     new Pipeline('whatever').add(
-                        new Step('noop').withSoftFail(1).withSoftFail(-127),
+                        new CommandStep('noop')
+                            .withSoftFail(1)
+                            .withSoftFail(-127),
                     ),
                 );
 
                 createTest('star', () =>
                     new Pipeline('whatever').add(
-                        new Step('noop').withSoftFail(1).withSoftFail('*'),
+                        new CommandStep('noop')
+                            .withSoftFail(1)
+                            .withSoftFail('*'),
                     ),
                 );
             });
 
             describe('skip', () => {
                 createTest('value', () => [
-                    new Pipeline('whatever').add(new Step('noop').skip(false)),
                     new Pipeline('whatever').add(
-                        new Step('noop').skip(false).skip(true),
+                        new CommandStep('noop').skip(false),
                     ),
                     new Pipeline('whatever').add(
-                        new Step('noop').skip('my reason'),
+                        new CommandStep('noop').skip(false).skip(true),
+                    ),
+                    new Pipeline('whatever').add(
+                        new CommandStep('noop').skip('my reason'),
                     ),
                 ]);
 
                 createTest('function', () => [
                     new Pipeline('whatever').add(
-                        new Step('noop').skip(() => false),
+                        new CommandStep('noop').skip(() => false),
                     ),
                     new Pipeline('whatever').add(
-                        new Step('noop').skip(() => true),
+                        new CommandStep('noop').skip(() => true),
                     ),
                     new Pipeline('whatever').add(
-                        new Step('noop').skip(() => 'my reason'),
+                        new CommandStep('noop').skip(() => 'my reason'),
                     ),
                 ]);
             });
 
             createTest('retry', () => [
                 new Pipeline('whatever').add(
-                    new Step('noop').retry.automatic(true),
+                    new CommandStep('noop').retry.automatic(true),
                 ),
                 new Pipeline('whatever').add(
-                    new Step('noop').retry.automatic(
+                    new CommandStep('noop').retry.automatic(
                         new Map<ExitStatus, number>([['*', 2], [255, 2]]),
                     ),
                 ),
                 new Pipeline('whatever').add(
-                    new Step('noop').retry.manual(false),
+                    new CommandStep('noop').retry.manual(false),
                 ),
                 new Pipeline('whatever').add(
-                    new Step('noop').retry.manual(
+                    new CommandStep('noop').retry.manual(
                         false,
                         false,
                         "Sorry, you can't retry a deployment",
                     ),
                 ),
                 new Pipeline('whatever').add(
-                    new Step('noop').retry.manual(
+                    new CommandStep('noop').retry.manual(
                         true,
                         false,
                         "Sorry, you can't retry a deployment",
                     ),
                 ),
                 new Pipeline('whatever').add(
-                    new Step('noop').retry.manual(true, true),
+                    new CommandStep('noop').retry.manual(true, true),
                 ),
                 new Pipeline('whatever').add(
-                    new Step('noop').retry
+                    new CommandStep('noop').retry
                         .automatic(true)
                         .retry.manual(true, true),
                 ),

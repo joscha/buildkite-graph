@@ -1,5 +1,5 @@
 import { Pipeline } from '../';
-import { Serializer } from '../serializer';
+import { Serializer } from '../serializers';
 import { DotSerializer } from '../serializers/dot';
 import { JsonSerializer } from '../serializers/json';
 import { YamlSerializer } from '../serializers/yaml';

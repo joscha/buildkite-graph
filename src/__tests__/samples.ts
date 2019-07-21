@@ -1,28 +1,24 @@
-import { Pipeline } from '..';
-import { Plugin } from '../plugins';
-import { BlockStep } from '../steps/block';
-import { Step } from '../steps/command';
-import { TriggerStep } from '../steps/trigger';
+import { BlockStep, CommandStep, Pipeline, Plugin, TriggerStep } from '../';
 
 export function createSimple(): Pipeline {
     return new Pipeline('web-deploy').env
         .set('USE_COLOR', '1')
         .env.set('DEBUG', 'true')
-        .add(new Step('buildkite/deploy_web.sh', 'Deploy'));
+        .add(new CommandStep('buildkite/deploy_web.sh', 'Deploy'));
 }
 
 export function createComplex(): Pipeline {
     const webDeploy = createSimple();
-    const buildEditorStep = new Step(
+    const buildEditorStep = new CommandStep(
         'web/bin/buildkite/run_web_step.sh build editor',
         'Build Editor',
     );
-    const testEditorStep = new Step(
+    const testEditorStep = new CommandStep(
         'web/bin/buildkite/run_web_step.sh test editor',
         'Test Editor',
     );
 
-    const annotateFailuresStep = new Step(
+    const annotateFailuresStep = new CommandStep(
         new Plugin('bugcrowd/test-summary#v1.5.0', {
             inputs: [
                 {
@@ -39,21 +35,21 @@ export function createComplex(): Pipeline {
         .alwaysExecute()
         .dependsOn(testEditorStep);
 
-    const deployCoverageReportStep = new Step(
+    const deployCoverageReportStep = new CommandStep(
         'web/bin/buildkite/run_web_step.sh deploy-report coverage editor',
         'Upload coverage',
     )
         .alwaysExecute()
         .dependsOn(testEditorStep);
 
-    const integrationTestStep = new Step(
+    const integrationTestStep = new CommandStep(
         'web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome',
         'Integration tests',
     )
         .withParallelism(8)
         .dependsOn(buildEditorStep);
 
-    const saucelabsIntegrationTestStep = new Step(
+    const saucelabsIntegrationTestStep = new CommandStep(
         'web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari',
         ':saucelabs: Integration tests',
     )
@@ -61,12 +57,12 @@ export function createComplex(): Pipeline {
         .add(new Plugin('sauce-connect-plugin'))
         .dependsOn(integrationTestStep);
 
-    const visregBaselineUpdateStep = new Step(
+    const visregBaselineUpdateStep = new CommandStep(
         'web/bin/buildkite/run_web_step.sh run-visual-regression editor',
         'Visreg baseline update',
     ).dependsOn(integrationTestStep);
 
-    const annotateCucumberFailuresStep = new Step(
+    const annotateCucumberFailuresStep = new CommandStep(
         'web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases',
         'Annotate cucumber failures',
     )
@@ -74,12 +70,12 @@ export function createComplex(): Pipeline {
         .dependsOn(integrationTestStep)
         .dependsOn(saucelabsIntegrationTestStep);
 
-    const copyToDeployBucketStep = new Step(
+    const copyToDeployBucketStep = new CommandStep(
         'web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor',
         'Copy to deploy bucket',
     ).dependsOn(saucelabsIntegrationTestStep);
 
-    const updateCheckpointStep = new Step(
+    const updateCheckpointStep = new CommandStep(
         'production/test/jobs/advance_branch.sh "checkpoint/web/green/editor"',
         'Update checkpoint',
     ).dependsOn(copyToDeployBucketStep);
