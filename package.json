@@ -1,6 +1,6 @@
 {
     "name": "buildkite-graph",
-    "version": "1.0.0",
+    "version": "0.0.0-development",
     "main": "dist/index.js",
     "license": "MIT",
     "private": false,
@@ -15,6 +15,7 @@
         "@types/slug": "^0.9.1",
         "@typescript-eslint/eslint-plugin": "^1.12.0",
         "@typescript-eslint/parser": "^1.12.0",
+        "cz-conventional-changelog": "3.0.1",
         "eslint": "^6.1.0",
         "eslint-config-prettier": "^6.0.0",
         "husky": "^3.0.1",
@@ -24,7 +25,8 @@
         "rimraf": "^2.6.3",
         "ts-jest": "^24.0.2",
         "ts-node": "^8.3.0",
-        "typescript": "^3.5.3"
+        "typescript": "^3.5.3",
+        "semantic-release": "^15.13.18"
     },
     "scripts": {
         "preprepare": "rimraf dist/",
@@ -32,7 +34,8 @@
         "pretest": "yarn lint",
         "lint": "eslint --ext .ts src",
         "test": "jest --ci --coverage",
-        "test:watch": "jest --watch"
+        "test:watch": "jest --watch",
+        "semantic-release": "semantic-release"
     },
     "dependencies": {
         "class-transformer": "^0.2.3",
@@ -47,5 +50,17 @@
         "hooks": {
             "pre-commit": "pretty-quick --staged"
         }
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/joscha/buildkite-graph.git"
+    },
+    "publishConfig": {
+        "access": "restricted"
     }
 }
