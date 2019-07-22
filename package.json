@@ -5,7 +5,8 @@
     "license": "MIT",
     "private": false,
     "files": [
-        "dist"
+        "dist",
+        "!dist/__tests__"
     ],
     "devDependencies": {
         "@types/graphviz": "^0.0.30",
