@@ -15,6 +15,10 @@ describe('buildkite-graph', () => {
     });
 
     describe('Pipeline', () => {
+        it('returns a slug', () => {
+            expect(new Pipeline('A: B: c_d').slug()).toEqual('a-b-c-d');
+        });
+
         createTest('env', () => [
             new Pipeline('whatever').env.set('COLOR', '1'),
         ]);

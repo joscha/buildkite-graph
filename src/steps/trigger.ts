@@ -1,5 +1,4 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
-import slug from 'slug';
 import { Pipeline } from '../';
 import { LabeledStep } from '../base';
 import { Build, BuildImpl } from './trigger/build';
@@ -15,7 +14,7 @@ export class TriggerStep extends LabeledStep {
     @Expose()
     get trigger(): string {
         return this._trigger instanceof Pipeline
-            ? slug(this._trigger.name, { lower: true })
+            ? this._trigger.slug()
             : this._trigger;
     }
     constructor(

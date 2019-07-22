@@ -1,3 +1,4 @@
+import slugify from '@sindresorhus/slugify';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import 'reflect-metadata';
 import { Step } from './base';
@@ -33,6 +34,13 @@ export class Pipeline {
     add(...step: PotentialStep[]): this {
         this.steps.push(...step);
         return this;
+    }
+
+    slug(): string {
+        return slugify(this.name, {
+            lowercase: true,
+            customReplacements: [['_', '-']],
+        });
     }
 
     @Expose({ name: 'steps' })
