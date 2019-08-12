@@ -1,9 +1,9 @@
-import { CommandStep, Conditional, Pipeline, Step } from '../';
+import { CommandStep, Conditional, Pipeline, Step, GeneratorFn } from '../';
 import { createTest } from './helpers';
 
-class MyConditional<T> extends Conditional<T> {
-    constructor(step: T, private readonly accepted: boolean) {
-        super(step);
+class MyConditional<T extends Pipeline | Step> extends Conditional<T> {
+    constructor(step: T | GeneratorFn<T>, private readonly accepted: boolean) {
+        super(step as any);
     }
 
     accept(): boolean {

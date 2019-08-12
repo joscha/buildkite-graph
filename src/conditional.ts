@@ -1,7 +1,9 @@
-export abstract class Conditional<T> {
+import { Step, Pipeline, GeneratorFn } from '.';
+
+export abstract class Conditional<T extends Step | Pipeline> {
     constructor(guarded: T);
-    constructor(guarded: () => T);
-    constructor(private readonly guarded: T) {}
+    constructor(guarded: GeneratorFn<Pipeline | Step>);
+    constructor(private readonly guarded: T | GeneratorFn<T>) {}
 
     get(): T {
         return typeof this.guarded === 'function'
