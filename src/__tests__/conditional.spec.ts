@@ -1,7 +1,7 @@
 import { CommandStep, Conditional, Pipeline, Step } from '../';
 import { createTest } from './helpers';
 
-class MyConditional<T extends Step | Pipeline> extends Conditional<T> {
+class MyConditional<T> extends Conditional<T> {
     constructor(step: T, private readonly accepted: boolean) {
         super(step);
     }
@@ -18,6 +18,12 @@ describe('buildkite-graph', () => {
                 new Pipeline('whatever').add(
                     new MyConditional(
                         new CommandStep('yarn').add('yarn test'),
+                        true,
+                    ),
+                ),
+                new Pipeline('whatever').add(
+                    new MyConditional(
+                        () => new CommandStep('yarn').add('yarn test'),
                         true,
                     ),
                 ),

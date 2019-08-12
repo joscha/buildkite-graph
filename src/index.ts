@@ -14,7 +14,11 @@ export { Command, CommandStep } from './steps/command';
 export { Plugin } from './steps/command/plugins';
 export { TriggerStep } from './steps/trigger';
 
-export type PotentialStep = Step | Conditional<Step | Pipeline> | Pipeline;
+type StepGeneratorFn = () => Pipeline | Step;
+export type PotentialStep =
+    | Step
+    | Conditional<StepGeneratorFn | ReturnType<StepGeneratorFn>>
+    | Pipeline;
 
 @Exclude()
 export class Pipeline {
