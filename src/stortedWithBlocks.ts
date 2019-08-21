@@ -10,7 +10,10 @@ export function stortedWithBlocks(e: Pipeline): (Step | null)[] {
     for (const step of sorted) {
         dep: for (const dependency of step.dependencies) {
             const dependentStep = allSteps.indexOf(dependency);
-            if (dependentStep !== -1 && dependentStep > lastWaitStep) {
+            if (
+                dependency === step ||
+                (dependentStep !== -1 && dependentStep > lastWaitStep)
+            ) {
                 lastWaitStep = allSteps.push(null) - 1;
                 break dep;
             }
