@@ -3,6 +3,22 @@ import { createTest } from './helpers';
 
 describe('buildkite-graph', () => {
     describe('Steps', () => {
+        describe('dependencies', () => {
+            createTest('step dependency', () =>
+                new Pipeline('whatever').add(
+                    new CommandStep('b').dependsOn(new CommandStep('a')),
+                ),
+            ),
+                createTest('can depend on itself to produce wait', () => {
+                    const c = new CommandStep('c');
+                    return new Pipeline('whatever').add(
+                        new CommandStep('a'),
+                        new CommandStep('b'),
+                        c.dependsOn(c),
+                    );
+                });
+        });
+
         describe('Command', () => {
             createTest('step addition', () =>
                 new Pipeline('whatever').add(
