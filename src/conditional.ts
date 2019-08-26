@@ -1,9 +1,10 @@
-import { Step, Pipeline, GeneratorFn } from '.';
+import { Step, Pipeline } from '.';
+
+export type Generator<T> = () => T;
+export type ThingOrGenerator<T> = T | Generator<T>;
 
 export abstract class Conditional<T extends Step | Pipeline> {
-    constructor(guarded: T);
-    constructor(guarded: GeneratorFn<T>);
-    constructor(private readonly guarded: T | GeneratorFn<T>) {}
+    constructor(private readonly guarded: ThingOrGenerator<T>) {}
 
     get(): T {
         return typeof this.guarded === 'function'

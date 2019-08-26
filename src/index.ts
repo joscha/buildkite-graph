@@ -7,7 +7,7 @@ import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
 import { WaitStep } from './steps/wait';
 import { stortedWithBlocks } from './stortedWithBlocks';
 export { ExitStatus, Step } from './base';
-export { Conditional } from './conditional';
+export { Conditional, ThingOrGenerator, Generator } from './conditional';
 export { BlockStep } from './steps/block';
 export { Option, SelectField, TextField } from './steps/block/fields';
 export { Command, CommandStep } from './steps/command';
@@ -15,7 +15,6 @@ export { Plugin } from './steps/command/plugins';
 export { TriggerStep } from './steps/trigger';
 export { KeyValue } from './key_value';
 
-export type GeneratorFn<T> = () => T;
 export type PotentialStep = Pipeline | Step | Conditional<Pipeline | Step>;
 
 @Exclude()
