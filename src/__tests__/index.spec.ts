@@ -1,11 +1,18 @@
 import { CommandStep, Pipeline } from '../';
 import { createTest } from './helpers';
 import { createComplex, createSimple } from './samples';
+import { JsonSerializer } from '../serializers/json';
 
 describe('buildkite-graph', () => {
     describe('general serialization', () => {
         createTest('simple', createSimple);
         createTest('complex', createComplex);
+
+        it('JSON serializer can stringify', () => {
+            expect(
+                new JsonSerializer(true).serialize(new Pipeline('test')),
+            ).toMatchSnapshot();
+        });
     });
 
     createTest('missing transitive steps get added to the graph', () => {
