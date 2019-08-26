@@ -13,6 +13,7 @@ export { Option, SelectField, TextField } from './steps/block/fields';
 export { Command, CommandStep } from './steps/command';
 export { Plugin } from './steps/command/plugins';
 export { TriggerStep } from './steps/trigger';
+export { KeyValue } from './key_value';
 
 export type GeneratorFn<T> = () => T;
 export type PotentialStep = Pipeline | Step | Conditional<Pipeline | Step>;
