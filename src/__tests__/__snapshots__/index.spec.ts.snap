@@ -94,6 +94,8 @@ exports[`buildkite-graph Pipeline steps yaml 1`] = `
 "
 `;
 
+exports[`buildkite-graph general serialization JSON serializer can stringify 1`] = `"{\\"steps\\":[]}"`;
+
 exports[`buildkite-graph general serialization complex dot 1`] = `
 "digraph \\"web-build-editor\\" {
   graph [ compound =true ];
