@@ -1,13 +1,15 @@
 import { execSync } from 'child_process';
 import { EOL } from 'os';
 import { extname } from 'path';
-import { Command, CommandStep, Conditional, Pipeline } from '../src';
+import { Command, CommandStep, Conditional, Pipeline, Step } from '../src';
 import { YamlSerializer } from '../src/serializers/yaml';
 
 /**
  * This Conditional will accept when there is at least one changed file ending in .feature
  */
-class FeatureFileChangedConditional<T> extends Conditional<T> {
+class FeatureFileChangedConditional<
+    T extends Pipeline | Step
+> extends Conditional<T> {
     accept() {
         const changedFiles = execSync(
             'git --no-pager diff master --name-only --no-renames',
