@@ -7,7 +7,7 @@ import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
 import { WaitStep } from './steps/wait';
 import { stortedWithBlocks } from './stortedWithBlocks';
 export { ExitStatus, Step } from './base';
-export { Conditional, ThingOrGenerator, Generator } from './conditional';
+export { Conditional, Generator } from './conditional';
 export { BlockStep } from './steps/block';
 export { Option, SelectField, TextField } from './steps/block/fields';
 export { Command, CommandStep } from './steps/command';

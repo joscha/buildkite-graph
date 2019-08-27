@@ -1,15 +1,20 @@
-import {
-    CommandStep,
-    Conditional,
-    Pipeline,
-    Step,
-    ThingOrGenerator,
-} from '../';
+import { CommandStep, Conditional, Generator, Pipeline, Step } from '../';
 import { createTest } from './helpers';
 
-class MyConditional<T extends Pipeline | Step> extends Conditional<T> {
+export type ThingOrGenerator<T> = T | Generator<T>;
+
+class MyConditional<T extends Pipeline | Step> implements Conditional<T> {
+    private readonly step?: T;
     constructor(step: ThingOrGenerator<T>, private readonly accepted: boolean) {
-        super(step as any);
+        if (typeof step === 'function') {
+            this.get = step;
+        } else {
+            this.step = step;
+        }
+    }
+
+    get(): T {
+        return this.step!;
     }
 
     accept(): boolean {

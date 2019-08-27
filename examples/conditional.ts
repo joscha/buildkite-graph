@@ -7,9 +7,14 @@ import { YamlSerializer } from '../src/serializers/yaml';
 /**
  * This Conditional will accept when there is at least one changed file ending in .feature
  */
-class FeatureFileChangedConditional<
-    T extends Pipeline | Step
-> extends Conditional<T> {
+class FeatureFileChangedConditional<T extends Pipeline | Step>
+    implements Conditional<T> {
+    constructor(private readonly step: T) {}
+
+    get() {
+        return this.step;
+    }
+
     accept() {
         const changedFiles = execSync(
             'git --no-pager diff master --name-only --no-renames',
