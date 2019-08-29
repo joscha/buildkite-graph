@@ -14,6 +14,16 @@ export { Command, CommandStep } from './steps/command';
 export { Plugin } from './steps/command/plugins';
 export { TriggerStep } from './steps/trigger';
 export { KeyValue } from './key_value';
+import { DotSerializer } from './serializers/dot';
+import { JsonSerializer } from './serializers/json';
+import { YamlSerializer } from './serializers/yaml';
+export { Serializer } from './serializers';
+
+export const serializers = {
+    DotSerializer,
+    JsonSerializer,
+    YamlSerializer,
+};
 
 export type PotentialStep = Pipeline | Step | Conditional<Pipeline | Step>;
 

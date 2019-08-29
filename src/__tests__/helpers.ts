@@ -1,13 +1,13 @@
-import { Pipeline } from '../';
-import { Serializer } from '../serializers';
-import { DotSerializer } from '../serializers/dot';
-import { JsonSerializer } from '../serializers/json';
-import { YamlSerializer } from '../serializers/yaml';
+import {
+    Pipeline,
+    Serializer,
+    serializers as predefinedSerializers,
+} from '../';
 
 const serializers: Record<string, Serializer<any>> = {
-    json: new JsonSerializer(),
-    yaml: new YamlSerializer(),
-    dot: new DotSerializer(),
+    json: new predefinedSerializers.JsonSerializer(),
+    yaml: new predefinedSerializers.YamlSerializer(),
+    dot: new predefinedSerializers.DotSerializer(),
 };
 
 type PipelineGenerator = () => Pipeline | Pipeline[];
