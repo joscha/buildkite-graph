@@ -1,7 +1,6 @@
-import { CommandStep, Pipeline } from '../';
+import { CommandStep, Pipeline, serializers } from '../';
 import { createTest } from './helpers';
 import { createComplex, createSimple } from './samples';
-import { JsonSerializer } from '../serializers/json';
 
 describe('buildkite-graph', () => {
     describe('general serialization', () => {
@@ -10,7 +9,9 @@ describe('buildkite-graph', () => {
 
         it('JSON serializer can stringify', () => {
             expect(
-                new JsonSerializer(true).serialize(new Pipeline('test')),
+                new serializers.JsonSerializer(true).serialize(
+                    new Pipeline('test'),
+                ),
             ).toMatchSnapshot();
         });
     });
