@@ -10,11 +10,11 @@ export interface Retry<T> {
 
 class RetryManual {
     @Transform((value: boolean) => (value ? undefined : false))
-    allowed: boolean = true;
+    allowed = true;
 
     @Expose({ name: 'permit_on_passed' })
     @Transform((value: boolean) => (value ? true : undefined))
-    permitOnPassed: boolean = false;
+    permitOnPassed = false;
 
     @Transform((value: string) => value || undefined)
     reason?: string;
@@ -70,11 +70,7 @@ export class RetryImpl<T> extends Chainable<T> implements Retry<T> {
         return this.parent;
     }
 
-    manual(
-        allowed: boolean = true,
-        permitOnPassed: boolean = false,
-        reason?: string,
-    ): T {
+    manual(allowed = true, permitOnPassed = false, reason?: string): T {
         ow(allowed, ow.boolean);
         ow(permitOnPassed, ow.boolean);
         ow(reason, ow.any(ow.undefined, ow.string.nonEmpty));

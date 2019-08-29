@@ -9,7 +9,7 @@ export class WaitStep implements BaseStep {
     @Transform((value: boolean) => value || undefined)
     public continueOnFailure: boolean;
 
-    constructor(continueOnFailure: boolean = false) {
+    constructor(continueOnFailure = false) {
         this.continueOnFailure = continueOnFailure;
     }
 

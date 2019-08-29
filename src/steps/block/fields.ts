@@ -9,7 +9,7 @@ abstract class Field {
         public readonly key: string,
         public readonly label?: string,
         public readonly hint?: string,
-        required: boolean = false,
+        required = false,
     ) {
         ow(key, ow.string.nonEmpty);
         ow(key, ow.string.matches(/[0-9a-z-\/]+/i));
@@ -25,7 +25,7 @@ export class TextField extends Field {
         key: string,
         label?: string,
         hint?: string,
-        required: boolean = true,
+        required = true,
         defaultValue?: string,
     ) {
         super(key, label, hint, required);
@@ -66,8 +66,8 @@ export class SelectField extends Field {
         key: string,
         label?: string,
         hint?: string,
-        required: boolean = true,
-        multiple: boolean = false,
+        required = true,
+        multiple = false,
         defaultValue?: string | string[],
     ) {
         super(key, label, hint, required);

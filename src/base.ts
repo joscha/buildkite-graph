@@ -18,7 +18,7 @@ export abstract class Step implements BaseStep {
     }
 
     @Exclude()
-    public always: boolean = false;
+    public always = false;
 
     alwaysExecute(): this {
         this.always = true;

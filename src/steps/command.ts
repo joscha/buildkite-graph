@@ -180,7 +180,7 @@ export class CommandStep extends LabeledStep {
      *
      * @param timeout for the step in seconds.
      */
-    withTimeout(timeout: number = Infinity): this {
+    withTimeout(timeout = Infinity): this {
         assertTimeout(timeout);
         this._timeout = timeout;
         return this;

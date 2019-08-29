@@ -10,7 +10,7 @@ export class TriggerStep extends LabeledStep {
     public readonly build: Build<TriggerStep> = new BuildImpl(this);
     @Expose({ name: 'async' })
     @Transform((value: boolean) => (value ? value : undefined))
-    private _async: boolean = false;
+    private _async = false;
     @Expose()
     get trigger(): string {
         return this._trigger instanceof Pipeline
@@ -20,7 +20,7 @@ export class TriggerStep extends LabeledStep {
     constructor(
         private readonly _trigger: Pipeline | string,
         label?: string,
-        async: boolean = false,
+        async = false,
     ) {
         super();
         if (label) {
