@@ -79,8 +79,8 @@ Object {
 exports[`buildkite-graph Steps Trigger async yaml 1`] = `
 "steps:
   - label: Label
-    async: true
     trigger: another
+    async: true
 "
 `;
 
@@ -93,8 +93,8 @@ exports[`buildkite-graph Steps Trigger async yaml 2`] = `
 
 exports[`buildkite-graph Steps Trigger async yaml 3`] = `
 "steps:
-  - async: true
-    trigger: another
+  - trigger: another
+    async: true
 "
 `;
 
@@ -241,45 +241,45 @@ Object {
 
 exports[`buildkite-graph Steps Trigger build yaml 1`] = `
 "steps:
-  - build:
+  - trigger: another
+    build:
       env:
         KEY: VALUE
         ANOTHER_KEY: VALUE
-    trigger: another
 "
 `;
 
 exports[`buildkite-graph Steps Trigger build yaml 2`] = `
 "steps:
-  - build:
+  - trigger: another
+    build:
       branch: rease-bla
-    trigger: another
 "
 `;
 
 exports[`buildkite-graph Steps Trigger build yaml 3`] = `
 "steps:
-  - build:
+  - trigger: another
+    build:
       commit: c0ffee
-    trigger: another
 "
 `;
 
 exports[`buildkite-graph Steps Trigger build yaml 4`] = `
 "steps:
-  - build:
+  - trigger: another
+    build:
       message: My messge
-    trigger: another
 "
 `;
 
 exports[`buildkite-graph Steps Trigger build yaml 5`] = `
 "steps:
-  - build:
+  - trigger: another
+    build:
       meta_data:
         release-version: '1.1'
         some-other: value
-    trigger: another
 "
 `;
 
