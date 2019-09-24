@@ -4,7 +4,7 @@ import {
     serializers as predefinedSerializers,
 } from '../';
 
-const serializers: Record<string, Serializer<any>> = {
+export const serializers: Record<string, Serializer<any>> = {
     json: new predefinedSerializers.JsonSerializer(),
     yaml: new predefinedSerializers.YamlSerializer(),
     dot: new predefinedSerializers.DotSerializer(),

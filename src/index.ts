@@ -56,7 +56,7 @@ export class Pipeline {
     }
 
     @Expose({ name: 'steps' })
-    private get _steps(): (WaitStep | Step)[] {
+    private _steps(): (WaitStep | Step)[] {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         const stepsWithBlocks = stortedWithBlocks(this);
 
@@ -83,7 +83,8 @@ export class Pipeline {
                 steps.push(s);
             }
         }
-
         return steps;
     }
 }
+
+const memo = {};

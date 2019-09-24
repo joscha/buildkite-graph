@@ -5,7 +5,7 @@ import {
     Step,
     ThingOrGenerator,
 } from '../';
-import { createTest } from './helpers';
+import { createTest, serializers } from './helpers';
 
 class MyConditional<T extends Pipeline | Step> extends Conditional<T> {
     constructor(step: ThingOrGenerator<T>, private readonly accepted: boolean) {
@@ -40,6 +40,28 @@ describe('buildkite-graph', () => {
                     ),
                 ),
             ]);
+
+            createTest('conditional dependencies', () => {
+                const p = new Pipeline('x');
+
+                const a = new MyConditional(new CommandStep('a'), false);
+                p.add(new CommandStep('b').dependsOn(a));
+
+                return p;
+            });
+            it('conditionals are only unwrapped once', () => {
+                const p = new Pipeline('x');
+
+                const gen = jest.fn();
+                gen.mockReturnValueOnce(new CommandStep('a'));
+                gen.mockImplementation(() => {
+                    throw new Error('only once!');
+                });
+                const a = new MyConditional(gen, false);
+                p.add(new CommandStep('b').dependsOn(a));
+
+                serializers.json.serialize(p);
+            });
         });
     });
     describe('Pipelines', () => {
