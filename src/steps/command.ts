@@ -26,7 +26,7 @@ export type SkipFunction = () => SkipValue;
 
 export class Command {
     constructor(public command: string, public timeout: number = Infinity) {
-        ow(command, ow.string.not.empty);
+        ow(command, ow.string);
         assertTimeout(timeout);
     }
 
@@ -239,7 +239,7 @@ export class CommandStep extends LabeledStep {
         return (
             this.label ||
             (this.command
-                ? `<${this.command.join(' && ')}>`
+                ? `<${this.command.join(' && ') || '(empty)'}>`
                 : this.plugins.toString())
         );
     }

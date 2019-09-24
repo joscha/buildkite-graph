@@ -995,6 +995,18 @@ subgraph cluster_0 {
 "
 `;
 
+exports[`buildkite-graph Steps Command step addition dot 2`] = `
+"digraph \\"x\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<(empty)>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
 exports[`buildkite-graph Steps Command step addition json 1`] = `
 Object {
   "steps": Array [
@@ -1008,11 +1020,27 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command step addition json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command step addition yaml 1`] = `
 "steps:
   - command:
       - yarn
       - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml 2`] = `
+"steps:
+  - command: ''
 "
 `;
 

@@ -20,11 +20,12 @@ describe('buildkite-graph', () => {
         });
 
         describe('Command', () => {
-            createTest('step addition', () =>
+            createTest('step addition', () => [
                 new Pipeline('whatever').add(
                     new CommandStep('yarn').add('yarn test'),
                 ),
-            );
+                new Pipeline('x').add(new CommandStep('')),
+            ]);
 
             describe('continue on failure', () => {
                 createTest(
