@@ -9,6 +9,7 @@ export class YamlSerializer implements Serializer<string> {
     serialize(e: Pipeline): string {
         return jsyaml.safeDump(this.jsonSerializer.serialize(e), {
             skipInvalid: true,
+            noRefs: true,
             styles: {
                 '!!null': 'canonical', // dump null as ~
             },
