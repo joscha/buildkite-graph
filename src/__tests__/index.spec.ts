@@ -25,6 +25,9 @@ describe('buildkite-graph', () => {
     describe('Pipeline', () => {
         it('returns a slug', () => {
             expect(new Pipeline('A: B: c_d').slug()).toEqual('a-b-c-d');
+            expect(new Pipeline('Web: E2E: page').slug()).toEqual(
+                'web-e2e-page',
+            );
         });
 
         createTest('env', () => [

@@ -51,6 +51,7 @@ export class Pipeline {
         return slugify(this.name, {
             lowercase: true,
             customReplacements: [['_', '-']],
+            decamelize: false,
         });
     }
 
