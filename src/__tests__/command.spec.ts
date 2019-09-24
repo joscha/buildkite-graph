@@ -4,11 +4,18 @@ import { createTest } from './helpers';
 describe('buildkite-graph', () => {
     describe('Steps', () => {
         describe('dependencies', () => {
-            createTest('step dependency', () =>
+            createTest('step dependency', () => [
                 new Pipeline('whatever').add(
                     new CommandStep('b').dependsOn(new CommandStep('a')),
                 ),
-            );
+                new Pipeline('whatever').add(
+                    new CommandStep('d').dependsOn(
+                        new CommandStep('a'),
+                        new CommandStep('b'),
+                        new CommandStep('c'),
+                    ),
+                ),
+            ]);
             createTest('can depend on itself to produce wait', () => {
                 const c = new CommandStep('c');
                 return new Pipeline('whatever').add(

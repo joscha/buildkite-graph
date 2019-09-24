@@ -12,8 +12,14 @@ export abstract class Step implements BaseStep {
     @Exclude()
     public readonly dependencies: Set<Step> = new Set();
 
-    dependsOn(step: Step): this {
-        this.dependencies.add(step);
+    dependsOn(...steps: Step[]): this {
+        ow(steps, ow.array.ofType(ow.object.nonEmpty));
+        // iterate in reverse so if dependencies are not added to the graph, yet
+        // they will be added in the order they are given as dependencies
+        for (let i = steps.length; i > 0; i--) {
+            const step = steps[i - 1];
+            this.dependencies.add(step);
+        }
         return this;
     }
 

@@ -1243,6 +1243,32 @@ subgraph cluster_1 {
 "
 `;
 
+exports[`buildkite-graph Steps dependencies step dependency dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<a>\\" [ color = \\"grey\\" ];
+  \\"<b>\\" [ color = \\"grey\\" ];
+  \\"<c>\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_1 {
+  graph [ color = \\"black\\" ];
+  \\"<d>\\" [ color = \\"grey\\" ];
+}
+
+  \\"<c>\\";
+  \\"<d>\\";
+  \\"<b>\\";
+  \\"<a>\\";
+  \\"<c>\\" -> \\"<d>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"<b>\\" -> \\"<d>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"<a>\\" -> \\"<d>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+}
+"
+`;
+
 exports[`buildkite-graph Steps dependencies step dependency json 1`] = `
 Object {
   "steps": Array [
@@ -1259,10 +1285,42 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps dependencies step dependency json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+    },
+    Object {
+      "command": "b",
+    },
+    Object {
+      "command": "c",
+    },
+    Object {
+      "wait": null,
+    },
+    Object {
+      "command": "d",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps dependencies step dependency yaml 1`] = `
 "steps:
   - command: a
   - wait: ~
   - command: b
+"
+`;
+
+exports[`buildkite-graph Steps dependencies step dependency yaml 2`] = `
+"steps:
+  - command: a
+  - command: b
+  - command: c
+  - wait: ~
+  - command: d
 "
 `;
