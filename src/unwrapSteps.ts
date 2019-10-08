@@ -1,8 +1,8 @@
-import { MaybeStep, Step } from './base';
+import { PotentialStep, Step } from './index';
 import { Conditional } from './conditional';
 
 export function unwrapSteps(
-    steps: MaybeStep[],
+    steps: PotentialStep[],
     cache: Map<Conditional<Step>, Step>,
 ): Step[] {
     const ret: Step[] = [];
