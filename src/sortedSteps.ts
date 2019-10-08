@@ -3,7 +3,6 @@ import { Step } from './base';
 import { Pipeline } from './index';
 import { unwrapSteps } from './unwrapSteps';
 import { Conditional } from './conditional';
-import { CommandStep } from './steps/command';
 
 export function sortedSteps(
     e: Pipeline,
@@ -22,6 +21,7 @@ export function sortedSteps(
             let dependency: Step;
             if (potentialDependency instanceof Conditional) {
                 if (cache.has(potentialDependency)) {
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     dependency = cache.get(potentialDependency)!;
                 } else {
                     // in the case we have to unwrap the conditional we store it for later use

@@ -1,4 +1,4 @@
-import { Step, Pipeline } from '.';
+import { Step } from '.';
 
 export type Generator<T> = () => T;
 export type ThingOrGenerator<T> = T | Generator<T>;

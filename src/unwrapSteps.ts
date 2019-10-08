@@ -11,6 +11,7 @@ export function unwrapSteps(
             if (s.accept()) {
                 let cond: Step;
                 if (cache.has(s)) {
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     cond = cache.get(s)!;
                 } else {
                     cond = s.get();

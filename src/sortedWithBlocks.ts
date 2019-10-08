@@ -6,7 +6,6 @@ import { Conditional } from './conditional';
 export function sortedWithBlocks(e: Pipeline): (Step | null)[] {
     const cache = new Map<Conditional<Step>, Step>();
     const sorted = sortedSteps(e, cache);
-    console.log(sorted);
     // null denotes a block
     const allSteps: (Step | null)[] = [];
     let lastWaitStep = -1;
@@ -14,7 +13,8 @@ export function sortedWithBlocks(e: Pipeline): (Step | null)[] {
         dep: for (const potentialDependency of step.dependencies) {
             const dependency =
                 potentialDependency instanceof Conditional
-                    ? cache.get(potentialDependency)!
+                    ? cache.get(potentialDependency) ||
+                      potentialDependency.get()
                     : potentialDependency;
             const dependentStep = allSteps.indexOf(dependency);
             if (
