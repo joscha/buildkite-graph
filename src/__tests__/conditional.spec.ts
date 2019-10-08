@@ -5,9 +5,9 @@ import {
     Step,
     ThingOrGenerator,
 } from '../';
-import { createTest } from './helpers';
+import { createTest, serializers } from './helpers';
 
-class MyConditional<T extends Pipeline | Step> extends Conditional<T> {
+class MyConditional<T extends Step> extends Conditional<T> {
     constructor(step: ThingOrGenerator<T>, private readonly accepted: boolean) {
         super(step as any);
     }
@@ -40,32 +40,59 @@ describe('buildkite-graph', () => {
                     ),
                 ),
             ]);
+
+            describe('Conditional dependencies', () => {
+                createTest('can be specified', () => {
+                    const p = new Pipeline('x');
+
+                    // even though the onditional is set to false,
+                    // "a" will be added to the graph as "b" depends on it
+                    const a = new MyConditional(new CommandStep('a'), false);
+                    p.add(new CommandStep('b').dependsOn(a));
+
+                    return p;
+                });
+
+                describe('can be specified multiple times', () => {
+                    createTest('as dependency', () => {
+                        const p = new Pipeline('x');
+
+                        // even though the onditional is set to false,
+                        // "a" will be added to the graph as "b" depends on it
+                        const a = new MyConditional(
+                            new CommandStep('a'),
+                            false,
+                        );
+                        p.add(new CommandStep('b').dependsOn(a));
+                        p.add(new CommandStep('c').dependsOn(a));
+
+                        return p;
+                    });
+                    it('but not in the pipeline', () => {
+                        expect(() => {
+                            const a = new MyConditional(
+                                new CommandStep('a'),
+                                false,
+                            );
+                            new Pipeline('x').add(a, a);
+                        }).toThrow();
+                    });
+                });
+
+                it('conditionals are only unwrapped once', () => {
+                    const p = new Pipeline('x');
+
+                    const gen = jest.fn();
+                    gen.mockReturnValueOnce(new CommandStep('a'));
+                    gen.mockImplementation(() => {
+                        throw new Error('only once!');
+                    });
+                    const a = new MyConditional(gen, false);
+                    p.add(new CommandStep('b').dependsOn(a));
+
+                    serializers.json.serialize(p);
+                });
+            });
         });
-    });
-    describe('Pipelines', () => {
-        createTest('can be conditional', () => [
-            new Pipeline('a')
-                .add(new CommandStep('a'))
-                .add(new CommandStep('b'))
-                .add(
-                    new MyConditional(
-                        new Pipeline('a')
-                            .add(new CommandStep('c'))
-                            .add(new CommandStep('d')),
-                        true,
-                    ),
-                ),
-            new Pipeline('a')
-                .add(new CommandStep('a'))
-                .add(new CommandStep('b'))
-                .add(
-                    new MyConditional(
-                        new Pipeline('a')
-                            .add(new CommandStep('c'))
-                            .add(new CommandStep('d')),
-                        false,
-                    ),
-                ),
-        ]);
     });
 });

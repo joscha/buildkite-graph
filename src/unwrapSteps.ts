@@ -1,20 +1,23 @@
-import { Pipeline, PotentialStep } from '.';
-import { Step } from './base';
+import { PotentialStep, Step } from './index';
 import { Conditional } from './conditional';
 
-export function unwrapSteps(steps: PotentialStep[]): Step[] {
+export function unwrapSteps(
+    steps: PotentialStep[],
+    cache: Map<Conditional<Step>, Step>,
+): Step[] {
     const ret: Step[] = [];
     for (const s of steps) {
-        if (s instanceof Pipeline) {
-            ret.push(...unwrapSteps(s.steps));
-        } else if (s instanceof Conditional) {
+        if (s instanceof Conditional) {
             if (s.accept()) {
-                const cond = s.get();
-                if (cond instanceof Pipeline) {
-                    ret.push(...unwrapSteps(cond.steps));
+                let cond: Step;
+                if (cache.has(s)) {
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    cond = cache.get(s)!;
                 } else {
-                    ret.push(cond);
+                    cond = s.get();
+                    cache.set(s, cond);
                 }
+                ret.push(cond);
             }
         } else {
             ret.push(s);

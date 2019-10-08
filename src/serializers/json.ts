@@ -1,4 +1,4 @@
-import { classToPlain } from 'class-transformer';
+import { serialize } from 'class-transformer';
 import { Pipeline } from '../';
 import { Serializer } from '.';
 
@@ -6,8 +6,8 @@ export class JsonSerializer implements Serializer<object | string> {
     constructor(private readonly stringify: boolean = false) {}
 
     serialize(e: Pipeline): object | string {
+        const serialized = serialize(e);
         // Workaround to get rid of undefined values
-        const json = JSON.parse(JSON.stringify(classToPlain(e)));
-        return this.stringify ? JSON.stringify(json) : json;
+        return this.stringify ? serialized : JSON.parse(serialized);
     }
 }

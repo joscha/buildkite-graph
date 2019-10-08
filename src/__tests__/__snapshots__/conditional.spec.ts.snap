@@ -1,38 +1,72 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildkite-graph Pipelines can be conditional dot 1`] = `
-"digraph \\"a\\" {
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified dot 1`] = `
+"digraph \\"x\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
   graph [ color = \\"black\\" ];
   \\"<a>\\" [ color = \\"grey\\" ];
-  \\"<b>\\" [ color = \\"grey\\" ];
-  \\"<c>\\" [ color = \\"grey\\" ];
-  \\"<d>\\" [ color = \\"grey\\" ];
 }
 
-}
-"
-`;
-
-exports[`buildkite-graph Pipelines can be conditional dot 2`] = `
-"digraph \\"a\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
+subgraph cluster_1 {
   graph [ color = \\"black\\" ];
-  \\"<a>\\" [ color = \\"grey\\" ];
   \\"<b>\\" [ color = \\"grey\\" ];
 }
 
+  \\"[object Object]\\";
+  \\"<b>\\";
+  \\"[object Object]\\" -> \\"<b>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
 }
 "
 `;
 
-exports[`buildkite-graph Pipelines can be conditional json 1`] = `
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified json 1`] = `
 Object {
   "steps": Array [
     Object {
       "command": "a",
+    },
+    Object {
+      "wait": null,
+    },
+    Object {
+      "command": "b",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency dot 1`] = `
+"digraph \\"x\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<a>\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_1 {
+  graph [ color = \\"black\\" ];
+  \\"<b>\\" [ color = \\"grey\\" ];
+  \\"<c>\\" [ color = \\"grey\\" ];
+}
+
+  \\"[object Object]\\";
+  \\"<b>\\";
+  \\"<c>\\";
+  \\"[object Object]\\" -> \\"<b>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"[object Object]\\" -> \\"<c>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+    },
+    Object {
+      "wait": null,
     },
     Object {
       "command": "b",
@@ -40,38 +74,23 @@ Object {
     Object {
       "command": "c",
     },
-    Object {
-      "command": "d",
-    },
   ],
 }
 `;
 
-exports[`buildkite-graph Pipelines can be conditional json 2`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "a",
-    },
-    Object {
-      "command": "b",
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph Pipelines can be conditional yaml 1`] = `
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency yaml 1`] = `
 "steps:
   - command: a
+  - wait: ~
   - command: b
   - command: c
-  - command: d
 "
 `;
 
-exports[`buildkite-graph Pipelines can be conditional yaml 2`] = `
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified yaml 1`] = `
 "steps:
   - command: a
+  - wait: ~
   - command: b
 "
 `;

@@ -1,14 +1,21 @@
 import { Step } from './base';
 import { sortedSteps } from './sortedSteps';
 import { Pipeline } from './index';
+import { Conditional } from './conditional';
 
-export function stortedWithBlocks(e: Pipeline): (Step | null)[] {
-    const sorted = sortedSteps(e);
+export function sortedWithBlocks(e: Pipeline): (Step | null)[] {
+    const cache = new Map<Conditional<Step>, Step>();
+    const sorted = sortedSteps(e, cache);
     // null denotes a block
     const allSteps: (Step | null)[] = [];
     let lastWaitStep = -1;
     for (const step of sorted) {
-        dep: for (const dependency of step.dependencies) {
+        dep: for (const potentialDependency of step.dependencies) {
+            const dependency =
+                potentialDependency instanceof Conditional
+                    ? cache.get(potentialDependency) ||
+                      potentialDependency.get()
+                    : potentialDependency;
             const dependentStep = allSteps.indexOf(dependency);
             if (
                 dependency === step ||

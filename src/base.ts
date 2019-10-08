@@ -1,6 +1,7 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
 import ow from 'ow';
 import 'reflect-metadata';
+import { PotentialStep } from './index';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BaseStep {}
@@ -10,9 +11,16 @@ export interface BaseStep {}
 export interface Step extends BaseStep {}
 export abstract class Step implements BaseStep {
     @Exclude()
-    public readonly dependencies: Set<Step> = new Set();
+    public readonly dependencies: Set<PotentialStep> = new Set();
 
-    dependsOn(...steps: Step[]): this {
+    /**
+     * This marks the given step or conditional as a dependency to the current
+     * step.
+     * In case the dependency is a conditional, then that conditional will
+     * always be added to the graph (e.g. the value of the accept function of that
+     * conditional will be trumped by the fact that the current step depends on it)
+     */
+    dependsOn(...steps: PotentialStep[]): this {
         ow(steps, ow.array.ofType(ow.object.nonEmpty));
         // iterate in reverse so if dependencies are not added to the graph, yet
         // they will be added in the order they are given as dependencies

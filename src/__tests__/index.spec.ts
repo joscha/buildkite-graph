@@ -37,16 +37,5 @@ describe('buildkite-graph', () => {
         createTest('steps', () => [
             new Pipeline('whatever').add(new CommandStep('command')),
         ]);
-
-        createTest('can be augmented', () => [
-            new Pipeline('a')
-                .add(new CommandStep('a'))
-                .add(new CommandStep('b'))
-                .add(
-                    new Pipeline('a')
-                        .add(new CommandStep('c'))
-                        .add(new CommandStep('d')),
-                ),
-        ]);
     });
 });

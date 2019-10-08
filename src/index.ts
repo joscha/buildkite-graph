@@ -5,7 +5,7 @@ import { Step } from './base';
 import { Conditional } from './conditional';
 import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
 import { WaitStep } from './steps/wait';
-import { stortedWithBlocks } from './stortedWithBlocks';
+import { sortedWithBlocks } from './sortedWithBlocks';
 export { ExitStatus, Step } from './base';
 export { Conditional, ThingOrGenerator, Generator } from './conditional';
 export { BlockStep } from './steps/block';
@@ -25,7 +25,7 @@ export const serializers = {
     YamlSerializer,
 };
 
-export type PotentialStep = Pipeline | Step | Conditional<Pipeline | Step>;
+export type PotentialStep = Step | Conditional<Step>;
 
 @Exclude()
 export class Pipeline {
@@ -43,7 +43,12 @@ export class Pipeline {
     }
 
     add(...step: PotentialStep[]): this {
-        this.steps.push(...step);
+        step.forEach(s => {
+            if (this.steps.includes(s)) {
+                throw new Error('Can not add the same step more than once');
+            }
+            this.steps.push(s);
+        });
         return this;
     }
 
@@ -56,9 +61,9 @@ export class Pipeline {
     }
 
     @Expose({ name: 'steps' })
-    private get _steps(): (WaitStep | Step)[] {
+    private _steps(): (WaitStep | Step)[] {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        const stepsWithBlocks = stortedWithBlocks(this);
+        const stepsWithBlocks = sortedWithBlocks(this);
 
         // TODO: when step.always = true,
         // then previous step needs a wait step with continueOnFailure: true
@@ -83,7 +88,6 @@ export class Pipeline {
                 steps.push(s);
             }
         }
-
         return steps;
     }
 }
