@@ -7,7 +7,7 @@ import {
 } from '../';
 import { createTest, serializers } from './helpers';
 
-class MyConditional<T extends Pipeline | Step> extends Conditional<T> {
+class MyConditional<T extends Step> extends Conditional<T> {
     constructor(step: ThingOrGenerator<T>, private readonly accepted: boolean) {
         super(step as any);
     }
@@ -63,31 +63,5 @@ describe('buildkite-graph', () => {
                 serializers.json.serialize(p);
             });
         });
-    });
-    describe('Pipelines', () => {
-        createTest('can be conditional', () => [
-            new Pipeline('a')
-                .add(new CommandStep('a'))
-                .add(new CommandStep('b'))
-                .add(
-                    new MyConditional(
-                        new Pipeline('a')
-                            .add(new CommandStep('c'))
-                            .add(new CommandStep('d')),
-                        true,
-                    ),
-                ),
-            new Pipeline('a')
-                .add(new CommandStep('a'))
-                .add(new CommandStep('b'))
-                .add(
-                    new MyConditional(
-                        new Pipeline('a')
-                            .add(new CommandStep('c'))
-                            .add(new CommandStep('d')),
-                        false,
-                    ),
-                ),
-        ]);
     });
 });

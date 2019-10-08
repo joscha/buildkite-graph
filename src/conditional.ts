@@ -3,7 +3,7 @@ import { Step, Pipeline } from '.';
 export type Generator<T> = () => T;
 export type ThingOrGenerator<T> = T | Generator<T>;
 
-export abstract class Conditional<T extends Step | Pipeline> {
+export abstract class Conditional<T extends Step> {
     constructor(private readonly guarded: ThingOrGenerator<T>) {}
 
     get(): T {

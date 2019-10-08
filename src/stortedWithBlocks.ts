@@ -4,7 +4,7 @@ import { Pipeline } from './index';
 import { Conditional } from './conditional';
 
 export function stortedWithBlocks(e: Pipeline): (Step | null)[] {
-    const cache = new Map<Conditional<Step | Pipeline>, Step>();
+    const cache = new Map<Conditional<Step>, Step>();
     const sorted = sortedSteps(e, cache);
     // null denotes a block
     const allSteps: (Step | null)[] = [];

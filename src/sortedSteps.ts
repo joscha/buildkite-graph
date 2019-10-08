@@ -7,7 +7,7 @@ import { CommandStep } from './steps/command';
 
 export function sortedSteps(
     e: Pipeline,
-    cache: Map<Conditional<Step | Pipeline>, Step>,
+    cache: Map<Conditional<Step>, Step>,
 ): Step[] {
     const steps = unwrapSteps(e.steps, cache);
     const sortOp = new TopologicalSort<Step, Step>(

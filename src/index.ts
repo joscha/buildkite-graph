@@ -1,7 +1,7 @@
 import slugify from '@sindresorhus/slugify';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import 'reflect-metadata';
-import { Step } from './base';
+import { MaybeStep, Step } from './base';
 import { Conditional } from './conditional';
 import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
 import { WaitStep } from './steps/wait';
@@ -25,13 +25,11 @@ export const serializers = {
     YamlSerializer,
 };
 
-export type PotentialStep = Pipeline | Step | Conditional<Pipeline | Step>;
-
 @Exclude()
 export class Pipeline {
     public readonly name: string;
 
-    public readonly steps: PotentialStep[] = [];
+    public readonly steps: MaybeStep[] = [];
 
     @Expose()
     @Transform(transformKeyValueImpl)
@@ -42,7 +40,7 @@ export class Pipeline {
         this.env = new KeyValueImpl(this);
     }
 
-    add(...step: PotentialStep[]): this {
+    add(...step: MaybeStep[]): this {
         this.steps.push(...step);
         return this;
     }
@@ -86,5 +84,3 @@ export class Pipeline {
         return steps;
     }
 }
-
-const memo = {};
