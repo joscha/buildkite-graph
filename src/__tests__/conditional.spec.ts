@@ -53,16 +53,30 @@ describe('buildkite-graph', () => {
                     return p;
                 });
 
-                createTest('can be specified multiple times', () => {
-                    const p = new Pipeline('x');
+                describe('can be specified multiple times', () => {
+                    createTest('as dependency', () => {
+                        const p = new Pipeline('x');
 
-                    // even though the onditional is set to false,
-                    // "a" will be added to the graph as "b" depends on it
-                    const a = new MyConditional(new CommandStep('a'), false);
-                    p.add(new CommandStep('b').dependsOn(a));
-                    p.add(new CommandStep('c').dependsOn(a));
+                        // even though the onditional is set to false,
+                        // "a" will be added to the graph as "b" depends on it
+                        const a = new MyConditional(
+                            new CommandStep('a'),
+                            false,
+                        );
+                        p.add(new CommandStep('b').dependsOn(a));
+                        p.add(new CommandStep('c').dependsOn(a));
 
-                    return p;
+                        return p;
+                    });
+                    it('but not in the pipeline', () => {
+                        expect(() => {
+                            const a = new MyConditional(
+                                new CommandStep('a'),
+                                false,
+                            );
+                            new Pipeline('x').add(a, a);
+                        }).toThrow();
+                    });
                 });
 
                 it('conditionals are only unwrapped once', () => {

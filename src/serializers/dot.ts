@@ -1,11 +1,11 @@
 import * as graphviz from 'graphviz';
 import { Serializer } from '.';
 import { Pipeline, TriggerStep } from '../';
-import { stortedWithBlocks } from '../stortedWithBlocks';
+import { sortedWithBlocks } from '../sortedWithBlocks';
 
 export class DotSerializer implements Serializer<string> {
     serialize(e: Pipeline): string {
-        const allSteps = stortedWithBlocks(e);
+        const allSteps = sortedWithBlocks(e);
         if (allSteps.length > 0) {
             allSteps.unshift(null);
         }

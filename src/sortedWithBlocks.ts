@@ -3,9 +3,10 @@ import { sortedSteps } from './sortedSteps';
 import { Pipeline } from './index';
 import { Conditional } from './conditional';
 
-export function stortedWithBlocks(e: Pipeline): (Step | null)[] {
+export function sortedWithBlocks(e: Pipeline): (Step | null)[] {
     const cache = new Map<Conditional<Step>, Step>();
     const sorted = sortedSteps(e, cache);
+    console.log(sorted);
     // null denotes a block
     const allSteps: (Step | null)[] = [];
     let lastWaitStep = -1;
