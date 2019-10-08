@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildkite-graph Steps Command conditional dependencies dot 1`] = `
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified dot 1`] = `
 "digraph \\"x\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -20,7 +20,7 @@ subgraph cluster_1 {
 "
 `;
 
-exports[`buildkite-graph Steps Command conditional dependencies json 1`] = `
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -36,7 +36,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Steps Command conditional dependencies yaml 1`] = `
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified yaml 1`] = `
 "steps:
   - command: a
   - wait: ~

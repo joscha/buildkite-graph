@@ -41,26 +41,30 @@ describe('buildkite-graph', () => {
                 ),
             ]);
 
-            createTest('conditional dependencies', () => {
-                const p = new Pipeline('x');
+            describe('Conditional dependencies', () => {
+                createTest('can be specified', () => {
+                    const p = new Pipeline('x');
 
-                const a = new MyConditional(new CommandStep('a'), false);
-                p.add(new CommandStep('b').dependsOn(a));
+                    // even though the onditional is set to false,
+                    // "a" will be added to the graph as "b" depends on it
+                    const a = new MyConditional(new CommandStep('a'), false);
+                    p.add(new CommandStep('b').dependsOn(a));
 
-                return p;
-            });
-            it('conditionals are only unwrapped once', () => {
-                const p = new Pipeline('x');
-
-                const gen = jest.fn();
-                gen.mockReturnValueOnce(new CommandStep('a'));
-                gen.mockImplementation(() => {
-                    throw new Error('only once!');
+                    return p;
                 });
-                const a = new MyConditional(gen, false);
-                p.add(new CommandStep('b').dependsOn(a));
+                it('conditionals are only unwrapped once', () => {
+                    const p = new Pipeline('x');
 
-                serializers.json.serialize(p);
+                    const gen = jest.fn();
+                    gen.mockReturnValueOnce(new CommandStep('a'));
+                    gen.mockImplementation(() => {
+                        throw new Error('only once!');
+                    });
+                    const a = new MyConditional(gen, false);
+                    p.add(new CommandStep('b').dependsOn(a));
+
+                    serializers.json.serialize(p);
+                });
             });
         });
     });
