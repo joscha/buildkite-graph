@@ -13,6 +13,13 @@ export abstract class Step implements BaseStep {
     @Exclude()
     public readonly dependencies: Set<PotentialStep> = new Set();
 
+    /**
+     * This marks the given step or conditional as a dependency to the current
+     * step.
+     * In case the dependency is a conditional, then that conditional will
+     * always be added to the graph (e.g. the value of the accept function of that
+     * conditional will be trumped by the fact that the current step depends on it)
+     */
     dependsOn(...steps: PotentialStep[]): this {
         ow(steps, ow.array.ofType(ow.object.nonEmpty));
         // iterate in reverse so if dependencies are not added to the graph, yet
