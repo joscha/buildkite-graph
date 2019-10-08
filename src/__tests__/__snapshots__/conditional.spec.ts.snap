@@ -36,6 +36,57 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times dot 1`] = `
+"digraph \\"x\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<a>\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_1 {
+  graph [ color = \\"black\\" ];
+  \\"<b>\\" [ color = \\"grey\\" ];
+  \\"<c>\\" [ color = \\"grey\\" ];
+}
+
+  \\"[object Object]\\";
+  \\"<b>\\";
+  \\"<c>\\";
+  \\"[object Object]\\" -> \\"<b>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"[object Object]\\" -> \\"<c>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+    },
+    Object {
+      "wait": null,
+    },
+    Object {
+      "command": "b",
+    },
+    Object {
+      "command": "c",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times yaml 1`] = `
+"steps:
+  - command: a
+  - wait: ~
+  - command: b
+  - command: c
+"
+`;
+
 exports[`buildkite-graph Steps Command Conditional dependencies can be specified yaml 1`] = `
 "steps:
   - command: a
