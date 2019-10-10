@@ -61,9 +61,9 @@ export class Pipeline {
     }
 
     @Expose({ name: 'steps' })
-    private _steps(): (WaitStep | Step)[] {
+    private async _steps(): Promise<(WaitStep | Step)[]> {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        const stepsWithBlocks = sortedWithBlocks(this);
+        const stepsWithBlocks = await sortedWithBlocks(this);
 
         // TODO: when step.always = true,
         // then previous step needs a wait step with continueOnFailure: true

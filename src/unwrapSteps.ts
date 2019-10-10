@@ -1,14 +1,15 @@
 import { PotentialStep, Step } from './index';
 import { Conditional } from './conditional';
 
-export function unwrapSteps(
+export async function unwrapSteps(
     steps: PotentialStep[],
     cache: Map<Conditional<Step>, Step>,
-): Step[] {
+): Promise<Step[]> {
     const ret: Step[] = [];
     for (const s of steps) {
         if (s instanceof Conditional) {
-            if (s.accept()) {
+            const accepted = s.accept();
+            if (accepted === true || (await accepted)) {
                 let cond: Step;
                 if (cache.has(s)) {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

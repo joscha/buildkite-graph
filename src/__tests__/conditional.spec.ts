@@ -8,11 +8,14 @@ import {
 import { createTest, serializers } from './helpers';
 
 class MyConditional<T extends Step> extends Conditional<T> {
-    constructor(step: ThingOrGenerator<T>, private readonly accepted: boolean) {
+    constructor(
+        step: ThingOrGenerator<T>,
+        private readonly accepted: ReturnType<Conditional<T>['accept']>,
+    ) {
         super(step as any);
     }
 
-    accept(): boolean {
+    accept() {
         return this.accepted;
     }
 }
@@ -37,6 +40,24 @@ describe('buildkite-graph', () => {
                     new MyConditional(
                         new CommandStep('yarn').add('yarn test'),
                         false,
+                    ),
+                ),
+                new Pipeline('whatever').add(
+                    new MyConditional(
+                        new CommandStep('yarn').add('yarn test'),
+                        Promise.resolve(),
+                    ),
+                ),
+                new Pipeline('whatever').add(
+                    new MyConditional(
+                        new CommandStep('yarn').add('yarn test'),
+                        Promise.reject(),
+                    ),
+                ),
+                new Pipeline('whatever').add(
+                    new MyConditional(
+                        new CommandStep('yarn').add('yarn test'),
+                        Promise.reject(new Error('O noes!!!')),
                     ),
                 ),
             ]);
