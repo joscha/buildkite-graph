@@ -130,13 +130,19 @@ describe('buildkite-graph', () => {
                 ),
             );
 
-            createTest('artifact_paths', () =>
+            createTest('artifact_paths', () => [
                 new Pipeline('whatever').add(
                     new CommandStep('noop')
                         .withArtifactPath('logs/**/*')
                         .withArtifactPath('coverage/**/*'),
                 ),
-            );
+                new Pipeline('whatever').add(
+                    new CommandStep('noop').withArtifactPath(
+                        'logs/**/*',
+                        'coverage/**/*',
+                    ),
+                ),
+            ]);
 
             createTest('branches', () =>
                 new Pipeline('whatever').add(
