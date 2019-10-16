@@ -144,13 +144,16 @@ Object {
       "fields": Array [
         Object {
           "key": "field-1",
+          "text": "Label 1",
         },
         Object {
           "key": "field-2",
           "options": Array [],
+          "select": "Label 2",
         },
         Object {
           "key": "field-3",
+          "text": "Label 3",
         },
       ],
     },
@@ -253,9 +256,12 @@ exports[`buildkite-graph Steps Block with fields yaml 1`] = `
   - block: my title
     fields:
       - key: field-1
+        text: Label 1
       - key: field-2
         options: []
+        select: Label 2
       - key: field-3
+        text: Label 3
 "
 `;
 
