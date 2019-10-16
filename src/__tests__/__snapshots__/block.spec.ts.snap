@@ -168,8 +168,8 @@ Object {
           "default": "Flying Dolphin",
           "hint": "What’s the code name for this release? :name_badge:",
           "key": "release-name",
-          "label": "Code Name",
           "required": false,
+          "text": "Code Name",
         },
       ],
     },
@@ -187,7 +187,6 @@ Object {
           "default": "beta",
           "hint": "What’s the release stream?",
           "key": "release-stream",
-          "label": "Stream",
           "options": Array [
             Object {
               "label": "Beta",
@@ -199,6 +198,7 @@ Object {
             },
           ],
           "required": false,
+          "select": "Stream",
         },
       ],
     },
@@ -221,7 +221,6 @@ Object {
           ],
           "hint": "Which regions should we deploy this to? :earth_asia:",
           "key": "regions",
-          "label": "Regions",
           "multiple": true,
           "options": Array [
             Object {
@@ -241,6 +240,7 @@ Object {
               "value": "aunz",
             },
           ],
+          "select": "Regions",
         },
       ],
     },
@@ -264,9 +264,9 @@ exports[`buildkite-graph Steps Block with fields yaml 2`] = `
   - block: my title
     fields:
       - key: release-name
-        label: Code Name
         hint: 'What’s the code name for this release? :name_badge:'
         required: false
+        text: Code Name
         default: Flying Dolphin
 "
 `;
@@ -276,7 +276,6 @@ exports[`buildkite-graph Steps Block with fields yaml 3`] = `
   - block: my title
     fields:
       - key: release-stream
-        label: Stream
         hint: What’s the release stream?
         required: false
         options:
@@ -284,6 +283,7 @@ exports[`buildkite-graph Steps Block with fields yaml 3`] = `
             value: beta
           - label: Stable
             value: stable
+        select: Stream
         default: beta
 "
 `;
@@ -293,7 +293,6 @@ exports[`buildkite-graph Steps Block with fields yaml 4`] = `
   - block: my title
     fields:
       - key: regions
-        label: Regions
         hint: 'Which regions should we deploy this to? :earth_asia:'
         options:
           - label: North America
@@ -304,6 +303,7 @@ exports[`buildkite-graph Steps Block with fields yaml 4`] = `
             value: asia
           - label: Oceania
             value: aunz
+        select: Regions
         default:
           - na
           - eur

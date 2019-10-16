@@ -7,7 +7,6 @@ abstract class Field {
     public readonly required?: false;
     constructor(
         public readonly key: string,
-        public readonly label?: string,
         public readonly hint?: string,
         required = false,
     ) {
@@ -20,15 +19,17 @@ abstract class Field {
 }
 @Expose()
 export class TextField extends Field {
+    private readonly text: string;
     private readonly default?: string;
     constructor(
         key: string,
-        label?: string,
+        label: string,
         hint?: string,
         required = true,
         defaultValue?: string,
     ) {
-        super(key, label, hint, required);
+        super(key, hint, required);
+        this.text = label;
         this.default = defaultValue;
     }
 }
@@ -43,12 +44,13 @@ export class Option {
 }
 @Expose()
 export class SelectField extends Field {
+    private readonly select: string;
     private options: Option[] = [];
     private readonly multiple?: true;
     private readonly default?: string | string[];
     constructor(
         key: string,
-        label?: string,
+        label: string,
         hint?: string,
         required?: boolean,
         multiple?: false,
@@ -56,7 +58,7 @@ export class SelectField extends Field {
     );
     constructor(
         key: string,
-        label?: string,
+        label: string,
         hint?: string,
         required?: boolean,
         multiple?: true,
@@ -64,13 +66,14 @@ export class SelectField extends Field {
     );
     constructor(
         key: string,
-        label?: string,
+        label: string,
         hint?: string,
         required = true,
         multiple = false,
         defaultValue?: string | string[],
     ) {
-        super(key, label, hint, required);
+        super(key, hint, required);
+        this.select = label;
         this.default = defaultValue;
         if (multiple) {
             this.multiple = multiple;
