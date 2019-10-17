@@ -42,6 +42,7 @@ export class BuildImpl<T> implements Build<T>, Serializable {
     }
 
     async toJson(): Promise<object | undefined> {
+        /* eslint-disable @typescript-eslint/camelcase */
         if (!this.hasData()) {
             return undefined;
         }

@@ -10,6 +10,7 @@ export class WaitStep implements BaseStep, Serializable {
     }
 
     async toJson(): Promise<object> {
+        /* eslint-disable @typescript-eslint/camelcase */
         return {
             wait: null,
             continue_on_failure: this.continueOnFailure || undefined,

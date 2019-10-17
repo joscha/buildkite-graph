@@ -223,6 +223,7 @@ export class CommandStep extends LabeledStep {
     }
 
     async toJson(): Promise<object> {
+        /* eslint-disable @typescript-eslint/camelcase */
         return {
             ...(await super.toJson()),
             command: transformCommand(this.command),
