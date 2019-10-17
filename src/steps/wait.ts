@@ -9,7 +9,7 @@ export class WaitStep implements BaseStep, Serializable {
         return '[wait]';
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             wait: null,
             continue_on_failure: this.continueOnFailure || undefined,

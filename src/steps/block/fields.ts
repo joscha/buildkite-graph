@@ -12,7 +12,7 @@ abstract class Field implements Serializable {
         ow(key, ow.string.matches(/[0-9a-z-\/]+/i));
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             key: this.key,
             hint: this.hint,
@@ -32,7 +32,7 @@ export class TextField extends Field {
         super(key, hint, required);
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             ...(await super.toJson()),
             text: this.label,
@@ -49,7 +49,7 @@ export class Option implements Serializable {
         ow(value, ow.string.nonEmpty);
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             label: this.label,
             value: this.value,
@@ -92,7 +92,7 @@ export class SelectField extends Field {
         return this;
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             ...(await super.toJson()),
             options: await Promise.all(this.options.map(o => o.toJson())),
@@ -117,7 +117,7 @@ export class FieldsImpl<T> extends Chainable<T>
         return this.fields.size > 0;
     }
 
-    async toJson() {
+    async toJson(): Promise<object | undefined> {
         if (!this.hasFields()) {
             return undefined;
         }

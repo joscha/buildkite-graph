@@ -16,7 +16,7 @@ class RetryManual {
         return !this.allowed || this.permitOnPassed;
     }
 
-    async toJson() {
+    async toJson(): Promise<object | undefined> {
         if (!this.hasValue()) {
             return undefined;
         }
@@ -28,7 +28,9 @@ class RetryManual {
     }
 }
 
-const transformAutomatic = (value: boolean | Map<ExitStatus, number>) => {
+const transformAutomatic = (
+    value: boolean | Map<ExitStatus, number>,
+): undefined | boolean | { exit_status: ExitStatus; limit: number }[] => {
     if (!value) {
         return undefined;
     }
@@ -44,7 +46,7 @@ const transformAutomatic = (value: boolean | Map<ExitStatus, number>) => {
 
 export class RetryImpl<T> extends Chainable<T>
     implements Retry<T>, Serializable {
-    async toJson() {
+    async toJson(): Promise<object | undefined> {
         if (!this.hasValue()) {
             return undefined;
         }

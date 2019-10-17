@@ -15,7 +15,7 @@ class MyConditional<T extends Step> extends Conditional<T> {
         super(step as any);
     }
 
-    accept() {
+    accept(): ReturnType<Conditional<T>['accept']> {
         return this.accepted;
     }
 }

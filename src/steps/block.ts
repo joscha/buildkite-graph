@@ -15,7 +15,7 @@ export class BlockStep extends BranchLimitedStep {
         return `[block for '${this.title}']`;
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             ...(await super.toJson()),
             block: this.title,

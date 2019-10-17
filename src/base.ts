@@ -47,7 +47,7 @@ export class BranchLimitedStep extends Step {
         return this;
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             branches: this.branches.size
                 ? [...this.branches].sort().join(' ')
@@ -68,7 +68,7 @@ export class LabeledStep extends BranchLimitedStep {
         return this;
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             ...(await super.toJson()),
             label: this.label,
@@ -89,7 +89,7 @@ export const exitStatusPredicate = ow.any(
     ow.number.integer,
 );
 
-export function mapToObject<T>(m: Map<string, T>) {
+export function mapToObject<T>(m: Map<string, T>): Record<string, T> {
     return Array.from(m).reduce<Record<string, T>>((acc, [key, value]) => {
         acc[key] = value;
         return acc;

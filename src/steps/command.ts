@@ -40,14 +40,16 @@ export class Command {
 
 type Agents = Map<string, string>;
 
-const transformCommand = (value: Command[]) => {
+const transformCommand = (value: Command[]): undefined | string | string[] => {
     if (!value || value.length === 0) {
         return undefined;
     }
     return value.length === 1 ? value[0].command : value.map(c => c.command);
 };
 
-const transformSoftFail = (value: Set<ExitStatus>) => {
+const transformSoftFail = (
+    value: Set<ExitStatus>,
+): undefined | boolean | { exit_status: ExitStatus }[] => {
     if (!value.size) {
         return undefined;
     } else if (value.has('*')) {
@@ -60,7 +62,9 @@ const transformSoftFail = (value: Set<ExitStatus>) => {
     }
 };
 
-const transformSkipValue = (value: SkipValue | SkipFunction) => {
+const transformSkipValue = (
+    value: SkipValue | SkipFunction,
+): SkipValue | SkipFunction | undefined => {
     if (typeof value === 'function') {
         value = value();
         assertSkipValue(value);
@@ -218,7 +222,7 @@ export class CommandStep extends LabeledStep {
         );
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             ...(await super.toJson()),
             command: transformCommand(this.command),

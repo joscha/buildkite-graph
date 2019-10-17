@@ -32,7 +32,7 @@ export class TriggerStep extends LabeledStep implements Serializable {
         return this.label || `[trigger ${this.trigger}]`;
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             ...(await super.toJson()),
             trigger: this.trigger,

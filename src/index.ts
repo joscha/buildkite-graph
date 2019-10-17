@@ -89,7 +89,7 @@ export class Pipeline implements Serializable {
         return steps;
     }
 
-    async toJson() {
+    async toJson(): Promise<object> {
         return {
             env: await (this.env as KeyValueImpl<this>).toJson(),
             steps: await Promise.all(

@@ -17,7 +17,7 @@ export class KeyValueImpl<T> extends Chainable<T>
         return this.parent;
     }
 
-    async toJson() {
+    async toJson(): Promise<object | undefined> {
         return this.vars.size ? mapToObject(this.vars) : undefined;
     }
 }

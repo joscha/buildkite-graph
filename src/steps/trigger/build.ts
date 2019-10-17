@@ -41,7 +41,7 @@ export class BuildImpl<T> implements Build<T>, Serializable {
         );
     }
 
-    async toJson() {
+    async toJson(): Promise<object | undefined> {
         if (!this.hasData()) {
             return undefined;
         }
