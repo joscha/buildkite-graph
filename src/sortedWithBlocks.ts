@@ -3,9 +3,9 @@ import { sortedSteps } from './sortedSteps';
 import { Pipeline } from './index';
 import { Conditional } from './conditional';
 
-export function sortedWithBlocks(e: Pipeline): (Step | null)[] {
+export async function sortedWithBlocks(e: Pipeline): Promise<(Step | null)[]> {
     const cache = new Map<Conditional<Step>, Step>();
-    const sorted = sortedSteps(e, cache);
+    const sorted = await sortedSteps(e, cache);
     // null denotes a block
     const allSteps: (Step | null)[] = [];
     let lastWaitStep = -1;

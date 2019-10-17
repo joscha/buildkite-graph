@@ -4,11 +4,11 @@ import { Pipeline } from './index';
 import { unwrapSteps } from './unwrapSteps';
 import { Conditional } from './conditional';
 
-export function sortedSteps(
+export async function sortedSteps(
     e: Pipeline,
     cache: Map<Conditional<Step>, Step>,
-): Step[] {
-    const steps = unwrapSteps(e.steps, cache);
+): Promise<Step[]> {
+    const steps = await unwrapSteps(e.steps, cache);
     const sortOp = new TopologicalSort<Step, Step>(
         new Map(steps.map(step => [step, step])),
     );

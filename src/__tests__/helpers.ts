@@ -18,13 +18,15 @@ export const createTest = (
     describeFn = describe,
 ): void =>
     describeFn(name, () => {
-        test.each(Object.keys(serializers))('%s', type => {
+        test.each(Object.keys(serializers))('%s', async type => {
             let entities = gen();
             if (!Array.isArray(entities)) {
                 entities = [entities];
             }
             for (const entity of entities) {
-                expect(serializers[type].serialize(entity)).toMatchSnapshot();
+                expect(
+                    await serializers[type].serialize(entity),
+                ).toMatchSnapshot();
             }
         });
     });

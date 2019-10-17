@@ -1,20 +1,19 @@
-import { Expose, Transform } from 'class-transformer';
-import 'reflect-metadata';
 import { BaseStep } from '../base';
+import { Serializable } from '../index';
 
-export class WaitStep implements BaseStep {
-    public readonly wait: null = null;
-
-    @Expose({ name: 'continue_on_failure' })
-    @Transform((value: boolean) => value || undefined)
-    public continueOnFailure: boolean;
-
-    constructor(continueOnFailure = false) {
-        this.continueOnFailure = continueOnFailure;
-    }
+export class WaitStep implements BaseStep, Serializable {
+    constructor(public continueOnFailure = false) {}
 
     toString(): string {
         /* istanbul ignore next */
         return '[wait]';
+    }
+
+    async toJson(): Promise<object> {
+        /* eslint-disable @typescript-eslint/camelcase */
+        return {
+            wait: null,
+            continue_on_failure: this.continueOnFailure || undefined,
+        };
     }
 }

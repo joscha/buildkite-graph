@@ -1,6 +1,4 @@
-import { Exclude } from 'class-transformer';
 import ow from 'ow';
-import 'reflect-metadata';
 import { Chainable } from '../../base';
 
 export class Plugin {
@@ -28,7 +26,6 @@ export function transformPlugins(value: PluginsImpl<any>): object | undefined {
     });
 }
 
-@Exclude()
 export class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
     public plugins: Plugin[] = [];
 

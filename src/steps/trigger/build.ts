@@ -1,5 +1,5 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
-import { KeyValue, KeyValueImpl, transformKeyValueImpl } from '../../key_value';
+import { KeyValue, KeyValueImpl } from '../../key_value';
+import { Serializable } from '../../index';
 
 export interface Build<T> {
     env: KeyValue<T>;
@@ -9,19 +9,11 @@ export interface Build<T> {
     withBranch(branch: string): T;
 }
 
-@Exclude()
-export class BuildImpl<T> implements Build<T> {
-    @Expose({ name: 'message' })
+export class BuildImpl<T> implements Build<T>, Serializable {
     private _message?: string;
-    @Expose({ name: 'commit' })
     private _commit?: string;
-    @Expose({ name: 'branch' })
     private _branch?: string;
-    @Expose()
-    @Transform(transformKeyValueImpl)
     public readonly env: KeyValue<T>;
-    @Expose({ name: 'meta_data' })
-    @Transform(transformKeyValueImpl)
     public readonly metadata: KeyValue<T>;
     constructor(private readonly triggerStep: T) {
         this.env = new KeyValueImpl(triggerStep);
@@ -47,5 +39,19 @@ export class BuildImpl<T> implements Build<T> {
             (this.env as KeyValueImpl<T>).vars.size ||
             (this.metadata as KeyValueImpl<T>).vars.size
         );
+    }
+
+    async toJson(): Promise<object | undefined> {
+        /* eslint-disable @typescript-eslint/camelcase */
+        if (!this.hasData()) {
+            return undefined;
+        }
+        return {
+            message: this._message,
+            commit: this._commit,
+            branch: this._branch,
+            env: await (this.env as KeyValueImpl<T>).toJson(),
+            meta_data: await (this.metadata as KeyValueImpl<T>).toJson(),
+        };
     }
 }

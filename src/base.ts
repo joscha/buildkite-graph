@@ -1,7 +1,5 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
 import ow from 'ow';
-import 'reflect-metadata';
-import { PotentialStep } from './index';
+import { PotentialStep, Serializable } from './index';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BaseStep {}
@@ -9,8 +7,7 @@ export interface BaseStep {}
 // see https://github.com/microsoft/TypeScript/issues/22815#issuecomment-375766197
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Step extends BaseStep {}
-export abstract class Step implements BaseStep {
-    @Exclude()
+export abstract class Step implements BaseStep, Serializable {
     public readonly dependencies: Set<PotentialStep> = new Set();
 
     /**
@@ -31,34 +28,37 @@ export abstract class Step implements BaseStep {
         return this;
     }
 
-    @Exclude()
     public always = false;
 
     alwaysExecute(): this {
         this.always = true;
         return this;
     }
+
+    abstract toJson(): Promise<object>;
 }
 
-@Exclude()
 export class BranchLimitedStep extends Step {
-    @Expose({ name: 'branches' })
-    @Transform((branches: Set<string>) =>
-        branches.size ? [...branches].sort().join(' ') : undefined,
-    )
-    private _branches: Set<string> = new Set();
+    private branches: Set<string> = new Set();
 
     withBranch(pattern: string): this {
         ow(pattern, ow.string.nonEmpty);
-        this._branches.add(pattern);
+        this.branches.add(pattern);
         return this;
+    }
+
+    async toJson(): Promise<object> {
+        return {
+            branches: this.branches.size
+                ? [...this.branches].sort().join(' ')
+                : undefined,
+        };
     }
 }
 
 export class LabeledStep extends BranchLimitedStep {
     private _label?: string;
 
-    @Expose()
     protected get label(): string | undefined {
         return this._label;
     }
@@ -67,9 +67,15 @@ export class LabeledStep extends BranchLimitedStep {
         this._label = label;
         return this;
     }
+
+    async toJson(): Promise<object> {
+        return {
+            ...(await super.toJson()),
+            label: this.label,
+        };
+    }
 }
 
-@Exclude()
 export abstract class Chainable<T> {
     constructor(protected readonly parent: T) {
         this.parent = parent;
@@ -82,3 +88,10 @@ export const exitStatusPredicate = ow.any(
     ow.string.equals('*'),
     ow.number.integer,
 );
+
+export function mapToObject<T>(m: Map<string, T>): Record<string, T> {
+    return Array.from(m).reduce<Record<string, T>>((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+    }, {});
+}
