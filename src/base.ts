@@ -70,8 +70,8 @@ export class LabeledStep extends BranchLimitedStep {
 
     async toJson(): Promise<object> {
         return {
-            ...(await super.toJson()),
             label: this.label,
+            ...(await super.toJson()),
         };
     }
 }

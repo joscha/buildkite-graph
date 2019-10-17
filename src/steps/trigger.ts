@@ -34,8 +34,8 @@ export class TriggerStep extends LabeledStep implements Serializable {
 
     async toJson(): Promise<object> {
         return {
-            ...(await super.toJson()),
             trigger: this.trigger,
+            ...(await super.toJson()),
             async: this._async || undefined,
             build: await (this.build as BuildImpl<this>).toJson(),
         };

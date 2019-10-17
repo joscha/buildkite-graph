@@ -78,16 +78,16 @@ Object {
 
 exports[`buildkite-graph Steps Trigger async yaml 1`] = `
 "steps:
-  - label: Label
-    trigger: another
+  - trigger: another
+    label: Label
     async: true
 "
 `;
 
 exports[`buildkite-graph Steps Trigger async yaml 2`] = `
 "steps:
-  - label: Label
-    trigger: another
+  - trigger: another
+    label: Label
 "
 `;
 
@@ -370,8 +370,8 @@ Object {
 
 exports[`buildkite-graph Steps Trigger limit branches yaml 1`] = `
 "steps:
-  - branches: master
-    trigger: another
+  - trigger: another
+    branches: master
 "
 `;
 
@@ -402,7 +402,7 @@ Object {
 
 exports[`buildkite-graph Steps Trigger with a label yaml 1`] = `
 "steps:
-  - label: Trigger another pipeline
-    trigger: another
+  - trigger: another
+    label: Trigger another pipeline
 "
 `;

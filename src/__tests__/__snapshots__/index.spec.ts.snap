@@ -284,14 +284,14 @@ exports[`buildkite-graph general serialization complex yaml 1`] = `
   - wait: ~
   - label: Update checkpoint
     command: production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"
-  - label: Deploy to tech
-    trigger: web-deploy
+  - trigger: web-deploy
+    label: Deploy to tech
     build:
       env:
         FLAVOR: tech
         RELEASE_PATH: some/path/
-  - label: Deploy to usertesting
-    trigger: web-deploy
+  - trigger: web-deploy
+    label: Deploy to usertesting
     build:
       env:
         FLAVOR: usertesting
