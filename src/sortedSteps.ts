@@ -29,7 +29,7 @@ export async function sortedSteps(
                     // time which means evenm though multiple steps might depend on the same conditionals
                     // we would add a new step each time. Also, generating a step can be potentially expemnsive
                     // so we want to do this only once
-                    dependency = potentialDependency.get();
+                    dependency = await potentialDependency.get();
                     cache.set(potentialDependency, dependency);
                 }
             } else {
