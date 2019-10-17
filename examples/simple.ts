@@ -18,5 +18,5 @@ const integration = new CommandStep([
 
 const pipeline = new Pipeline('My pipeline').add(test).add(integration);
 
-console.log(new YamlSerializer().serialize(pipeline));
-// console.log(new DotSerializer().serialize(pipeline));
+console.log(await new YamlSerializer().serialize(pipeline));
+// console.log(await new DotSerializer().serialize(pipeline));

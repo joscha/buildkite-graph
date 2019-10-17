@@ -36,7 +36,7 @@ const integration = new CommandStep([
 
 const pipeline = new Pipeline('My pipeline').add(test).add(integration);
 
-console.log(new YamlSerializer().serialize(pipeline));
+console.log(await new YamlSerializer().serialize(pipeline));
 ```
 
 > Do you see how we don't have to add the `lint` or `build`step? Because other steps depend on them, they will become part of the graph automatically in the right place. This allows you to define graphs with complex dependencies and only add the steps which have an important signal - no more manually adding auxiliary steps.
