@@ -14,7 +14,7 @@ export async function unwrapSteps(
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     cond = cache.get(s)!;
                 } else {
-                    cond = s.get();
+                    cond = await s.get();
                     cache.set(s, cond);
                 }
                 ret.push(cond);

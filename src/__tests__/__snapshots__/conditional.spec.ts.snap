@@ -146,6 +146,72 @@ exports[`buildkite-graph Steps Command async step addition yaml 2`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command async step creation dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command async step creation dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<yarn && yarn test>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command async step creation json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command async step creation json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command async step creation yaml 1`] = `
+"steps:
+  - command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step creation yaml 2`] = `
+"steps:
+  - command:
+      - yarn
+      - yarn test
+"
+`;
+
 exports[`buildkite-graph Steps Command step addition dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];

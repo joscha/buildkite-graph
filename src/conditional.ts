@@ -1,12 +1,12 @@
 import { Step } from '.';
 
-export type Generator<T> = () => T;
-export type ThingOrGenerator<T> = T | Generator<T>;
+export type Generator<T> = () => T | Promise<T>;
+export type ThingOrGenerator<T> = T | Promise<T> | Generator<T>;
 
 export abstract class Conditional<T extends Step> {
     constructor(private readonly guarded: ThingOrGenerator<T>) {}
 
-    get(): T {
+    get(): T | Promise<T> {
         return typeof this.guarded === 'function'
             ? this.guarded()
             : this.guarded;

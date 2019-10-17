@@ -58,6 +58,26 @@ describe('buildkite-graph', () => {
                 ),
             ]);
 
+            createTest('async step creation', () => [
+                new Pipeline('whatever').add(
+                    new MyConditional(
+                        Promise.resolve(
+                            new CommandStep('yarn').add('yarn test'),
+                        ),
+                        true,
+                    ),
+                ),
+                new Pipeline('whatever').add(
+                    new MyConditional(
+                        () =>
+                            Promise.resolve(
+                                new CommandStep('yarn').add('yarn test'),
+                            ),
+                        true,
+                    ),
+                ),
+            ]);
+
             it('throws on accept rejection', async () => {
                 expect(
                     serializers.json.serialize(
