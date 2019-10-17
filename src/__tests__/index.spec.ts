@@ -7,9 +7,9 @@ describe('buildkite-graph', () => {
         createTest('simple', createSimple);
         createTest('complex', createComplex);
 
-        it('JSON serializer can stringify', () => {
+        it('JSON serializer can stringify', async () => {
             expect(
-                new serializers.JsonSerializer(true).serialize(
+                await new serializers.JsonSerializer(true).serialize(
                     new Pipeline('test'),
                 ),
             ).toMatchSnapshot();

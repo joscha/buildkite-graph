@@ -1,14 +1,17 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
 import ow from 'ow';
-import 'reflect-metadata';
-import { KeyValue, KeyValueImpl, transformKeyValueImpl } from '../key_value';
+import { KeyValue, KeyValueImpl } from '../key_value';
 import {
     Plugin,
     Plugins,
     PluginsImpl,
     transformPlugins,
 } from './command/plugins';
-import { ExitStatus, exitStatusPredicate, LabeledStep } from '../base';
+import {
+    ExitStatus,
+    exitStatusPredicate,
+    LabeledStep,
+    mapToObject,
+} from '../base';
 import { Retry, RetryImpl } from './command/retry';
 
 function assertTimeout(timeout: number): void {
@@ -37,57 +40,56 @@ export class Command {
 
 type Agents = Map<string, string>;
 
-@Exclude()
-export class CommandStep extends LabeledStep {
-    @Expose({ name: 'command' })
-    @Transform((value: Command[]) => {
-        if (!value || value.length === 0) {
-            return undefined;
-        }
-        return value.length === 1
-            ? value[0].command
-            : value.map(c => c.command);
-    })
-    public readonly command: Command[] = [];
+const transformCommand = (value: Command[]) => {
+    if (!value || value.length === 0) {
+        return undefined;
+    }
+    return value.length === 1 ? value[0].command : value.map(c => c.command);
+};
 
-    @Expose()
-    @Transform(transformKeyValueImpl)
+const transformSoftFail = (value: Set<ExitStatus>) => {
+    if (!value.size) {
+        return undefined;
+    } else if (value.has('*')) {
+        return true;
+    } else {
+        return [...value].map(s => ({
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            exit_status: s,
+        }));
+    }
+};
+
+const transformSkipValue = (value: SkipValue | SkipFunction) => {
+    if (typeof value === 'function') {
+        value = value();
+        assertSkipValue(value);
+    }
+    return value || undefined;
+};
+
+export class CommandStep extends LabeledStep {
+    public readonly command: Command[] = [];
     public readonly env: KeyValue<this>;
 
     private _id?: string;
-    @Expose({ name: 'id' })
     private get id(): string | undefined {
         return this._id;
     }
 
     private _parallelism?: number;
-
-    @Expose({ name: 'parallelism' })
-    private get paralellism(): number | undefined {
+    private get parallelism(): number | undefined {
         return this._parallelism;
     }
 
-    @Expose()
     private concurrency?: number;
-
-    @Expose({ name: 'concurrency_group' })
     private concurrencyGroup?: string;
-
-    @Expose({ name: 'artifact_paths' })
-    @Transform((paths: Set<string>) => (paths.size ? paths : undefined))
     private _artifactPaths: Set<string> = new Set();
-
     private _agents: Agents = new Map();
-
-    @Expose()
-    @Transform((agents: Agents) => (agents.size ? agents : undefined))
     get agents(): Agents {
         return this._agents;
     }
-
     private _timeout?: number;
-
-    @Expose({ name: 'timeout_in_minutes' })
     get timeout(): number | undefined {
         if (this._timeout === Infinity || this._timeout === 0) {
             return undefined;
@@ -107,39 +109,9 @@ export class CommandStep extends LabeledStep {
         }
     }
 
-    @Expose({ name: 'plugins' })
-    @Transform(transformPlugins)
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
-
-    @Expose({ name: 'soft_fail' })
-    @Transform((value: Set<ExitStatus>) => {
-        if (!value.size) {
-            return undefined;
-        } else if (value.has('*')) {
-            return true;
-        } else {
-            return [...value].map(s => ({
-                // eslint-disable-next-line @typescript-eslint/camelcase
-                exit_status: s,
-            }));
-        }
-    })
     private _softFail: Set<ExitStatus> = new Set();
-
-    @Expose({ name: 'skip' })
-    @Transform((value: SkipValue | SkipFunction) => {
-        if (typeof value === 'function') {
-            value = value();
-            assertSkipValue(value);
-        }
-        return value || undefined;
-    })
     private _skip?: SkipValue | SkipFunction;
-
-    @Expose()
-    @Transform((value: RetryImpl<any>) =>
-        value.hasValue() ? value : undefined,
-    )
     public readonly retry: Retry<CommandStep> = new RetryImpl(this);
 
     constructor(plugin: Plugin, label?: string);
@@ -244,5 +216,26 @@ export class CommandStep extends LabeledStep {
                 ? `<${this.command.join(' && ') || '(empty)'}>`
                 : this.plugins.toString())
         );
+    }
+
+    async toJson() {
+        return {
+            ...(await super.toJson()),
+            command: transformCommand(this.command),
+            env: await (this.env as KeyValueImpl<this>).toJson(),
+            id: this._id,
+            parallelism: this.parallelism,
+            concurrency: this.concurrency,
+            concurrency_group: this.concurrencyGroup,
+            artifact_paths: this._artifactPaths.size
+                ? Array.from(this._artifactPaths)
+                : undefined,
+            agents: this.agents.size ? mapToObject(this.agents) : undefined,
+            timeout_in_minutes: this.timeout,
+            plugins: transformPlugins(this.plugins as PluginsImpl<this>),
+            soft_fail: transformSoftFail(this._softFail),
+            skip: this._skip ? transformSkipValue(this._skip) : undefined,
+            retry: await (this.retry as RetryImpl<this>).toJson(),
+        };
     }
 }

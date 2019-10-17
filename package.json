@@ -40,11 +40,9 @@
     },
     "dependencies": {
         "@sindresorhus/slugify": "^0.9.1",
-        "class-transformer": "^0.2.3",
         "graphviz": "^0.0.9",
         "js-yaml": "^3.13.1",
         "ow": "^0.13.2",
-        "reflect-metadata": "^0.1.13",
         "topological-sort": "^0.3.0"
     },
     "husky": {

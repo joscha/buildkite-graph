@@ -1,23 +1,16 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
-import { Pipeline } from '../';
+import { Pipeline, Serializable } from '../index';
 import { LabeledStep } from '../base';
 import { Build, BuildImpl } from './trigger/build';
 
-@Exclude()
-export class TriggerStep extends LabeledStep {
-    @Expose()
+export class TriggerStep extends LabeledStep implements Serializable {
     get trigger(): string {
         return this._trigger instanceof Pipeline
             ? this._trigger.slug()
             : this._trigger;
     }
 
-    @Expose({ name: 'async' })
-    @Transform((value: boolean) => (value ? value : undefined))
     private _async = false;
 
-    @Expose()
-    @Transform((value: BuildImpl<any>) => (value.hasData() ? value : undefined))
     public readonly build: Build<TriggerStep> = new BuildImpl(this);
 
     constructor(
@@ -37,5 +30,14 @@ export class TriggerStep extends LabeledStep {
     }
     toString(): string {
         return this.label || `[trigger ${this.trigger}]`;
+    }
+
+    async toJson() {
+        return {
+            ...(await super.toJson()),
+            trigger: this.trigger,
+            async: this._async || undefined,
+            build: await (this.build as BuildImpl<this>).toJson(),
+        };
     }
 }

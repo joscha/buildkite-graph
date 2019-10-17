@@ -1,13 +1,13 @@
-import { Exclude } from 'class-transformer';
 import ow from 'ow';
-import { Chainable } from './base';
+import { Chainable, mapToObject } from './base';
+import { Serializable } from './index';
 
 export interface KeyValue<T> {
     set(name: string, value: string): T;
 }
 
-@Exclude()
-export class KeyValueImpl<T> extends Chainable<T> implements KeyValue<T> {
+export class KeyValueImpl<T> extends Chainable<T>
+    implements KeyValue<T>, Serializable {
     public readonly vars: Map<string, string> = new Map();
 
     set(name: string, value: string): T {
@@ -16,13 +16,8 @@ export class KeyValueImpl<T> extends Chainable<T> implements KeyValue<T> {
         this.vars.set(name, value);
         return this.parent;
     }
-}
 
-// TODO: remove this once
-// https://github.com/typestack/class-transformer/issues/274
-// is fixed
-export function transformKeyValueImpl(
-    kv: KeyValueImpl<any>,
-): Map<string, string> | undefined {
-    return kv.vars.size ? kv.vars : undefined;
+    async toJson() {
+        return this.vars.size ? mapToObject(this.vars) : undefined;
+    }
 }

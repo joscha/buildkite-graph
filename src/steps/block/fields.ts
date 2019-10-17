@@ -1,39 +1,46 @@
-import { Exclude, Expose } from 'class-transformer';
 import ow from 'ow';
 import { Chainable } from '../../base';
+import { Serializable } from '../../index';
 
-@Expose()
-abstract class Field {
-    public readonly required?: false;
+abstract class Field implements Serializable {
     constructor(
         public readonly key: string,
         public readonly hint?: string,
-        required = false,
+        public readonly required = false,
     ) {
         ow(key, ow.string.nonEmpty);
         ow(key, ow.string.matches(/[0-9a-z-\/]+/i));
-        if (!required) {
-            this.required = required;
-        }
+    }
+
+    async toJson() {
+        return {
+            key: this.key,
+            hint: this.hint,
+            required: this.required ? undefined : false,
+        };
     }
 }
-@Expose()
+
 export class TextField extends Field {
-    private readonly text: string;
-    private readonly default?: string;
     constructor(
         key: string,
-        label: string,
+        private readonly label: string,
         hint?: string,
         required = true,
-        defaultValue?: string,
+        private readonly defaultValue?: string,
     ) {
         super(key, hint, required);
-        this.text = label;
-        this.default = defaultValue;
+    }
+
+    async toJson() {
+        return {
+            ...(await super.toJson()),
+            text: this.label,
+            default: this.defaultValue,
+        };
     }
 }
-export class Option {
+export class Option implements Serializable {
     constructor(
         private readonly label: string,
         private readonly value: string,
@@ -41,13 +48,18 @@ export class Option {
         ow(label, ow.string.nonEmpty);
         ow(value, ow.string.nonEmpty);
     }
+
+    async toJson() {
+        return {
+            label: this.label,
+            value: this.value,
+        };
+    }
 }
-@Expose()
+
 export class SelectField extends Field {
-    private readonly select: string;
     private options: Option[] = [];
-    private readonly multiple?: true;
-    private readonly default?: string | string[];
+
     constructor(
         key: string,
         label: string,
@@ -66,30 +78,36 @@ export class SelectField extends Field {
     );
     constructor(
         key: string,
-        label: string,
+        private readonly label: string,
         hint?: string,
         required = true,
-        multiple = false,
-        defaultValue?: string | string[],
+        private readonly multiple = false,
+        private readonly defaultValue?: string | string[],
     ) {
         super(key, hint, required);
-        this.select = label;
-        this.default = defaultValue;
-        if (multiple) {
-            this.multiple = multiple;
-        }
     }
+
     addOption(option: Option): this {
         this.options.push(option);
         return this;
+    }
+
+    async toJson() {
+        return {
+            ...(await super.toJson()),
+            options: await Promise.all(this.options.map(o => o.toJson())),
+            select: this.label,
+            default: this.defaultValue,
+            multiple: this.multiple || undefined,
+        };
     }
 }
 export interface Fields<T> {
     add(field: Field): T;
 }
 
-@Exclude()
-export class FieldsImpl<T> extends Chainable<T> implements Fields<T> {
+export class FieldsImpl<T> extends Chainable<T>
+    implements Fields<T>, Serializable {
     fields: Map<string, Field> = new Map();
     add(field: Field): T {
         this.fields.set(field.key, field);
@@ -97,5 +115,14 @@ export class FieldsImpl<T> extends Chainable<T> implements Fields<T> {
     }
     hasFields(): boolean {
         return this.fields.size > 0;
+    }
+
+    async toJson() {
+        if (!this.hasFields()) {
+            return undefined;
+        }
+        return await Promise.all(
+            [...this.fields.values()].map(f => f.toJson()),
+        );
     }
 }

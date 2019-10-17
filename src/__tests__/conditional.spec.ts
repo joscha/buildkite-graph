@@ -42,25 +42,34 @@ describe('buildkite-graph', () => {
                         false,
                     ),
                 ),
+            ]);
+            createTest('async step addition', () => [
                 new Pipeline('whatever').add(
                     new MyConditional(
                         new CommandStep('yarn').add('yarn test'),
-                        Promise.resolve(),
+                        Promise.resolve(true),
                     ),
                 ),
                 new Pipeline('whatever').add(
                     new MyConditional(
                         new CommandStep('yarn').add('yarn test'),
-                        Promise.reject(),
-                    ),
-                ),
-                new Pipeline('whatever').add(
-                    new MyConditional(
-                        new CommandStep('yarn').add('yarn test'),
-                        Promise.reject(new Error('O noes!!!')),
+                        Promise.resolve(false),
                     ),
                 ),
             ]);
+
+            it('throws on accept rejection', async () => {
+                expect(
+                    serializers.json.serialize(
+                        new Pipeline('whatever').add(
+                            new MyConditional(
+                                new CommandStep('yarn').add('yarn test'),
+                                Promise.reject(new Error('O noes!!!')),
+                            ),
+                        ),
+                    ),
+                ).rejects.toThrowError();
+            });
 
             describe('Conditional dependencies', () => {
                 createTest('can be specified', () => {

@@ -13,8 +13,8 @@ export abstract class Conditional<T extends Step> {
     }
 
     /**
-     * The step is accepted if the returned boolean is true or the promise resolves.
-     * The step is rejected if the returned boolean is false or the promise rejects.
+     * The step is accepted if the returned boolean is true or the promise resolves to true.
+     * The step is rejected if the returned boolean is false or the promise resolves to false.
      */
-    abstract accept(): boolean | Promise<void | Error>;
+    abstract accept(): boolean | Promise<boolean>;
 }

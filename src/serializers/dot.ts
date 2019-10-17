@@ -4,8 +4,8 @@ import { Pipeline, TriggerStep } from '../';
 import { sortedWithBlocks } from '../sortedWithBlocks';
 
 export class DotSerializer implements Serializer<string> {
-    serialize(e: Pipeline): string {
-        const allSteps = sortedWithBlocks(e);
+    async serialize(e: Pipeline): Promise<string> {
+        const allSteps = await sortedWithBlocks(e);
         if (allSteps.length > 0) {
             allSteps.unshift(null);
         }

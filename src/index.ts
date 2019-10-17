@@ -1,9 +1,7 @@
 import slugify from '@sindresorhus/slugify';
-import { Exclude, Expose, Transform } from 'class-transformer';
-import 'reflect-metadata';
 import { Step } from './base';
 import { Conditional } from './conditional';
-import { KeyValue, KeyValueImpl, transformKeyValueImpl } from './key_value';
+import { KeyValue, KeyValueImpl } from './key_value';
 import { WaitStep } from './steps/wait';
 import { sortedWithBlocks } from './sortedWithBlocks';
 export { ExitStatus, Step } from './base';
@@ -25,16 +23,17 @@ export const serializers = {
     YamlSerializer,
 };
 
+export interface Serializable {
+    toJson(): Promise<object | undefined>;
+}
+
 export type PotentialStep = Step | Conditional<Step>;
 
-@Exclude()
-export class Pipeline {
+export class Pipeline implements Serializable {
     public readonly name: string;
 
     public readonly steps: PotentialStep[] = [];
 
-    @Expose()
-    @Transform(transformKeyValueImpl)
     public readonly env: KeyValue<this>;
 
     constructor(name: string) {
@@ -60,7 +59,6 @@ export class Pipeline {
         });
     }
 
-    @Expose({ name: 'steps' })
     private async _steps(): Promise<(WaitStep | Step)[]> {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         const stepsWithBlocks = await sortedWithBlocks(this);
@@ -89,5 +87,14 @@ export class Pipeline {
             }
         }
         return steps;
+    }
+
+    async toJson() {
+        return {
+            env: await (this.env as KeyValueImpl<this>).toJson(),
+            steps: await Promise.all(
+                (await this._steps()).map(s => s.toJson()),
+            ),
+        };
     }
 }

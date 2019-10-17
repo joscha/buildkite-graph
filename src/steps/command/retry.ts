@@ -1,7 +1,6 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
 import ow from 'ow';
-import 'reflect-metadata';
 import { Chainable, ExitStatus, exitStatusPredicate } from '../../base';
+import { Serializable } from '../../index';
 
 export interface Retry<T> {
     automatic(statuses: boolean | Map<ExitStatus, number>): T;
@@ -9,41 +8,53 @@ export interface Retry<T> {
 }
 
 class RetryManual {
-    @Transform((value: boolean) => (value ? undefined : false))
     allowed = true;
-
-    @Expose({ name: 'permit_on_passed' })
-    @Transform((value: boolean) => (value ? true : undefined))
     permitOnPassed = false;
-
-    @Transform((value: string) => value || undefined)
     reason?: string;
 
     hasValue(): boolean {
         return !this.allowed || this.permitOnPassed;
     }
-}
 
-@Exclude()
-export class RetryImpl<T> extends Chainable<T> implements Retry<T> {
-    @Expose({ name: 'manual' })
-    @Transform((value: RetryManual) => (value.hasValue() ? value : undefined))
-    private readonly _manual = new RetryManual();
-
-    @Expose({ name: 'automatic' })
-    @Transform((value: boolean | Map<ExitStatus, number>) => {
-        if (!value) {
+    async toJson() {
+        if (!this.hasValue()) {
             return undefined;
         }
-        if (typeof value === 'boolean') {
-            return value;
+        return {
+            allowed: this.allowed ? undefined : false,
+            permit_on_passed: this.permitOnPassed || undefined,
+            reason: this.reason || undefined,
+        };
+    }
+}
+
+const transformAutomatic = (value: boolean | Map<ExitStatus, number>) => {
+    if (!value) {
+        return undefined;
+    }
+    if (typeof value === 'boolean') {
+        return value;
+    }
+    return [...value.entries()].map(([s, limit]) => ({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        exit_status: s,
+        limit,
+    }));
+};
+
+export class RetryImpl<T> extends Chainable<T>
+    implements Retry<T>, Serializable {
+    async toJson() {
+        if (!this.hasValue()) {
+            return undefined;
         }
-        return [...value.entries()].map(([s, limit]) => ({
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            exit_status: s,
-            limit,
-        }));
-    })
+        return {
+            manual: await this._manual.toJson(),
+            automatic: transformAutomatic(this._automatic),
+        };
+    }
+
+    private readonly _manual = new RetryManual();
     private _automatic: boolean | Map<ExitStatus, number> = false;
 
     hasValue(): boolean {
