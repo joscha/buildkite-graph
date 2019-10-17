@@ -45,6 +45,18 @@ subgraph cluster_0 {
 "
 `;
 
+exports[`buildkite-graph Steps Command artifact_paths dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
 exports[`buildkite-graph Steps Command artifact_paths json 1`] = `
 Object {
   "steps": Array [
@@ -59,7 +71,30 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command artifact_paths json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "artifact_paths": Array [
+        "logs/**/*",
+        "coverage/**/*",
+      ],
+      "command": "noop",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command artifact_paths yaml 1`] = `
+"steps:
+  - command: noop
+    artifact_paths:
+      - logs/**/*
+      - coverage/**/*
+"
+`;
+
+exports[`buildkite-graph Steps Command artifact_paths yaml 2`] = `
 "steps:
   - command: noop
     artifact_paths:

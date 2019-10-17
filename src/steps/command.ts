@@ -199,9 +199,11 @@ export class CommandStep extends LabeledStep {
         return this;
     }
 
-    withArtifactPath(glob: string): this {
-        ow(glob, ow.string.nonEmpty);
-        this._artifactPaths.add(glob);
+    withArtifactPath(...globs: string[]): this {
+        ow(globs, ow.array.ofType(ow.string.nonEmpty));
+        for (const glob of globs) {
+            this._artifactPaths.add(glob);
+        }
         return this;
     }
 

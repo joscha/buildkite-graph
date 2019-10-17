@@ -28,9 +28,9 @@ describe('buildkite-graph', () => {
             createTest('with fields', () => [
                 new Pipeline('whatever').add(
                     new BlockStep('my title').fields
-                        .add(new TextField('field-1'))
-                        .fields.add(new SelectField('field-2'))
-                        .fields.add(new TextField('field-3')),
+                        .add(new TextField('field-1', 'Label 1'))
+                        .fields.add(new SelectField('field-2', 'Label 2'))
+                        .fields.add(new TextField('field-3', 'Label 3')),
                 ),
                 new Pipeline('whatever').add(
                     new BlockStep('my title').fields.add(
