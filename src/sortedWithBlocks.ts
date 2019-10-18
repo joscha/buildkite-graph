@@ -14,7 +14,7 @@ export async function sortedWithBlocks(e: Pipeline): Promise<(Step | null)[]> {
             const dependency =
                 potentialDependency instanceof Conditional
                     ? cache.get(potentialDependency) ||
-                      potentialDependency.get()
+                      (await potentialDependency.get())
                     : potentialDependency;
             const dependentStep = allSteps.indexOf(dependency);
             if (
