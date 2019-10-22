@@ -53,6 +53,29 @@ exports[`buildkite-graph Pipeline steps yaml 1`] = `
 
 exports[`buildkite-graph general serialization JSON serializer can stringify 1`] = `"{\\"steps\\":[]}"`;
 
+exports[`buildkite-graph general serialization Structural serializer can stringify 1`] = `
+"* Build Editor
+* Test Editor
+* [wait; continues on failure]
+* Annotate failures
+* Upload coverage
+* [wait]
+* Integration tests [x 8]
+* [wait]
+* :saucelabs: Integration tests [x 8]
+* Visreg baseline update
+* [wait; continues on failure]
+* Annotate cucumber failures
+* [wait]
+* Copy to deploy bucket
+* [wait]
+* Update checkpoint
+* Deploy to tech
+* Deploy to usertesting
+* [wait]
+* [block for 'Release editor']"
+`;
+
 exports[`buildkite-graph general serialization complex dot 1`] = `
 "digraph \\"web-build-editor\\" {
   graph [ compound =true ];
@@ -66,12 +89,12 @@ subgraph cluster_1 {
   graph [ color = \\"black\\" ];
   \\"Annotate failures\\" [ color = \\"grey\\" ];
   \\"Upload coverage\\" [ color = \\"grey\\" ];
-  \\"Integration tests\\" [ color = \\"grey\\" ];
+  \\"Integration tests [x 8]\\" [ color = \\"grey\\" ];
 }
 
 subgraph cluster_2 {
   graph [ color = \\"black\\" ];
-  \\":saucelabs: Integration tests\\" [ color = \\"grey\\" ];
+  \\":saucelabs: Integration tests [x 8]\\" [ color = \\"grey\\" ];
   \\"Visreg baseline update\\" [ color = \\"grey\\" ];
 }
 
@@ -97,8 +120,8 @@ subgraph cluster_5 {
   \\"Annotate failures\\";
   \\"Upload coverage\\";
   \\"Build Editor\\";
-  \\"Integration tests\\";
-  \\":saucelabs: Integration tests\\";
+  \\"Integration tests [x 8]\\";
+  \\":saucelabs: Integration tests [x 8]\\";
   \\"Visreg baseline update\\";
   \\"Annotate cucumber failures\\";
   \\"Copy to deploy bucket\\";
@@ -109,12 +132,12 @@ subgraph cluster_5 {
   \\"[block for 'Release editor']\\";
   \\"Test Editor\\" -> \\"Annotate failures\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
   \\"Test Editor\\" -> \\"Upload coverage\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
-  \\"Build Editor\\" -> \\"Integration tests\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
-  \\"Integration tests\\" -> \\":saucelabs: Integration tests\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
-  \\"Integration tests\\" -> \\"Visreg baseline update\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
-  \\"Integration tests\\" -> \\"Annotate cucumber failures\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
-  \\":saucelabs: Integration tests\\" -> \\"Annotate cucumber failures\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
-  \\":saucelabs: Integration tests\\" -> \\"Copy to deploy bucket\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
+  \\"Build Editor\\" -> \\"Integration tests [x 8]\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"Integration tests [x 8]\\" -> \\":saucelabs: Integration tests [x 8]\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
+  \\"Integration tests [x 8]\\" -> \\"Visreg baseline update\\" [ ltail = \\"cluster_1\\", lhead = \\"cluster_2\\" ];
+  \\"Integration tests [x 8]\\" -> \\"Annotate cucumber failures\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
+  \\":saucelabs: Integration tests [x 8]\\" -> \\"Annotate cucumber failures\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
+  \\":saucelabs: Integration tests [x 8]\\" -> \\"Copy to deploy bucket\\" [ ltail = \\"cluster_2\\", lhead = \\"cluster_3\\" ];
   \\"Copy to deploy bucket\\" -> \\"Update checkpoint\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
   \\"Copy to deploy bucket\\" -> \\"Deploy to tech\\" [ ltail = \\"cluster_3\\", lhead = \\"cluster_4\\" ];
   \\"Deploy to tech\\" -> \\"web-deploy\\" [ label = \\"triggers\\" ];

@@ -6,7 +6,9 @@ export class WaitStep implements BaseStep, Serializable {
 
     toString(): string {
         /* istanbul ignore next */
-        return '[wait]';
+        return this.continueOnFailure
+            ? '[wait; continues on failure]'
+            : '[wait]';
     }
 
     async toJson(): Promise<object> {

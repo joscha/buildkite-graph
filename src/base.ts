@@ -59,7 +59,7 @@ export class BranchLimitedStep extends Step {
 export class LabeledStep extends BranchLimitedStep {
     private _label?: string;
 
-    protected get label(): string | undefined {
+    get label(): string | undefined {
         return this._label;
     }
 

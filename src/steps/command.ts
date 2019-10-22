@@ -83,7 +83,7 @@ export class CommandStep extends LabeledStep {
 
     private _parallelism?: number;
     private get parallelism(): number | undefined {
-        return this._parallelism;
+        return this._parallelism === 1 ? undefined : this._parallelism;
     }
 
     private concurrency?: number;
@@ -215,10 +215,11 @@ export class CommandStep extends LabeledStep {
 
     toString(): string {
         return (
-            this.label ||
-            (this.command
-                ? `<${this.command.join(' && ') || '(empty)'}>`
-                : this.plugins.toString())
+            (this.label ||
+                (this.command
+                    ? `<${this.command.join(' && ') || '(empty)'}>`
+                    : this.plugins.toString())) +
+            (this.parallelism ? ` [x ${this.parallelism}]` : '')
         );
     }
 
@@ -229,7 +230,7 @@ export class CommandStep extends LabeledStep {
             command: transformCommand(this.command),
             env: await (this.env as KeyValueImpl<this>).toJson(),
             id: this._id,
-            parallelism: this.parallelism === 1 ? undefined : this.parallelism,
+            parallelism: this.parallelism,
             concurrency: this.concurrency,
             concurrency_group: this.concurrencyGroup,
             artifact_paths: this._artifactPaths.size

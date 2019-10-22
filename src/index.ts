@@ -14,12 +14,14 @@ export { TriggerStep } from './steps/trigger';
 export { KeyValue } from './key_value';
 import { DotSerializer } from './serializers/dot';
 import { JsonSerializer } from './serializers/json';
+import { StructuralSerializer } from './serializers/structural';
 import { YamlSerializer } from './serializers/yaml';
 export { Serializer } from './serializers';
 
 export const serializers = {
     DotSerializer,
     JsonSerializer,
+    StructuralSerializer,
     YamlSerializer,
 };
 
@@ -59,7 +61,7 @@ export class Pipeline implements Serializable {
         });
     }
 
-    private async _steps(): Promise<(WaitStep | Step)[]> {
+    async toList(): Promise<(WaitStep | Step)[]> {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         const stepsWithBlocks = await sortedWithBlocks(this);
 
@@ -93,7 +95,7 @@ export class Pipeline implements Serializable {
         return {
             env: await (this.env as KeyValueImpl<this>).toJson(),
             steps: await Promise.all(
-                (await this._steps()).map(s => s.toJson()),
+                (await this.toList()).map(s => s.toJson()),
             ),
         };
     }

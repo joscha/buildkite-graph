@@ -14,6 +14,14 @@ describe('buildkite-graph', () => {
                 ),
             ).toMatchSnapshot();
         });
+
+        it('Structural serializer can stringify', async () => {
+            expect(
+                await new serializers.StructuralSerializer().serialize(
+                    createComplex(),
+                ),
+            ).toMatchSnapshot();
+        });
     });
 
     createTest('missing transitive steps get added to the graph', () => {

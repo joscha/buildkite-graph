@@ -105,3 +105,36 @@ which will visualize to:
 <img src="https://user-images.githubusercontent.com/188038/61578524-b6cfc280-ab3b-11e9-87ab-28fa6be480ff.png" width="500">
 
 > See the clusters (the square boxes)? The are legs of multiple steps in your pipeline, each separated by a wait step.
+
+...but wait there's more; you can use the structural serializer to produce a textual output of the pipeline:
+
+```
+* Build Editor
+* Test Editor
+* [wait; continues on failure]
+* Annotate failures
+* Upload coverage
+* [wait]
+* Integration tests [x 8]
+* [wait]
+* :saucelabs: Integration tests [x 8]
+* Visreg baseline update
+* [wait; continues on failure]
+* Annotate cucumber failures
+* [wait]
+* Copy to deploy bucket
+* [wait]
+* Update checkpoint
+* Deploy to tech
+* Deploy to usertesting
+* [wait]
+* [block for 'Release editor']
+```
+
+just by calling:
+
+```ts
+console.log(await new StructuralSerializer().serialize(pipeline));
+```
+
+This will allow you to create snapshot tests for your dynamic pipelines which represent the step composition and order.

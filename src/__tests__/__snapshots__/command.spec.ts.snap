@@ -382,7 +382,7 @@ exports[`buildkite-graph Steps Command parallelism dot 1`] = `
   graph [ compound =true ];
 subgraph cluster_0 {
   graph [ color = \\"black\\" ];
-  \\"<noop>\\" [ color = \\"grey\\" ];
+  \\"<noop> [x 123]\\" [ color = \\"grey\\" ];
 }
 
 }
