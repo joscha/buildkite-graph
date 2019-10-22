@@ -229,7 +229,7 @@ export class CommandStep extends LabeledStep {
             command: transformCommand(this.command),
             env: await (this.env as KeyValueImpl<this>).toJson(),
             id: this._id,
-            parallelism: this.parallelism,
+            parallelism: this.parallelism === 1 ? undefined : this.parallelism,
             concurrency: this.concurrency,
             concurrency_group: this.concurrencyGroup,
             artifact_paths: this._artifactPaths.size

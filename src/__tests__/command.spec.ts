@@ -185,13 +185,16 @@ describe('buildkite-graph', () => {
                 ),
             );
 
-            createTest('parallelism', () =>
+            createTest('parallelism', () => [
                 new Pipeline('whatever').add(
                     new CommandStep('noop')
                         .withParallelism(100)
                         .withParallelism(123),
                 ),
-            );
+                new Pipeline('whatever').add(
+                    new CommandStep('noop').withParallelism(1),
+                ),
+            ]);
 
             createTest('plugins', () =>
                 new Pipeline('whatever').add(
