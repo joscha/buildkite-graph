@@ -2,8 +2,10 @@ import ow from 'ow';
 import { Chainable, ExitStatus, exitStatusPredicate } from '../../base';
 import { Serializable } from '../../index';
 
+type Statuses = boolean | number | Map<ExitStatus, number>;
+
 export interface Retry<T> {
-    automatic(statuses: boolean | Map<ExitStatus, number>): T;
+    automatic(statuses: Statuses): T;
     manual(allowed: boolean, permitOnPassed?: boolean, reason?: string): T;
 }
 
@@ -30,19 +32,31 @@ class RetryManual {
 }
 
 const transformAutomatic = (
-    value: boolean | Map<ExitStatus, number>,
-): undefined | boolean | { exit_status: ExitStatus; limit: number }[] => {
+    value: Statuses,
+):
+    | undefined
+    | boolean
+    | { limit: number }
+    | { exit_status?: ExitStatus; limit: number }[] => {
     if (!value) {
         return undefined;
     }
     if (typeof value === 'boolean') {
         return value;
+    } else if (typeof value === 'number') {
+        return { limit: value };
     }
-    return [...value.entries()].map(([s, limit]) => ({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        exit_status: s,
-        limit,
-    }));
+    if (value.size === 1 && value.has('*') && value.get('*')) {
+        return {
+            limit: value.get('*')!,
+        };
+    } else {
+        return [...value.entries()].map(([s, limit]) => ({
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            exit_status: s,
+            limit,
+        }));
+    }
 };
 
 export class RetryImpl<T> extends Chainable<T>
@@ -58,26 +72,29 @@ export class RetryImpl<T> extends Chainable<T>
     }
 
     private readonly _manual = new RetryManual();
-    private _automatic: boolean | Map<ExitStatus, number> = false;
+    private _automatic: Statuses = false;
 
     hasValue(): boolean {
         return !!(this._manual.hasValue() || this._automatic);
     }
 
-    automatic(statuses: boolean | Map<ExitStatus, number> = true): T {
-        if (typeof statuses !== 'boolean') {
+    automatic(statuses: Statuses = true): T {
+        if (typeof statuses === 'object') {
             ow(statuses, ow.map.nonEmpty);
             ow(statuses, ow.map.valuesOfType(ow.number.integer.positive));
             ow(statuses, ow.map.valuesOfType(exitStatusPredicate as any)); // Fix predicate type
 
             this._automatic =
-                typeof this._automatic === 'boolean'
+                typeof this._automatic !== 'object'
                     ? new Map()
                     : this._automatic;
 
             for (const [exitStatus, limit] of statuses) {
                 this._automatic.set(exitStatus, limit);
             }
+        } else if (typeof statuses === 'number') {
+            ow(statuses, ow.number.positive);
+            this._automatic = statuses;
         } else {
             this._automatic = statuses;
         }

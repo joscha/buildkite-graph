@@ -542,6 +542,30 @@ subgraph cluster_0 {
 "
 `;
 
+exports[`buildkite-graph Steps Command retry dot 8`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command retry dot 9`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
 exports[`buildkite-graph Steps Command retry json 1`] = `
 Object {
   "steps": Array [
@@ -649,6 +673,36 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command retry json 8`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "retry": Object {
+        "automatic": Object {
+          "limit": 2,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command retry json 9`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "retry": Object {
+        "automatic": Object {
+          "limit": 1,
+        },
+      },
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command retry yaml 1`] = `
 "steps:
   - command: noop
@@ -710,6 +764,24 @@ exports[`buildkite-graph Steps Command retry yaml 7`] = `
       manual:
         permit_on_passed: true
       automatic: true
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml 8`] = `
+"steps:
+  - command: noop
+    retry:
+      automatic:
+        limit: 2
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml 9`] = `
+"steps:
+  - command: noop
+    retry:
+      automatic:
+        limit: 1
 "
 `;
 

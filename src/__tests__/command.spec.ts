@@ -299,6 +299,14 @@ describe('buildkite-graph', () => {
                         .automatic(true)
                         .retry.manual(true, true),
                 ),
+                new Pipeline('whatever').add(
+                    new CommandStep('noop').retry.automatic(2),
+                ),
+                new Pipeline('whatever').add(
+                    new CommandStep('noop').retry.automatic(
+                        new Map<ExitStatus, number>([['*', 1]]),
+                    ),
+                ),
             ]);
         });
     });
