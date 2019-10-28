@@ -108,14 +108,14 @@ export async function sortedSteps(
         await iterateAndAddEffect(step);
 
         if (!removedEffects.has(step)) {
-            for (const potentialDependency of step.dependencies) {
+            for (const potentialDependency of [...step.dependencies]) {
                 // when we depend on a conditional the acceptor of the conditional doesn't matter
                 // we need to always get it and add it to the graph
                 const dependency = await getAndCacheDependency(
                     potentialDependency,
                 );
                 addDependency(dependency);
-                for (const removedEffectStep of removedEffects) {
+                for (const removedEffectStep of [...removedEffects]) {
                     removedEffects.delete(removedEffectStep);
                     await iterateAndAddEffect(removedEffectStep);
                 }
