@@ -116,14 +116,8 @@ export async function sortedSteps(
                 );
                 addDependency(dependency);
                 for (const removedEffectStep of removedEffects) {
-                    if (
-                        removedEffectStep.effectDependencies.has(
-                            potentialDependency,
-                        )
-                    ) {
-                        removedEffects.delete(removedEffectStep);
-                        await iterateAndAddEffect(removedEffectStep);
-                    }
+                    removedEffects.delete(removedEffectStep);
+                    await iterateAndAddEffect(removedEffectStep);
                 }
             }
         }
