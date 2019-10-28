@@ -333,28 +333,41 @@ describe('buildkite-graph', () => {
                 createTest(
                     'later steps affect earlier effects',
                     () => {
+                        const p = new Pipeline('x');
                         const buildConditional = new MyConditional(
-                            new CommandStep('build app'),
+                            () => new CommandStep('build app'),
                             false,
                         );
+                        p.add(buildConditional);
 
                         const deployApp = new CommandStep(
                             'deploy app',
                         ).isEffectOf(buildConditional);
+                        p.add(deployApp);
+
+                        const releaseApp = new CommandStep(
+                            'release app',
+                        ).isEffectOf(deployApp);
+                        p.add(releaseApp);
 
                         const tests = new MyConditional(
                             () =>
-                                new CommandStep(
-                                    'run integration tests',
-                                ).dependsOn(buildConditional),
+                                new Promise<Step>(resolve =>
+                                    setTimeout(
+                                        () =>
+                                            resolve(
+                                                new CommandStep(
+                                                    'run integration tests',
+                                                ).dependsOn(buildConditional),
+                                            ),
+                                        100,
+                                    ),
+                                ),
                             true,
                         );
+                        p.add(tests);
 
-                        return new Pipeline('x').add(
-                            buildConditional,
-                            deployApp,
-                            tests,
-                        );
+                        return p;
                     },
                     ['structure'],
                 );
