@@ -233,6 +233,32 @@ exports[`buildkite-graph Steps Command async step creation yaml 2`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command isEffectOf effects of effects will be added if first effect dependency is accepted structure 1`] = `
+"* <run tests>
+* [wait]
+* <create coverage>
+* [wait]
+* <deploy coverage>"
+`;
+
+exports[`buildkite-graph Steps Command isEffectOf effects of effects will not be added if first effect dependency is rejected structure 1`] = `""`;
+
+exports[`buildkite-graph Steps Command isEffectOf last call wins structure 1`] = `
+"* <run tests>
+* [wait]
+* <deploy coverage>"
+`;
+
+exports[`buildkite-graph Steps Command isEffectOf last call wins structure 2`] = `""`;
+
+exports[`buildkite-graph Steps Command isEffectOf will add steps if their effect dependency is accepted structure 1`] = `
+"* <run tests>
+* [wait]
+* <deploy coverage>"
+`;
+
+exports[`buildkite-graph Steps Command isEffectOf will not add steps if effect dependency is rejected structure 1`] = `""`;
+
 exports[`buildkite-graph Steps Command step addition dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];

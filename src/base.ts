@@ -8,7 +8,20 @@ export interface BaseStep {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Step extends BaseStep {}
 export abstract class Step implements BaseStep, Serializable {
+    /**
+     * A set of potential steps that are hard dependencies to the
+     * current step. Each of these will be marked as accepted in case
+     * it is a Conditional and added to the graph as a side-effect.
+     */
     public readonly dependencies: Set<PotentialStep> = new Set();
+
+    /**
+     * A set of potential steps the current step is an effect of.
+     * The current step will only be added if the potential step
+     * is accepted; the effect dependency will not be added to the
+     * graph automatically
+     */
+    public readonly effectDependencies: Set<PotentialStep> = new Set();
 
     /**
      * This marks the given step or conditional as a dependency to the current
@@ -24,7 +37,20 @@ export abstract class Step implements BaseStep, Serializable {
         for (let i = steps.length; i > 0; i--) {
             const step = steps[i - 1];
             this.dependencies.add(step);
+            this.effectDependencies.delete(step);
         }
+        return this;
+    }
+
+    isEffectOf(...steps: PotentialStep[]): this {
+        ow(steps, ow.array.ofType(ow.object.nonEmpty));
+        steps.forEach(s => {
+            if (s === this) {
+                throw new Error('Can not add itself as an effect dependency');
+            }
+            this.effectDependencies.add(s);
+            this.dependencies.delete(s);
+        });
         return this;
     }
 
