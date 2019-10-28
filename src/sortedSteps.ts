@@ -79,7 +79,7 @@ export async function sortedSteps(
             if (potentialEffectDependency instanceof Conditional) {
                 // in case it is a conditional we are interested in whether it that one was accepted or not
                 if (
-                    (await potentialEffectDependency.accept()) &&
+                    (await potentialEffectDependency.accept()) ||
                     inGraph(dependency)
                 ) {
                     // if it was accepted and it is part of the graph, add the dependency to the current step

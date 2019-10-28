@@ -245,6 +245,13 @@ exports[`buildkite-graph Steps Command isEffectOf effects of effects will be add
 
 exports[`buildkite-graph Steps Command isEffectOf effects of effects will not be added if first effect dependency is rejected structure 1`] = `""`;
 
+exports[`buildkite-graph Steps Command isEffectOf effects of steps that are becoming part of the graph are exercised structure 1`] = `
+"* <build app>
+* [wait]
+* <run integration tests>
+* <deploy app>"
+`;
+
 exports[`buildkite-graph Steps Command isEffectOf last call wins structure 1`] = `
 "* <run tests>
 * [wait]

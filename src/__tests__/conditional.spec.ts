@@ -302,6 +302,34 @@ describe('buildkite-graph', () => {
                     },
                     ['structure'],
                 );
+
+                createTest(
+                    'effects of steps that are becoming part of the graph are exercised',
+                    () => {
+                        const buildConditional = new MyConditional(
+                            new CommandStep('build app'),
+                            false,
+                        );
+                        const tests = new MyConditional(
+                            () =>
+                                new CommandStep(
+                                    'run integration tests',
+                                ).dependsOn(buildConditional),
+                            true,
+                        );
+
+                        const deployApp = new CommandStep(
+                            'deploy app',
+                        ).isEffectOf(buildConditional);
+
+                        return new Pipeline('x').add(
+                            buildConditional,
+                            tests,
+                            deployApp,
+                        );
+                    },
+                    ['structure'],
+                );
             });
         });
     });
