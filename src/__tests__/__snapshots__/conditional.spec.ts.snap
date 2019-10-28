@@ -264,6 +264,7 @@ exports[`buildkite-graph Steps Command isEffectOf later steps affect earlier eff
 "* <build app>
 * [wait]
 * <deploy app>
+* <release app>
 * <run integration tests>"
 `;
 
