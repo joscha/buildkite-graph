@@ -278,6 +278,30 @@ describe('buildkite-graph', () => {
                     },
                     ['structure'],
                 );
+
+                createTest(
+                    'dependsOn is used after isEffectOf',
+                    () => {
+                        const buildConditional = new MyConditional(
+                            new CommandStep('build app'),
+                            false,
+                        );
+                        const tests = new MyConditional(
+                            new CommandStep('run tests'),
+                            false,
+                        );
+
+                        const deployApp = new CommandStep('deploy app')
+                            .isEffectOf(buildConditional)
+                            .dependsOn(tests);
+
+                        return new Pipeline('x').add(
+                            buildConditional,
+                            deployApp,
+                        );
+                    },
+                    ['structure'],
+                );
             });
         });
     });

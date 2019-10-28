@@ -54,22 +54,23 @@ export async function sortedSteps(
             addToGraph(dependency);
             if (dependency !== step) {
                 // not a self-reference, we just add the edge as usual
-                sortOp.addEdge(dependency, step);
+                try {
+                    sortOp.addEdge(dependency, step);
+                } catch (e) {
+                    // edge was already added, that is fine
+                }
             } else {
                 // self-reference, so we need to add a wait step in between later
                 if (i !== 0) {
                     // we only do this if it is not the very first step
-                    sortOp.addEdge(steps[i - 1], step);
+                    try {
+                        sortOp.addEdge(steps[i - 1], step);
+                    } catch (e) {
+                        // edge was already added, that is fine
+                    }
                 }
             }
         };
-
-        for (const potentialDependency of step.dependencies) {
-            // when we depend on a conditional the acceptor of the conditional doesn't matter
-            // we need to always get it and add it to the graph
-            const dependency = await getAndCacheDependency(potentialDependency);
-            addDependency(dependency);
-        }
 
         for (const potentialEffectDependency of step.effectDependencies) {
             const dependency = await getAndCacheDependency(
@@ -100,6 +101,17 @@ export async function sortedSteps(
                 } else {
                     removedEffects.push(step);
                 }
+            }
+        }
+
+        if (!removedEffects.includes(step)) {
+            for (const potentialDependency of step.dependencies) {
+                // when we depend on a conditional the acceptor of the conditional doesn't matter
+                // we need to always get it and add it to the graph
+                const dependency = await getAndCacheDependency(
+                    potentialDependency,
+                );
+                addDependency(dependency);
             }
         }
     }
