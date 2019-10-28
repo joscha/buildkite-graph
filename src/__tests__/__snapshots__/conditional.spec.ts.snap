@@ -260,6 +260,13 @@ exports[`buildkite-graph Steps Command isEffectOf last call wins structure 1`] =
 
 exports[`buildkite-graph Steps Command isEffectOf last call wins structure 2`] = `""`;
 
+exports[`buildkite-graph Steps Command isEffectOf later steps affect earlier effects structure 1`] = `
+"* <build app>
+* [wait]
+* <deploy app>
+* <run integration tests>"
+`;
+
 exports[`buildkite-graph Steps Command isEffectOf will add steps if their effect dependency is accepted structure 1`] = `
 "* <run tests>
 * [wait]

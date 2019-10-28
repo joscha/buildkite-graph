@@ -47,7 +47,7 @@ export async function sortedSteps(
         }
     };
 
-    const removedEffects: Step[] = [];
+    const removedEffects = new Set<Step>();
     for (let i = 0; i < steps.length; i++) {
         const step = steps[i];
         const addDependency = (dependency: Step): void => {
@@ -71,40 +71,43 @@ export async function sortedSteps(
                 }
             }
         };
-
-        for (const potentialEffectDependency of step.effectDependencies) {
-            const dependency = await getAndCacheDependency(
-                potentialEffectDependency,
-            );
-            if (potentialEffectDependency instanceof Conditional) {
-                // in case it is a conditional we are interested in whether it that one was accepted or not
-                if (
-                    (await potentialEffectDependency.accept()) ||
-                    inGraph(dependency)
-                ) {
-                    // if it was accepted and it is part of the graph, add the dependency to the current step
-                    addDependency(dependency);
-                    step.dependsOn(potentialEffectDependency);
+        const iterateAndAddEffect = async (s: Step): Promise<void> => {
+            for (const potentialEffectDependency of s.effectDependencies) {
+                const dependency = await getAndCacheDependency(
+                    potentialEffectDependency,
+                );
+                if (potentialEffectDependency instanceof Conditional) {
+                    // in case it is a conditional we are interested in whether it that one was accepted or not
+                    if (
+                        (await potentialEffectDependency.accept()) ||
+                        inGraph(dependency)
+                    ) {
+                        // if it was accepted and it is part of the graph, add the dependency to the current step
+                        addDependency(dependency);
+                        s.dependsOn(potentialEffectDependency);
+                    } else {
+                        // remove the current step from the graph
+                        removedEffects.add(s);
+                    }
                 } else {
-                    // remove the current step from the graph
-                    removedEffects.push(step);
-                }
-            } else {
-                // the dependency is a step and it wasn't removed before;
-                // add ourselves to the graph if the step is part of the graph
-                if (
-                    inGraph(dependency) &&
-                    !removedEffects.includes(dependency)
-                ) {
-                    addDependency(dependency);
-                    step.dependsOn(potentialEffectDependency);
-                } else {
-                    removedEffects.push(step);
+                    // the dependency is a step and it wasn't removed before;
+                    // add ourselves to the graph if the step is part of the graph
+                    if (
+                        inGraph(dependency) &&
+                        !removedEffects.has(dependency)
+                    ) {
+                        addDependency(dependency);
+                        s.dependsOn(potentialEffectDependency);
+                    } else {
+                        removedEffects.add(s);
+                    }
                 }
             }
-        }
+        };
 
-        if (!removedEffects.includes(step)) {
+        await iterateAndAddEffect(step);
+
+        if (!removedEffects.has(step)) {
             for (const potentialDependency of step.dependencies) {
                 // when we depend on a conditional the acceptor of the conditional doesn't matter
                 // we need to always get it and add it to the graph
@@ -112,10 +115,20 @@ export async function sortedSteps(
                     potentialDependency,
                 );
                 addDependency(dependency);
+                for (const removedEffectStep of removedEffects) {
+                    if (
+                        removedEffectStep.effectDependencies.has(
+                            potentialDependency,
+                        )
+                    ) {
+                        removedEffects.delete(removedEffectStep);
+                        await iterateAndAddEffect(removedEffectStep);
+                    }
+                }
             }
         }
     }
     return Array.from(sortOp.sort().values())
         .map(i => i.node)
-        .filter(s => !removedEffects.includes(s));
+        .filter(s => !removedEffects.has(s));
 }
