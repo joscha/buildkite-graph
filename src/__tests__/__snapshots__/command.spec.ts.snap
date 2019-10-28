@@ -25,6 +25,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command agents structure 1`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command agents yaml 1`] = `
 "steps:
   - command: noop
@@ -85,6 +87,10 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command artifact_paths structure 1`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command artifact_paths structure 2`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command artifact_paths yaml 1`] = `
 "steps:
   - command: noop
@@ -126,6 +132,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command branches structure 1`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command branches yaml 1`] = `
 "steps:
   - branches: '!release/* master stable/*'
@@ -156,6 +164,8 @@ Object {
   ],
 }
 `;
+
+exports[`buildkite-graph Steps Command concurrency structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command concurrency yaml 1`] = `
 "steps:
@@ -212,6 +222,14 @@ Object {
     },
   ],
 }
+`;
+
+exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step structure 1`] = `
+"* <command.sh>
+* [wait; continues on failure]
+* <echo This runs regardless of the success or failure>
+* <echo This runs regardless of the success or failure 2>
+* <echo This runs regardless of the success or failure 3>"
 `;
 
 exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step yaml 1`] = `
@@ -271,6 +289,14 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step structure 1`] = `
+"* <command.sh>
+* [wait; continues on failure]
+* <echo This runs regardless of the success or failure>
+* [wait]
+* <echo The command passed>"
+`;
+
 exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step yaml 1`] = `
 "steps:
   - command: command.sh
@@ -308,6 +334,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command env structure 1`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command env yaml 1`] = `
 "steps:
   - command: noop
@@ -340,6 +368,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command id structure 1`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command id yaml 1`] = `
 "steps:
   - command: noop
@@ -369,6 +399,8 @@ Object {
   ],
 }
 `;
+
+exports[`buildkite-graph Steps Command label structure 1`] = `"* my label"`;
 
 exports[`buildkite-graph Steps Command label yaml 1`] = `
 "steps:
@@ -422,6 +454,10 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command parallelism structure 1`] = `"* <noop> [x 123]"`;
+
+exports[`buildkite-graph Steps Command parallelism structure 2`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command parallelism yaml 1`] = `
 "steps:
   - command: noop
@@ -472,6 +508,8 @@ Object {
   ],
 }
 `;
+
+exports[`buildkite-graph Steps Command plugins structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command plugins yaml 1`] = `
 "steps:
@@ -731,6 +769,24 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command retry structure 1`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command retry structure 2`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command retry structure 3`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command retry structure 4`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command retry structure 5`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command retry structure 6`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command retry structure 7`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command retry structure 8`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command retry structure 9`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command retry yaml 1`] = `
 "steps:
   - command: noop
@@ -881,6 +937,12 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command skip function structure 1`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command skip function structure 2`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command skip function structure 3`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command skip function yaml 1`] = `
 "steps:
   - command: noop
@@ -969,6 +1031,12 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command skip value structure 1`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command skip value structure 2`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command skip value structure 3`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command skip value yaml 1`] = `
 "steps:
   - command: noop
@@ -1035,6 +1103,10 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command soft_fail boolean structure 1`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command soft_fail boolean structure 2`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command soft_fail boolean yaml 1`] = `
 "steps:
   - command: noop
@@ -1079,6 +1151,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command soft_fail multiple structure 1`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command soft_fail multiple yaml 1`] = `
 "steps:
   - command: noop
@@ -1110,6 +1184,8 @@ Object {
   ],
 }
 `;
+
+exports[`buildkite-graph Steps Command soft_fail star structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command soft_fail star yaml 1`] = `
 "steps:
@@ -1165,6 +1241,10 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command step addition structure 1`] = `"* <yarn && yarn test>"`;
+
+exports[`buildkite-graph Steps Command step addition structure 2`] = `"* <(empty)>"`;
+
 exports[`buildkite-graph Steps Command step addition yaml 1`] = `
 "steps:
   - command:
@@ -1201,6 +1281,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command timeouts can be infinite structure 1`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command timeouts can be infinite yaml 1`] = `
 "steps:
   - command: noop
@@ -1232,6 +1314,8 @@ Object {
   ],
 }
 `;
+
+exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total structure 1`] = `"* <yarn install && yarn test>"`;
 
 exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total yaml 1`] = `
 "steps:
@@ -1267,6 +1351,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others structure 1`] = `"* <yarn install && yarn test>"`;
+
 exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others yaml 1`] = `
 "steps:
   - command:
@@ -1300,6 +1386,8 @@ Object {
   ],
 }
 `;
+
+exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands structure 1`] = `"* <yarn install && yarn test>"`;
 
 exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands yaml 1`] = `
 "steps:
@@ -1347,6 +1435,13 @@ Object {
     },
   ],
 }
+`;
+
+exports[`buildkite-graph Steps dependencies can depend on itself to produce wait structure 1`] = `
+"* <a>
+* <b>
+* [wait]
+* <c>"
 `;
 
 exports[`buildkite-graph Steps dependencies can depend on itself to produce wait yaml 1`] = `
@@ -1440,6 +1535,20 @@ Object {
     },
   ],
 }
+`;
+
+exports[`buildkite-graph Steps dependencies step dependency structure 1`] = `
+"* <a>
+* [wait]
+* <b>"
+`;
+
+exports[`buildkite-graph Steps dependencies step dependency structure 2`] = `
+"* <a>
+* <b>
+* <c>
+* [wait]
+* <d>"
 `;
 
 exports[`buildkite-graph Steps dependencies step dependency yaml 1`] = `

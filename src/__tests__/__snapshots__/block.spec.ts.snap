@@ -23,6 +23,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Block branches structure 1`] = `"* [block for 'my title']"`;
+
 exports[`buildkite-graph Steps Block branches yaml 1`] = `
 "steps:
   - branches: '!release/* master stable/*'
@@ -74,6 +76,10 @@ Object {
   ],
 }
 `;
+
+exports[`buildkite-graph Steps Block can be added structure 1`] = `"* [block for ':rocket: Release!']"`;
+
+exports[`buildkite-graph Steps Block can be added structure 2`] = `"* [block for ':rocket: Release!']"`;
 
 exports[`buildkite-graph Steps Block can be added yaml 1`] = `
 "steps:
@@ -250,6 +256,14 @@ Object {
   ],
 }
 `;
+
+exports[`buildkite-graph Steps Block with fields structure 1`] = `"* [block for 'my title']"`;
+
+exports[`buildkite-graph Steps Block with fields structure 2`] = `"* [block for 'my title']"`;
+
+exports[`buildkite-graph Steps Block with fields structure 3`] = `"* [block for 'my title']"`;
+
+exports[`buildkite-graph Steps Block with fields structure 4`] = `"* [block for 'my title']"`;
 
 exports[`buildkite-graph Steps Block with fields yaml 1`] = `
 "steps:

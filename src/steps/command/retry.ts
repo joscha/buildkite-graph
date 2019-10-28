@@ -48,6 +48,7 @@ const transformAutomatic = (
     }
     if (value.size === 1 && value.has('*') && value.get('*')) {
         return {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             limit: value.get('*')!,
         };
     } else {

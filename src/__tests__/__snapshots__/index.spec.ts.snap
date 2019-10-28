@@ -16,6 +16,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Pipeline env structure 1`] = `""`;
+
 exports[`buildkite-graph Pipeline env yaml 1`] = `
 "env:
   COLOR: '1'
@@ -45,15 +47,21 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Pipeline steps structure 1`] = `"* <command>"`;
+
 exports[`buildkite-graph Pipeline steps yaml 1`] = `
 "steps:
   - command: command
 "
 `;
 
-exports[`buildkite-graph general serialization JSON serializer can stringify 1`] = `"{\\"steps\\":[]}"`;
+exports[`buildkite-graph general serialization JSON serializer can stringify json 1`] = `
+Object {
+  "steps": Array [],
+}
+`;
 
-exports[`buildkite-graph general serialization Structural serializer can stringify 1`] = `
+exports[`buildkite-graph general serialization Structural serializer can stringify structure 1`] = `
 "* Build Editor
 * Test Editor
 * [wait; continues on failure]
@@ -263,6 +271,29 @@ Object {
 }
 `;
 
+exports[`buildkite-graph general serialization complex structure 1`] = `
+"* Build Editor
+* Test Editor
+* [wait; continues on failure]
+* Annotate failures
+* Upload coverage
+* [wait]
+* Integration tests [x 8]
+* [wait]
+* :saucelabs: Integration tests [x 8]
+* Visreg baseline update
+* [wait; continues on failure]
+* Annotate cucumber failures
+* [wait]
+* Copy to deploy bucket
+* [wait]
+* Update checkpoint
+* Deploy to tech
+* Deploy to usertesting
+* [wait]
+* [block for 'Release editor']"
+`;
+
 exports[`buildkite-graph general serialization complex yaml 1`] = `
 "steps:
   - label: Build Editor
@@ -351,6 +382,8 @@ Object {
 }
 `;
 
+exports[`buildkite-graph general serialization simple structure 1`] = `"* Deploy"`;
+
 exports[`buildkite-graph general serialization simple yaml 1`] = `
 "env:
   USE_COLOR: '1'
@@ -395,6 +428,12 @@ Object {
     },
   ],
 }
+`;
+
+exports[`buildkite-graph missing transitive steps get added to the graph structure 1`] = `
+"* <yarn>
+* [wait]
+* <yarn test>"
 `;
 
 exports[`buildkite-graph missing transitive steps get added to the graph yaml 1`] = `

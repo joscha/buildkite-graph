@@ -78,6 +78,13 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency structure 1`] = `
+"* <a>
+* [wait]
+* <b>
+* <c>"
+`;
+
 exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency yaml 1`] = `
 "steps:
   - command: a
@@ -85,6 +92,12 @@ exports[`buildkite-graph Steps Command Conditional dependencies can be specified
   - command: b
   - command: c
 "
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified structure 1`] = `
+"* <a>
+* [wait]
+* <b>"
 `;
 
 exports[`buildkite-graph Steps Command Conditional dependencies can be specified yaml 1`] = `
@@ -132,6 +145,10 @@ Object {
   "steps": Array [],
 }
 `;
+
+exports[`buildkite-graph Steps Command async step addition structure 1`] = `"* <yarn && yarn test>"`;
+
+exports[`buildkite-graph Steps Command async step addition structure 2`] = `""`;
 
 exports[`buildkite-graph Steps Command async step addition yaml 1`] = `
 "steps:
@@ -195,6 +212,10 @@ Object {
   ],
 }
 `;
+
+exports[`buildkite-graph Steps Command async step creation structure 1`] = `"* <yarn && yarn test>"`;
+
+exports[`buildkite-graph Steps Command async step creation structure 2`] = `"* <yarn && yarn test>"`;
 
 exports[`buildkite-graph Steps Command async step creation yaml 1`] = `
 "steps:
@@ -274,6 +295,12 @@ Object {
   "steps": Array [],
 }
 `;
+
+exports[`buildkite-graph Steps Command step addition structure 1`] = `"* <yarn && yarn test>"`;
+
+exports[`buildkite-graph Steps Command step addition structure 2`] = `"* <yarn && yarn test>"`;
+
+exports[`buildkite-graph Steps Command step addition structure 3`] = `""`;
 
 exports[`buildkite-graph Steps Command step addition yaml 1`] = `
 "steps:

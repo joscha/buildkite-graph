@@ -1,4 +1,4 @@
-import { CommandStep, Pipeline, serializers } from '../';
+import { CommandStep, Pipeline } from '../';
 import { createTest } from './helpers';
 import { createComplex, createSimple } from './samples';
 
@@ -7,21 +7,17 @@ describe('buildkite-graph', () => {
         createTest('simple', createSimple);
         createTest('complex', createComplex);
 
-        it('JSON serializer can stringify', async () => {
-            expect(
-                await new serializers.JsonSerializer(true).serialize(
-                    new Pipeline('test'),
-                ),
-            ).toMatchSnapshot();
-        });
+        createTest(
+            'JSON serializer can stringify',
+            () => new Pipeline('test'),
+            ['json'],
+        );
 
-        it('Structural serializer can stringify', async () => {
-            expect(
-                await new serializers.StructuralSerializer().serialize(
-                    createComplex(),
-                ),
-            ).toMatchSnapshot();
-        });
+        createTest(
+            'Structural serializer can stringify',
+            () => createComplex(),
+            ['structure'],
+        );
     });
 
     createTest('missing transitive steps get added to the graph', () => {
