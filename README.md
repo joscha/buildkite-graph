@@ -138,3 +138,11 @@ console.log(await new StructuralSerializer().serialize(pipeline));
 ```
 
 This will allow you to create snapshot tests for your dynamic pipelines which represent the step composition and order.
+
+## Side-effetcs (Weak dependencies)
+
+Sometimes a dependency is not a strong one, e.g. if you have a unit test you probably want to deploy the coverage, but adding the deploy coverage step should not trigger the unit tests unless they need to. In that case you can use `.isEffectOf()` instead of `.dependsOn()`:
+
+```ts
+deploCoverageStep.isEffectOf(conditionalUnitTestStep);
+```
