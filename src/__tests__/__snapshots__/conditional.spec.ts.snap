@@ -257,6 +257,8 @@ exports[`buildkite-graph Steps Command isEffectOf will add steps if their effect
 * <deploy coverage>"
 `;
 
+exports[`buildkite-graph Steps Command isEffectOf will not add steps if any effect dependency is rejected structure 1`] = `"* <run tests 1>"`;
+
 exports[`buildkite-graph Steps Command isEffectOf will not add steps if effect dependency is rejected structure 1`] = `""`;
 
 exports[`buildkite-graph Steps Command step addition dot 1`] = `

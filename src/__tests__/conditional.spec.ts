@@ -184,6 +184,30 @@ describe('buildkite-graph', () => {
                 );
 
                 createTest(
+                    'will not add steps if any effect dependency is rejected',
+                    () => {
+                        const acceptedTests = new MyConditional(
+                            new CommandStep('run tests 1'),
+                            true,
+                        );
+                        const rejectedTests = new MyConditional(
+                            new CommandStep('run tests 2'),
+                            false,
+                        );
+                        const deployCoverage = new CommandStep(
+                            'deploy coverage',
+                        ).isEffectOf(rejectedTests, acceptedTests);
+
+                        return new Pipeline('x').add(
+                            acceptedTests,
+                            rejectedTests,
+                            deployCoverage,
+                        );
+                    },
+                    ['structure'],
+                );
+
+                createTest(
                     'effects of effects will be added if first effect dependency is accepted',
                     () => {
                         const acceptedTests = new MyConditional(
