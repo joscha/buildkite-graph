@@ -143,6 +143,118 @@ describe('buildkite-graph', () => {
                     serializers.json.serialize(p);
                 });
             });
+
+            describe.only('isEffectOf', () => {
+                createTest(
+                    'will add steps if their effect dependency is accepted',
+                    () => {
+                        const acceptedTests = new MyConditional(
+                            new CommandStep('run tests'),
+                            true,
+                        );
+                        const deployCoverage = new CommandStep(
+                            'deploy coverage',
+                        ).isEffectOf(acceptedTests);
+
+                        return new Pipeline('x').add(
+                            acceptedTests,
+                            deployCoverage,
+                        );
+                    },
+                    ['structure'],
+                );
+
+                createTest(
+                    'will not add steps if effect dependency is rejected',
+                    () => {
+                        const acceptedTests = new MyConditional(
+                            new CommandStep('run tests'),
+                            false,
+                        );
+                        const deployCoverage = new CommandStep(
+                            'deploy coverage',
+                        ).isEffectOf(acceptedTests);
+
+                        return new Pipeline('x').add(
+                            acceptedTests,
+                            deployCoverage,
+                        );
+                    },
+                    ['structure'],
+                );
+
+                createTest(
+                    'effects of effects will be added if first effect dependency is accepted',
+                    () => {
+                        const acceptedTests = new MyConditional(
+                            new CommandStep('run tests'),
+                            true,
+                        );
+                        const createCoverageStep = new CommandStep(
+                            'create coverage',
+                        ).isEffectOf(acceptedTests);
+                        const deployCoverage = new CommandStep(
+                            'deploy coverage',
+                        ).isEffectOf(createCoverageStep);
+
+                        return new Pipeline('x').add(
+                            acceptedTests,
+                            createCoverageStep,
+                            deployCoverage,
+                        );
+                    },
+                    ['structure'],
+                );
+
+                createTest(
+                    'effects of effects will not be added if first effect dependency is rejected',
+                    () => {
+                        const acceptedTests = new MyConditional(
+                            new CommandStep('run tests'),
+                            false,
+                        );
+                        const createCoverageStep = new CommandStep(
+                            'create coverage',
+                        ).isEffectOf(acceptedTests);
+                        const deployCoverage = new CommandStep(
+                            'deploy coverage',
+                        ).isEffectOf(createCoverageStep);
+
+                        return new Pipeline('x').add(
+                            acceptedTests,
+                            createCoverageStep,
+                            deployCoverage,
+                        );
+                    },
+                    ['structure'],
+                );
+
+                createTest(
+                    'last call wins',
+                    () => {
+                        const acceptedTests = new MyConditional(
+                            new CommandStep('run tests'),
+                            false,
+                        );
+                        const deployCoverage1 = new CommandStep(
+                            'deploy coverage',
+                        )
+                            .isEffectOf(acceptedTests)
+                            .dependsOn(acceptedTests);
+                        const deployCoverage2 = new CommandStep(
+                            'deploy coverage',
+                        )
+                            .dependsOn(acceptedTests)
+                            .isEffectOf(acceptedTests);
+
+                        return [
+                            new Pipeline('x').add(deployCoverage1),
+                            new Pipeline('x').add(deployCoverage2),
+                        ];
+                    },
+                    ['structure'],
+                );
+            });
         });
     });
 });
