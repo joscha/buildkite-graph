@@ -16,9 +16,25 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Pipeline env json_depends_on 1`] = `
+Object {
+  "env": Object {
+    "COLOR": "1",
+  },
+  "steps": Array [],
+}
+`;
+
 exports[`buildkite-graph Pipeline env structure 1`] = `""`;
 
 exports[`buildkite-graph Pipeline env yaml 1`] = `
+"env:
+  COLOR: '1'
+steps: []
+"
+`;
+
+exports[`buildkite-graph Pipeline env yaml_depends_on 1`] = `
 "env:
   COLOR: '1'
 steps: []
@@ -47,11 +63,29 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Pipeline steps json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "command",
+      "key": "_0",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Pipeline steps structure 1`] = `"* <command>"`;
 
 exports[`buildkite-graph Pipeline steps yaml 1`] = `
 "steps:
   - command: command
+"
+`;
+
+exports[`buildkite-graph Pipeline steps yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: command
 "
 `;
 
@@ -271,6 +305,173 @@ Object {
 }
 `;
 
+exports[`buildkite-graph general serialization complex json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh build editor",
+      "key": "_0",
+      "label": "Build Editor",
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh test editor",
+      "key": "_1",
+      "label": "Test Editor",
+    },
+    Object {
+      "depends_on": Array [
+        Object {
+          "allow_failure": true,
+          "step": "_1",
+        },
+      ],
+      "key": "_2",
+      "label": "Annotate failures",
+      "plugins": Array [
+        Object {
+          "bugcrowd/test-summary#v1.5.0": Object {
+            "inputs": Array [
+              Object {
+                "artifact_path": "web/target/htmllint-*.txt",
+                "label": ":htmllint: HTML lint",
+                "type": "oneline",
+              },
+            ],
+          },
+        },
+        Object {
+          "detect-clowns#v1.0.0": null,
+        },
+      ],
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh deploy-report coverage editor",
+      "depends_on": Array [
+        Object {
+          "allow_failure": true,
+          "step": "_1",
+        },
+      ],
+      "key": "_3",
+      "label": "Upload coverage",
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_4",
+      "label": "Integration tests",
+      "parallelism": 8,
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
+      "depends_on": Array [
+        Object {
+          "step": "_4",
+        },
+      ],
+      "key": "_5",
+      "label": ":saucelabs: Integration tests",
+      "parallelism": 8,
+      "plugins": Array [
+        Object {
+          "sauce-connect-plugin": null,
+        },
+      ],
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
+      "depends_on": Array [
+        Object {
+          "step": "_4",
+        },
+      ],
+      "key": "_6",
+      "label": "Visreg baseline update",
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases",
+      "depends_on": Array [
+        Object {
+          "allow_failure": true,
+          "step": "_4",
+        },
+        Object {
+          "allow_failure": true,
+          "step": "_5",
+        },
+      ],
+      "key": "_7",
+      "label": "Annotate cucumber failures",
+    },
+    Object {
+      "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
+      "depends_on": Array [
+        Object {
+          "step": "_5",
+        },
+      ],
+      "key": "_8",
+      "label": "Copy to deploy bucket",
+    },
+    Object {
+      "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
+      "depends_on": Array [
+        Object {
+          "step": "_8",
+        },
+      ],
+      "key": "_9",
+      "label": "Update checkpoint",
+    },
+    Object {
+      "build": Object {
+        "env": Object {
+          "FLAVOR": "tech",
+          "RELEASE_PATH": "some/path/",
+        },
+      },
+      "depends_on": Array [
+        Object {
+          "step": "_8",
+        },
+      ],
+      "key": "_10",
+      "label": "Deploy to tech",
+      "trigger": "web-deploy",
+    },
+    Object {
+      "build": Object {
+        "env": Object {
+          "FLAVOR": "usertesting",
+          "RELEASE_PATH": "some/path/",
+        },
+      },
+      "depends_on": Array [
+        Object {
+          "step": "_8",
+        },
+      ],
+      "key": "_11",
+      "label": "Deploy to usertesting",
+      "trigger": "web-deploy",
+    },
+    Object {
+      "block": "Release editor",
+      "depends_on": Array [
+        Object {
+          "step": "_9",
+        },
+      ],
+      "key": "_12",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph general serialization complex structure 1`] = `
 "* Build Editor
 * Test Editor
@@ -355,6 +556,98 @@ exports[`buildkite-graph general serialization complex yaml 1`] = `
 "
 `;
 
+exports[`buildkite-graph general serialization complex yaml_depends_on 1`] = `
+"steps:
+  - label: Build Editor
+    key: _0
+    command: web/bin/buildkite/run_web_step.sh build editor
+  - label: Test Editor
+    key: _1
+    command: web/bin/buildkite/run_web_step.sh test editor
+  - label: Annotate failures
+    key: _2
+    depends_on:
+      - step: _1
+        allow_failure: true
+    plugins:
+      - 'bugcrowd/test-summary#v1.5.0':
+          inputs:
+            - label: ':htmllint: HTML lint'
+              artifact_path: web/target/htmllint-*.txt
+              type: oneline
+      - 'detect-clowns#v1.0.0': ~
+  - label: Upload coverage
+    key: _3
+    depends_on:
+      - step: _1
+        allow_failure: true
+    command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
+  - label: Integration tests
+    key: _4
+    depends_on:
+      - step: _0
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests local editor
+      chrome
+    parallelism: 8
+  - label: ':saucelabs: Integration tests'
+    key: _5
+    depends_on:
+      - step: _4
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
+      safari
+    parallelism: 8
+    plugins:
+      - sauce-connect-plugin: ~
+  - label: Visreg baseline update
+    key: _6
+    depends_on:
+      - step: _4
+    command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
+  - label: Annotate cucumber failures
+    key: _7
+    depends_on:
+      - step: _4
+        allow_failure: true
+      - step: _5
+        allow_failure: true
+    command: web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases
+  - label: Copy to deploy bucket
+    key: _8
+    depends_on:
+      - step: _5
+    command: web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor
+  - label: Update checkpoint
+    key: _9
+    depends_on:
+      - step: _8
+    command: production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"
+  - trigger: web-deploy
+    label: Deploy to tech
+    key: _10
+    depends_on:
+      - step: _8
+    build:
+      env:
+        FLAVOR: tech
+        RELEASE_PATH: some/path/
+  - trigger: web-deploy
+    label: Deploy to usertesting
+    key: _11
+    depends_on:
+      - step: _8
+    build:
+      env:
+        FLAVOR: usertesting
+        RELEASE_PATH: some/path/
+  - key: _12
+    depends_on:
+      - step: _9
+    block: Release editor
+"
+`;
+
 exports[`buildkite-graph general serialization simple dot 1`] = `
 "digraph \\"web-deploy\\" {
   graph [ compound =true ];
@@ -382,6 +675,22 @@ Object {
 }
 `;
 
+exports[`buildkite-graph general serialization simple json_depends_on 1`] = `
+Object {
+  "env": Object {
+    "DEBUG": "true",
+    "USE_COLOR": "1",
+  },
+  "steps": Array [
+    Object {
+      "command": "buildkite/deploy_web.sh",
+      "key": "_0",
+      "label": "Deploy",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph general serialization simple structure 1`] = `"* Deploy"`;
 
 exports[`buildkite-graph general serialization simple yaml 1`] = `
@@ -390,6 +699,17 @@ exports[`buildkite-graph general serialization simple yaml 1`] = `
   DEBUG: 'true'
 steps:
   - label: Deploy
+    command: buildkite/deploy_web.sh
+"
+`;
+
+exports[`buildkite-graph general serialization simple yaml_depends_on 1`] = `
+"env:
+  USE_COLOR: '1'
+  DEBUG: 'true'
+steps:
+  - label: Deploy
+    key: _0
     command: buildkite/deploy_web.sh
 "
 `;
@@ -430,6 +750,26 @@ Object {
 }
 `;
 
+exports[`buildkite-graph missing transitive steps get added to the graph json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "yarn",
+      "key": "_0",
+    },
+    Object {
+      "command": "yarn test",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph missing transitive steps get added to the graph structure 1`] = `
 "* <yarn>
 * [wait]
@@ -441,5 +781,16 @@ exports[`buildkite-graph missing transitive steps get added to the graph yaml 1`
   - command: yarn
   - wait: ~
   - command: yarn test
+"
+`;
+
+exports[`buildkite-graph missing transitive steps get added to the graph yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: yarn
+  - key: _1
+    depends_on:
+      - step: _0
+    command: yarn test
 "
 `;

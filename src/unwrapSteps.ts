@@ -1,9 +1,11 @@
 import { PotentialStep, Step } from './index';
 import { Conditional } from './conditional';
 
+export type StepCache = Map<Conditional<Step>, Step>;
+
 export async function unwrapSteps(
     steps: PotentialStep[],
-    cache: Map<Conditional<Step>, Step>,
+    cache: StepCache,
 ): Promise<Step[]> {
     const ret: Step[] = [];
     for (const s of steps) {

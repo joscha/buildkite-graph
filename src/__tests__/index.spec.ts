@@ -34,6 +34,13 @@ describe('buildkite-graph', () => {
             );
         });
 
+        it('only allows adding a step once', () => {
+            const step = new CommandStep('');
+            expect(() =>
+                new Pipeline('test').add(step).add(step),
+            ).toThrowError();
+        });
+
         createTest('env', () => [
             new Pipeline('whatever').env.set('COLOR', '1'),
         ]);

@@ -13,6 +13,7 @@ import {
     mapToObject,
 } from '../base';
 import { Retry, RetryImpl } from './command/retry';
+import { ToJsonSerializationOptions } from 'src';
 
 function assertTimeout(timeout: number): void {
     ow(timeout, ow.number.integerOrInfinite.positive);
@@ -75,11 +76,6 @@ const transformSkipValue = (
 export class CommandStep extends LabeledStep {
     public readonly command: Command[] = [];
     public readonly env: KeyValue<this>;
-
-    private _id?: string;
-    private get id(): string | undefined {
-        return this._id;
-    }
 
     private _parallelism?: number;
     private get parallelism(): number | undefined {
@@ -190,12 +186,6 @@ export class CommandStep extends LabeledStep {
         return this;
     }
 
-    withId(identifier: string): this {
-        ow(identifier, ow.string.nonEmpty);
-        this._id = identifier;
-        return this;
-    }
-
     withSoftFail(fail: ExitStatus | true): this {
         if (fail !== true) {
             ow(fail, exitStatusPredicate);
@@ -223,13 +213,14 @@ export class CommandStep extends LabeledStep {
         );
     }
 
-    async toJson(): Promise<object> {
+    async toJson(
+        opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    ): Promise<object> {
         /* eslint-disable @typescript-eslint/camelcase */
         return {
-            ...(await super.toJson()),
+            ...(await super.toJson(opts)),
             command: transformCommand(this.command),
             env: await (this.env as KeyValueImpl<this>).toJson(),
-            id: this._id,
             parallelism: this.parallelism,
             concurrency: this.concurrency,
             concurrency_group: this.concurrencyGroup,
