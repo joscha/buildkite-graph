@@ -1,5 +1,12 @@
 import ow from 'ow';
-import { PotentialStep, Serializable } from './index';
+import sortBy from 'lodash.sortby';
+import {
+    PotentialStep,
+    Serializable,
+    ToJsonSerializationOptions,
+} from './index';
+import uniqid from 'uniqid';
+import { unwrapSteps } from './unwrapSteps';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BaseStep {}
@@ -23,6 +30,40 @@ export abstract class Step implements BaseStep, Serializable {
      */
     public readonly effectDependencies: Set<PotentialStep> = new Set();
 
+    private _key?: string;
+
+    get key(): string {
+        this._key = this._key || uniqid();
+        return this._key;
+    }
+
+    private _allowDependencyFailure = false;
+    allowDependencyFailure(allow = true): this {
+        this._allowDependencyFailure = allow;
+        return this;
+    }
+
+    /**
+     * @deprecated
+     */
+    withId(identifier: string): this {
+        /* istanbul ignore next */
+        return this.withKey(identifier);
+    }
+
+    withKey(identifier: string): this {
+        ow(identifier, ow.string.nonEmpty);
+        this._key = identifier;
+        return this;
+    }
+
+    private assertEffectOrDependency(...steps: PotentialStep[]): void {
+        ow(steps, ow.array.ofType(ow.object.nonEmpty));
+        if (steps.includes(this)) {
+            throw new Error('Self-references are not supported');
+        }
+    }
+
     /**
      * This marks the given step or conditional as a dependency to the current
      * step.
@@ -31,7 +72,7 @@ export abstract class Step implements BaseStep, Serializable {
      * conditional will be trumped by the fact that the current step depends on it)
      */
     dependsOn(...steps: PotentialStep[]): this {
-        ow(steps, ow.array.ofType(ow.object.nonEmpty));
+        this.assertEffectOrDependency(...steps);
         // iterate in reverse so if dependencies are not added to the graph, yet
         // they will be added in the order they are given as dependencies
         for (let i = steps.length; i > 0; i--) {
@@ -43,11 +84,8 @@ export abstract class Step implements BaseStep, Serializable {
     }
 
     isEffectOf(...steps: PotentialStep[]): this {
-        ow(steps, ow.array.ofType(ow.object.nonEmpty));
+        this.assertEffectOrDependency(...steps);
         steps.forEach(s => {
-            if (s === this) {
-                throw new Error('Can not add itself as an effect dependency');
-            }
             this.effectDependencies.add(s);
             this.dependencies.delete(s);
         });
@@ -61,7 +99,34 @@ export abstract class Step implements BaseStep, Serializable {
         return this;
     }
 
-    abstract toJson(): Promise<object>;
+    async toJson(
+        opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    ): Promise<object> {
+        if (!opts.explicitDependencies) {
+            return {};
+        }
+        const dependsOn = sortBy(
+            (
+                await unwrapSteps(
+                    [...this.dependencies, ...this.effectDependencies],
+                    opts.cache,
+                )
+            ).map(s => ({
+                /* eslint-disable @typescript-eslint/camelcase */
+                step: s.key,
+                allow_failure: this._allowDependencyFailure
+                    ? undefined
+                    : this.always || undefined,
+            })),
+            'step',
+        );
+        /* eslint-disable @typescript-eslint/camelcase */
+        return {
+            key: this.key,
+            depends_on: dependsOn.length ? dependsOn : undefined,
+            allow_dependency_failure: this._allowDependencyFailure || undefined,
+        };
+    }
 }
 
 export class BranchLimitedStep extends Step {
@@ -72,12 +137,14 @@ export class BranchLimitedStep extends Step {
         this.branches.add(pattern);
         return this;
     }
-
-    async toJson(): Promise<object> {
+    async toJson(
+        opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    ): Promise<object> {
         return {
             branches: this.branches.size
                 ? [...this.branches].sort().join(' ')
                 : undefined,
+            ...(await super.toJson(opts)),
         };
     }
 }
@@ -94,10 +161,12 @@ export class LabeledStep extends BranchLimitedStep {
         return this;
     }
 
-    async toJson(): Promise<object> {
+    async toJson(
+        opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    ): Promise<object> {
         return {
             label: this.label,
-            ...(await super.toJson()),
+            ...(await super.toJson(opts)),
         };
     }
 }

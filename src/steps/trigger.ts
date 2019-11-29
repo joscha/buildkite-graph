@@ -1,4 +1,4 @@
-import { Pipeline, Serializable } from '../index';
+import { Pipeline, Serializable, ToJsonSerializationOptions } from '../index';
 import { LabeledStep } from '../base';
 import { Build, BuildImpl } from './trigger/build';
 
@@ -32,10 +32,12 @@ export class TriggerStep extends LabeledStep implements Serializable {
         return this.label || `[trigger ${this.trigger}]`;
     }
 
-    async toJson(): Promise<object> {
+    async toJson(
+        opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    ): Promise<object> {
         return {
             trigger: this.trigger,
-            ...(await super.toJson()),
+            ...(await super.toJson(opts)),
             async: this._async || undefined,
             build: await (this.build as BuildImpl<this>).toJson(),
         };

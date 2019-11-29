@@ -25,11 +25,34 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command agents json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "agents": Object {
+        "npm": "true",
+      },
+      "command": "noop",
+      "key": "_0",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command agents structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command agents yaml 1`] = `
 "steps:
   - command: noop
+    agents:
+      npm: 'true'
+"
+`;
+
+exports[`buildkite-graph Steps Command agents yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
     agents:
       npm: 'true'
 "
@@ -87,6 +110,36 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command artifact_paths json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "artifact_paths": Array [
+        "logs/**/*",
+        "coverage/**/*",
+      ],
+      "command": "noop",
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command artifact_paths json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "artifact_paths": Array [
+        "logs/**/*",
+        "coverage/**/*",
+      ],
+      "command": "noop",
+      "key": "_1",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command artifact_paths structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command artifact_paths structure 2`] = `"* <noop>"`;
@@ -103,6 +156,26 @@ exports[`buildkite-graph Steps Command artifact_paths yaml 1`] = `
 exports[`buildkite-graph Steps Command artifact_paths yaml 2`] = `
 "steps:
   - command: noop
+    artifact_paths:
+      - logs/**/*
+      - coverage/**/*
+"
+`;
+
+exports[`buildkite-graph Steps Command artifact_paths yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
+    artifact_paths:
+      - logs/**/*
+      - coverage/**/*
+"
+`;
+
+exports[`buildkite-graph Steps Command artifact_paths yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command: noop
     artifact_paths:
       - logs/**/*
       - coverage/**/*
@@ -132,11 +205,31 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command branches json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "branches": "!release/* master stable/*",
+      "command": "noop",
+      "key": "_0",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command branches structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command branches yaml 1`] = `
 "steps:
   - branches: '!release/* master stable/*'
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command branches yaml_depends_on 1`] = `
+"steps:
+  - branches: '!release/* master stable/*'
+    key: _0
     command: noop
 "
 `;
@@ -165,11 +258,33 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command concurrency json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "concurrency": 3,
+      "concurrency_group": "my-app/deploy",
+      "key": "_0",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command concurrency structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command concurrency yaml 1`] = `
 "steps:
   - command: noop
+    concurrency: 3
+    concurrency_group: my-app/deploy
+"
+`;
+
+exports[`buildkite-graph Steps Command concurrency yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
     concurrency: 3
     concurrency_group: my-app/deploy
 "
@@ -224,6 +339,47 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "command.sh",
+      "key": "_0",
+    },
+    Object {
+      "command": "echo This runs regardless of the success or failure",
+      "depends_on": Array [
+        Object {
+          "allow_failure": true,
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+    Object {
+      "command": "echo This runs regardless of the success or failure 2",
+      "depends_on": Array [
+        Object {
+          "allow_failure": true,
+          "step": "_0",
+        },
+      ],
+      "key": "_2",
+    },
+    Object {
+      "command": "echo This runs regardless of the success or failure 3",
+      "depends_on": Array [
+        Object {
+          "allow_failure": true,
+          "step": "_0",
+        },
+      ],
+      "key": "_3",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step structure 1`] = `
 "* <command.sh>
 * [wait; continues on failure]
@@ -240,6 +396,28 @@ exports[`buildkite-graph Steps Command continue on failure multiple subsequent a
   - command: echo This runs regardless of the success or failure
   - command: echo This runs regardless of the success or failure 2
   - command: echo This runs regardless of the success or failure 3
+"
+`;
+
+exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: command.sh
+  - key: _1
+    depends_on:
+      - step: _0
+        allow_failure: true
+    command: echo This runs regardless of the success or failure
+  - key: _2
+    depends_on:
+      - step: _0
+        allow_failure: true
+    command: echo This runs regardless of the success or failure 2
+  - key: _3
+    depends_on:
+      - step: _0
+        allow_failure: true
+    command: echo This runs regardless of the success or failure 3
 "
 `;
 
@@ -289,6 +467,36 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "command.sh",
+      "key": "_0",
+    },
+    Object {
+      "command": "echo This runs regardless of the success or failure",
+      "depends_on": Array [
+        Object {
+          "allow_failure": true,
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+    Object {
+      "command": "echo The command passed",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_2",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step structure 1`] = `
 "* <command.sh>
 * [wait; continues on failure]
@@ -305,6 +513,151 @@ exports[`buildkite-graph Steps Command continue on failure subsequent depending 
   - command: echo This runs regardless of the success or failure
   - wait: ~
   - command: echo The command passed
+"
+`;
+
+exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: command.sh
+  - key: _1
+    depends_on:
+      - step: _0
+        allow_failure: true
+    command: echo This runs regardless of the success or failure
+  - key: _2
+    depends_on:
+      - step: _0
+    command: echo The command passed
+"
+`;
+
+exports[`buildkite-graph Steps Command dependency failures dot 1`] = `
+"digraph \\"test\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<a.sh>\\" [ color = \\"grey\\" ];
+}
+
+subgraph cluster_1 {
+  graph [ color = \\"black\\" ];
+  \\"<b.sh>\\" [ color = \\"grey\\" ];
+  \\"<c.sh>\\" [ color = \\"grey\\" ];
+}
+
+  \\"<a.sh>\\";
+  \\"<b.sh>\\";
+  \\"<c.sh>\\";
+  \\"<a.sh>\\" -> \\"<b.sh>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"<a.sh>\\" -> \\"<c.sh>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+  \\"<a.sh>\\" -> \\"<c.sh>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command dependency failures json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a.sh",
+    },
+    Object {
+      "continue_on_failure": true,
+      "wait": null,
+    },
+    Object {
+      "command": "b.sh",
+    },
+    Object {
+      "command": "c.sh",
+    },
+    Object {
+      "command": "c.sh",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command dependency failures json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a.sh",
+      "key": "_0",
+    },
+    Object {
+      "allow_dependency_failure": true,
+      "command": "b.sh",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+    Object {
+      "command": "c.sh",
+      "depends_on": Array [
+        Object {
+          "allow_failure": true,
+          "step": "_0",
+        },
+      ],
+      "key": "_2",
+    },
+    Object {
+      "allow_dependency_failure": true,
+      "command": "c.sh",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_3",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command dependency failures structure 1`] = `
+"* <a.sh>
+* [wait; continues on failure]
+* <b.sh>
+* <c.sh>
+* <c.sh>"
+`;
+
+exports[`buildkite-graph Steps Command dependency failures yaml 1`] = `
+"steps:
+  - command: a.sh
+  - wait: ~
+    continue_on_failure: true
+  - command: b.sh
+  - command: c.sh
+  - command: c.sh
+"
+`;
+
+exports[`buildkite-graph Steps Command dependency failures yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: a.sh
+  - key: _1
+    depends_on:
+      - step: _0
+    allow_dependency_failure: true
+    command: b.sh
+  - key: _2
+    depends_on:
+      - step: _0
+        allow_failure: true
+    command: c.sh
+  - key: _3
+    depends_on:
+      - step: _0
+    allow_dependency_failure: true
+    command: c.sh
 "
 `;
 
@@ -334,6 +687,21 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command env json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "env": Object {
+        "DEBUG": "true",
+        "RAILS_ENV": "test",
+      },
+      "key": "_0",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command env structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command env yaml 1`] = `
@@ -345,7 +713,17 @@ exports[`buildkite-graph Steps Command env yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Steps Command id dot 1`] = `
+exports[`buildkite-graph Steps Command env yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
+    env:
+      RAILS_ENV: test
+      DEBUG: 'true'
+"
+`;
+
+exports[`buildkite-graph Steps Command key dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -357,23 +735,39 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Steps Command id json 1`] = `
+exports[`buildkite-graph Steps Command key json 1`] = `
 Object {
   "steps": Array [
     Object {
       "command": "noop",
-      "id": "my-id",
     },
   ],
 }
 `;
 
-exports[`buildkite-graph Steps Command id structure 1`] = `"* <noop>"`;
+exports[`buildkite-graph Steps Command key json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "my-key",
+    },
+  ],
+}
+`;
 
-exports[`buildkite-graph Steps Command id yaml 1`] = `
+exports[`buildkite-graph Steps Command key structure 1`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command key yaml 1`] = `
 "steps:
   - command: noop
-    id: my-id
+"
+`;
+
+exports[`buildkite-graph Steps Command key yaml_depends_on 1`] = `
+"steps:
+  - key: my-key
+    command: noop
 "
 `;
 
@@ -400,11 +794,31 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command label json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+      "label": "my label",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command label structure 1`] = `"* my label"`;
 
 exports[`buildkite-graph Steps Command label yaml 1`] = `
 "steps:
   - label: my label
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command label yaml_depends_on 1`] = `
+"steps:
+  - label: my label
+    key: _0
     command: noop
 "
 `;
@@ -454,6 +868,29 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command parallelism json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+      "parallelism": 123,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command parallelism json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_1",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command parallelism structure 1`] = `"* <noop> [x 123]"`;
 
 exports[`buildkite-graph Steps Command parallelism structure 2`] = `"* <noop>"`;
@@ -468,6 +905,21 @@ exports[`buildkite-graph Steps Command parallelism yaml 1`] = `
 exports[`buildkite-graph Steps Command parallelism yaml 2`] = `
 "steps:
   - command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command parallelism yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
+    parallelism: 123
+"
+`;
+
+exports[`buildkite-graph Steps Command parallelism yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command: noop
 "
 `;
 
@@ -509,11 +961,52 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command plugins json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+      "plugins": Array [
+        Object {
+          "bugcrowd/test-summary#v1.5.0": Object {
+            "inputs": Array [
+              Object {
+                "artifact_path": "web/target/htmllint-*.txt",
+                "label": ":htmllint: HTML lint",
+                "type": "oneline",
+              },
+            ],
+          },
+        },
+        Object {
+          "detect-clowns#v1.0.0": null,
+        },
+      ],
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command plugins structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command plugins yaml 1`] = `
 "steps:
   - command: noop
+    plugins:
+      - 'bugcrowd/test-summary#v1.5.0':
+          inputs:
+            - label: ':htmllint: HTML lint'
+              artifact_path: web/target/htmllint-*.txt
+              type: oneline
+      - 'detect-clowns#v1.0.0': ~
+"
+`;
+
+exports[`buildkite-graph Steps Command plugins yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
     plugins:
       - 'bugcrowd/test-summary#v1.5.0':
           inputs:
@@ -769,6 +1262,152 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command retry json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+      "retry": Object {
+        "automatic": true,
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command retry json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_1",
+      "retry": Object {
+        "automatic": Array [
+          Object {
+            "exit_status": "*",
+            "limit": 2,
+          },
+          Object {
+            "exit_status": 255,
+            "limit": 2,
+          },
+        ],
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command retry json_depends_on 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_2",
+      "retry": Object {
+        "manual": Object {
+          "allowed": false,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command retry json_depends_on 4`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_3",
+      "retry": Object {
+        "manual": Object {
+          "allowed": false,
+          "reason": "Sorry, you can't retry a deployment",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command retry json_depends_on 5`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_4",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command retry json_depends_on 6`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_5",
+      "retry": Object {
+        "manual": Object {
+          "permit_on_passed": true,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command retry json_depends_on 7`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_6",
+      "retry": Object {
+        "automatic": true,
+        "manual": Object {
+          "permit_on_passed": true,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command retry json_depends_on 8`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_7",
+      "retry": Object {
+        "automatic": Object {
+          "limit": 2,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command retry json_depends_on 9`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_8",
+      "retry": Object {
+        "automatic": Object {
+          "limit": 1,
+        },
+      },
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command retry structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command retry structure 2`] = `"* <noop>"`;
@@ -869,6 +1508,97 @@ exports[`buildkite-graph Steps Command retry yaml 9`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command retry yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
+    retry:
+      automatic: true
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command: noop
+    retry:
+      automatic:
+        - exit_status: '*'
+          limit: 2
+        - exit_status: 255
+          limit: 2
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_depends_on 3`] = `
+"steps:
+  - key: _2
+    command: noop
+    retry:
+      manual:
+        allowed: false
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_depends_on 4`] = `
+"steps:
+  - key: _3
+    command: noop
+    retry:
+      manual:
+        allowed: false
+        reason: 'Sorry, you can''t retry a deployment'
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_depends_on 5`] = `
+"steps:
+  - key: _4
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_depends_on 6`] = `
+"steps:
+  - key: _5
+    command: noop
+    retry:
+      manual:
+        permit_on_passed: true
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_depends_on 7`] = `
+"steps:
+  - key: _6
+    command: noop
+    retry:
+      manual:
+        permit_on_passed: true
+      automatic: true
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_depends_on 8`] = `
+"steps:
+  - key: _7
+    command: noop
+    retry:
+      automatic:
+        limit: 2
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_depends_on 9`] = `
+"steps:
+  - key: _8
+    command: noop
+    retry:
+      automatic:
+        limit: 1
+"
+`;
+
 exports[`buildkite-graph Steps Command skip function dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -937,6 +1667,41 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command skip function json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command skip function json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_1",
+      "skip": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command skip function json_depends_on 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_2",
+      "skip": "my reason",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command skip function structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command skip function structure 2`] = `"* <noop>"`;
@@ -959,6 +1724,29 @@ exports[`buildkite-graph Steps Command skip function yaml 2`] = `
 exports[`buildkite-graph Steps Command skip function yaml 3`] = `
 "steps:
   - command: noop
+    skip: my reason
+"
+`;
+
+exports[`buildkite-graph Steps Command skip function yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command skip function yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command: noop
+    skip: true
+"
+`;
+
+exports[`buildkite-graph Steps Command skip function yaml_depends_on 3`] = `
+"steps:
+  - key: _2
+    command: noop
     skip: my reason
 "
 `;
@@ -1031,6 +1819,41 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command skip value json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command skip value json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_1",
+      "skip": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command skip value json_depends_on 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_2",
+      "skip": "my reason",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command skip value structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command skip value structure 2`] = `"* <noop>"`;
@@ -1053,6 +1876,29 @@ exports[`buildkite-graph Steps Command skip value yaml 2`] = `
 exports[`buildkite-graph Steps Command skip value yaml 3`] = `
 "steps:
   - command: noop
+    skip: my reason
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command: noop
+    skip: true
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value yaml_depends_on 3`] = `
+"steps:
+  - key: _2
+    command: noop
     skip: my reason
 "
 `;
@@ -1103,6 +1949,30 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command soft_fail boolean json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+      "soft_fail": true,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command soft_fail boolean json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_1",
+      "soft_fail": true,
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command soft_fail boolean structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command soft_fail boolean structure 2`] = `"* <noop>"`;
@@ -1117,6 +1987,22 @@ exports[`buildkite-graph Steps Command soft_fail boolean yaml 1`] = `
 exports[`buildkite-graph Steps Command soft_fail boolean yaml 2`] = `
 "steps:
   - command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph Steps Command soft_fail boolean yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph Steps Command soft_fail boolean yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command: noop
     soft_fail: true
 "
 `;
@@ -1151,11 +2037,40 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command soft_fail multiple json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+      "soft_fail": Array [
+        Object {
+          "exit_status": 1,
+        },
+        Object {
+          "exit_status": -127,
+        },
+      ],
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command soft_fail multiple structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command soft_fail multiple yaml 1`] = `
 "steps:
   - command: noop
+    soft_fail:
+      - exit_status: 1
+      - exit_status: -127
+"
+`;
+
+exports[`buildkite-graph Steps Command soft_fail multiple yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
     soft_fail:
       - exit_status: 1
       - exit_status: -127
@@ -1185,11 +2100,31 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command soft_fail star json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+      "soft_fail": true,
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command soft_fail star structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command soft_fail star yaml 1`] = `
 "steps:
   - command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph Steps Command soft_fail star yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
     soft_fail: true
 "
 `;
@@ -1241,6 +2176,31 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command step addition json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command step addition json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "",
+      "key": "_1",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command step addition structure 1`] = `"* <yarn && yarn test>"`;
 
 exports[`buildkite-graph Steps Command step addition structure 2`] = `"* <(empty)>"`;
@@ -1256,6 +2216,22 @@ exports[`buildkite-graph Steps Command step addition yaml 1`] = `
 exports[`buildkite-graph Steps Command step addition yaml 2`] = `
 "steps:
   - command: ''
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command: ''
 "
 `;
 
@@ -1281,11 +2257,29 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command timeouts can be infinite json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "key": "_0",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command timeouts can be infinite structure 1`] = `"* <noop>"`;
 
 exports[`buildkite-graph Steps Command timeouts can be infinite yaml 1`] = `
 "steps:
   - command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command timeouts can be infinite yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noop
 "
 `;
 
@@ -1315,11 +2309,36 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn install",
+        "yarn test",
+      ],
+      "key": "_0",
+      "timeout_in_minutes": 20,
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total structure 1`] = `"* <yarn install && yarn test>"`;
 
 exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total yaml 1`] = `
 "steps:
   - command:
+      - yarn install
+      - yarn test
+    timeout_in_minutes: 20
+"
+`;
+
+exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command:
       - yarn install
       - yarn test
     timeout_in_minutes: 20
@@ -1351,11 +2370,34 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn install",
+        "yarn test",
+      ],
+      "key": "_0",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others structure 1`] = `"* <yarn install && yarn test>"`;
 
 exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others yaml 1`] = `
 "steps:
   - command:
+      - yarn install
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command:
       - yarn install
       - yarn test
 "
@@ -1387,6 +2429,21 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn install",
+        "yarn test",
+      ],
+      "key": "_0",
+      "timeout_in_minutes": 2,
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands structure 1`] = `"* <yarn install && yarn test>"`;
 
 exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands yaml 1`] = `
@@ -1398,58 +2455,13 @@ exports[`buildkite-graph Steps Command timeouts step timeout total trumps comman
 "
 `;
 
-exports[`buildkite-graph Steps dependencies can depend on itself to produce wait dot 1`] = `
-"digraph \\"whatever\\" {
-  graph [ compound =true ];
-subgraph cluster_0 {
-  graph [ color = \\"black\\" ];
-  \\"<a>\\" [ color = \\"grey\\" ];
-  \\"<b>\\" [ color = \\"grey\\" ];
-}
-
-subgraph cluster_1 {
-  graph [ color = \\"black\\" ];
-  \\"<c>\\" [ color = \\"grey\\" ];
-}
-
-  \\"<c>\\";
-  \\"<c>\\" -> \\"<c>\\" [ ltail = \\"cluster_0\\", lhead = \\"cluster_1\\" ];
-}
-"
-`;
-
-exports[`buildkite-graph Steps dependencies can depend on itself to produce wait json 1`] = `
-Object {
-  "steps": Array [
-    Object {
-      "command": "a",
-    },
-    Object {
-      "command": "b",
-    },
-    Object {
-      "wait": null,
-    },
-    Object {
-      "command": "c",
-    },
-  ],
-}
-`;
-
-exports[`buildkite-graph Steps dependencies can depend on itself to produce wait structure 1`] = `
-"* <a>
-* <b>
-* [wait]
-* <c>"
-`;
-
-exports[`buildkite-graph Steps dependencies can depend on itself to produce wait yaml 1`] = `
+exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands yaml_depends_on 1`] = `
 "steps:
-  - command: a
-  - command: b
-  - wait: ~
-  - command: c
+  - key: _0
+    command:
+      - yarn install
+      - yarn test
+    timeout_in_minutes: 2
 "
 `;
 
@@ -1537,6 +2549,60 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps dependencies step dependency json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+      "key": "_0",
+    },
+    Object {
+      "command": "b",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps dependencies step dependency json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+      "key": "_2",
+    },
+    Object {
+      "command": "b",
+      "key": "_3",
+    },
+    Object {
+      "command": "c",
+      "key": "_4",
+    },
+    Object {
+      "command": "d",
+      "depends_on": Array [
+        Object {
+          "step": "_2",
+        },
+        Object {
+          "step": "_3",
+        },
+        Object {
+          "step": "_4",
+        },
+      ],
+      "key": "_5",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps dependencies step dependency structure 1`] = `
 "* <a>
 * [wait]
@@ -1566,5 +2632,33 @@ exports[`buildkite-graph Steps dependencies step dependency yaml 2`] = `
   - command: c
   - wait: ~
   - command: d
+"
+`;
+
+exports[`buildkite-graph Steps dependencies step dependency yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: a
+  - key: _1
+    depends_on:
+      - step: _0
+    command: b
+"
+`;
+
+exports[`buildkite-graph Steps dependencies step dependency yaml_depends_on 2`] = `
+"steps:
+  - key: _2
+    command: a
+  - key: _3
+    command: b
+  - key: _4
+    command: c
+  - key: _5
+    depends_on:
+      - step: _2
+      - step: _3
+      - step: _4
+    command: d
 "
 `;

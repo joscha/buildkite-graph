@@ -1,12 +1,12 @@
 import TopologicalSort from 'topological-sort';
 import { Step } from './base';
 import { Pipeline, PotentialStep } from './index';
-import { unwrapSteps } from './unwrapSteps';
+import { unwrapSteps, StepCache } from './unwrapSteps';
 import { Conditional } from './conditional';
 
 export async function sortedSteps(
     e: Pipeline,
-    cache: Map<Conditional<Step>, Step>,
+    cache: StepCache,
 ): Promise<Step[]> {
     const steps = await unwrapSteps(e.steps, cache);
     const sortOp = new TopologicalSort<Step, Step>(
@@ -52,23 +52,10 @@ export async function sortedSteps(
         const step = steps[i];
         const addDependency = (dependency: Step): void => {
             addToGraph(dependency);
-            if (dependency !== step) {
-                // not a self-reference, we just add the edge as usual
-                try {
-                    sortOp.addEdge(dependency, step);
-                } catch (e) {
-                    // edge was already added, that is fine
-                }
-            } else {
-                // self-reference, so we need to add a wait step in between later
-                if (i !== 0) {
-                    // we only do this if it is not the very first step
-                    try {
-                        sortOp.addEdge(steps[i - 1], step);
-                    } catch (e) {
-                        // edge was already added, that is fine
-                    }
-                }
+            try {
+                sortOp.addEdge(dependency, step);
+            } catch (e) {
+                // edge was already added, that is fine
             }
         };
         const iterateAndAddEffect = async (s: Step): Promise<void> => {

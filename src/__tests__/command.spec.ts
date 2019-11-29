@@ -16,13 +16,9 @@ describe('buildkite-graph', () => {
                     ),
                 ),
             ]);
-            createTest('can depend on itself to produce wait', () => {
+            it('can not depend on itself', () => {
                 const c = new CommandStep('c');
-                return new Pipeline('whatever').add(
-                    new CommandStep('a'),
-                    new CommandStep('b'),
-                    c.dependsOn(c),
-                );
+                expect(() => c.dependsOn(c)).toThrowError();
             });
         });
 
@@ -82,6 +78,23 @@ describe('buildkite-graph', () => {
                             .add(passed);
                     },
                 );
+            });
+
+            createTest('dependency failures', () => {
+                const a = new CommandStep('a.sh');
+                const b = new CommandStep('b.sh')
+                    .dependsOn(a)
+                    .allowDependencyFailure();
+                const c = new CommandStep('c.sh').dependsOn(a).alwaysExecute();
+                const d = new CommandStep('c.sh')
+                    .dependsOn(a)
+                    .alwaysExecute()
+                    .allowDependencyFailure();
+                return new Pipeline('test')
+                    .add(a)
+                    .add(b)
+                    .add(c)
+                    .add(d);
             });
 
             describe('timeouts', () => {
@@ -169,11 +182,11 @@ describe('buildkite-graph', () => {
                 ),
             );
 
-            createTest('id', () =>
+            createTest('key', () =>
                 new Pipeline('whatever').add(
                     new CommandStep('noop')
-                        .withId('my-id-overridden')
-                        .withId('my-id'),
+                        .withKey('my-key-overridden')
+                        .withKey('my-key'),
                 ),
             );
 
@@ -274,7 +287,10 @@ describe('buildkite-graph', () => {
                 ),
                 new Pipeline('whatever').add(
                     new CommandStep('noop').retry.automatic(
-                        new Map<ExitStatus, number>([['*', 2], [255, 2]]),
+                        new Map<ExitStatus, number>([
+                            ['*', 2],
+                            [255, 2],
+                        ]),
                     ),
                 ),
                 new Pipeline('whatever').add(

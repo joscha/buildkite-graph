@@ -19,24 +19,23 @@ The main advantage of using this module is:
 ```ts
 const install = new Command('yarn', 2);
 
-const lint = new CommandStep([install, new Command('yarn lint', 1)]);
-
-const test = new CommandStep([install, new Command('yarn test', 2)]).dependsOn(
-    lint,
+const lint = new CommandStep([install, new Command('yarn lint', 1)]).withKey(
+    'lint',
 );
-const build = new CommandStep([
-    install,
-    new Command('yarn build', 5),
-]).dependsOn(lint);
-
+const test = new CommandStep([install, new Command('yarn test', 2)])
+    .withKey('test')
+    .dependsOn(lint);
+const build = new CommandStep([install, new Command('yarn build', 5)])
+    .withKey('build')
+    .dependsOn(lint);
 const integration = new CommandStep([
     install,
     new Command('yarn integration', 10),
-]).dependsOn(build);
+])
+    .withKey('integration-test')
+    .dependsOn(build);
 
 const pipeline = new Pipeline('My pipeline').add(test).add(integration);
-
-console.log(await new YamlSerializer().serialize(pipeline));
 ```
 
 > Do you see how we don't have to add the `lint` or `build`step? Because other steps depend on them, they will become part of the graph automatically in the right place. This allows you to define graphs with complex dependencies and only add the steps which have an important signal - no more manually adding auxiliary steps.
@@ -69,7 +68,49 @@ steps:
 
 > And did you also see how the timeouts for the steps are derived from the commands?
 
-and
+Since version 5 we also support the [new `depends_on` syntax](https://buildkite.com/changelog/84-introducing-pipeline-step-dependencies):
+
+```yaml
+steps:
+    - key: lint
+      command:
+          - yarn
+          - yarn lint
+      timeout_in_minutes: 3
+    - key: build
+      depends_on:
+          - step: lint
+      command:
+          - yarn
+          - yarn build
+      timeout_in_minutes: 7
+    - key: test
+      depends_on:
+          - step: lint
+      command:
+          - yarn
+          - yarn test
+      timeout_in_minutes: 4
+    - key: integration-test
+      depends_on:
+          - step: build
+      command:
+          - yarn
+          - yarn integration
+      timeout_in_minutes: 12
+```
+
+you can get this format by using a flag on the yaml serializer:
+
+```ts
+console.log(
+    await new YamlSerializer({ explicitDependencies: true }).serialize(
+        pipeline,
+    ),
+);
+```
+
+The same with graphviz:
 
 ```dot
 digraph "My pipeline" {

@@ -1,12 +1,16 @@
-import { Pipeline } from '../';
+import { Pipeline, SerializationOptions } from '../';
 import { Serializer } from '.';
 
+type JsonSerializationOptions = {
+    stringify?: boolean;
+} & SerializationOptions;
+
 export class JsonSerializer implements Serializer<object | string> {
-    constructor(private readonly stringify: boolean = false) {}
+    constructor(private readonly opts: JsonSerializationOptions = {}) {}
 
     async serialize(e: Pipeline): Promise<object | string> {
-        const serialized = JSON.stringify(await e.toJson());
+        const serialized = JSON.stringify(await e.toJson(this.opts));
         // Workaround to get rid of undefined values
-        return this.stringify ? serialized : JSON.parse(serialized);
+        return this.opts.stringify ? serialized : JSON.parse(serialized);
     }
 }
