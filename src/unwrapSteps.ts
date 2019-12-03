@@ -10,7 +10,7 @@ export async function unwrapSteps(
     const ret: Step[] = [];
     for (const s of steps) {
         if (s instanceof Conditional) {
-            if ((await s.accept()) === true) {
+            if ((await s.accept()) === true || cache.has(s)) {
                 let cond: Step;
                 if (cache.has(s)) {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

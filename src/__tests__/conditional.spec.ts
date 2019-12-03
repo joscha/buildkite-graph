@@ -371,6 +371,32 @@ describe('buildkite-graph', () => {
                     },
                     ['structure'],
                 );
+
+                createTest(
+                    'effects and conditionals have correct depends_on',
+                    () => {
+                        const p = new Pipeline('x');
+                        const buildConditional = new MyConditional(
+                            () => new CommandStep('build app').withKey('build'),
+                            false,
+                        );
+                        p.add(buildConditional);
+
+                        const deployStep = new CommandStep('deploy app')
+                            .withKey('deploy')
+                            .isEffectOf(buildConditional);
+                        p.add(deployStep);
+
+                        const testsUsingBuildArtifact = new CommandStep(
+                            'ssr tests',
+                        )
+                            .withKey('ssr-tests')
+                            .dependsOn(buildConditional);
+                        p.add(testsUsingBuildArtifact);
+                        return p;
+                    },
+                    ['yaml_depends_on'],
+                );
             });
         });
     });

@@ -235,6 +235,21 @@ exports[`buildkite-graph Steps Command async step creation yaml 2`] = `
 
 exports[`buildkite-graph Steps Command isEffectOf dependsOn is used after isEffectOf structure 1`] = `""`;
 
+exports[`buildkite-graph Steps Command isEffectOf effects and conditionals have correct depends_on yaml_depends_on 1`] = `
+"steps:
+  - key: build
+    command: build app
+  - key: deploy
+    depends_on:
+      - step: build
+    command: deploy app
+  - key: ssr-tests
+    depends_on:
+      - step: build
+    command: ssr tests
+"
+`;
+
 exports[`buildkite-graph Steps Command isEffectOf effects of effects will be added if first effect dependency is accepted structure 1`] = `
 "* <run tests>
 * [wait]
