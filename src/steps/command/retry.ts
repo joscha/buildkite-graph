@@ -7,6 +7,7 @@ type Statuses = boolean | number | Map<ExitStatus, number>;
 export interface Retry<T> {
     automatic(statuses: Statuses): T;
     manual(allowed: boolean, permitOnPassed?: boolean, reason?: string): T;
+    getAutomaticValue(): Map<ExitStatus, number>;
 }
 
 class RetryManual {
@@ -77,6 +78,17 @@ export class RetryImpl<T> extends Chainable<T>
 
     hasValue(): boolean {
         return !!(this._manual.hasValue() || this._automatic);
+    }
+
+    getAutomaticValue(): Map<ExitStatus, number> {
+        switch (typeof this._automatic) {
+            case 'boolean':
+                return this._automatic ? new Map([['*', 2]]) : new Map();
+            case 'number':
+                return new Map([['*', this._automatic]]);
+            default:
+                return this._automatic;
+        }
     }
 
     automatic(statuses: Statuses = true): T {

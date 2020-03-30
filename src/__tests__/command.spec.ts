@@ -327,6 +327,26 @@ describe('buildkite-graph', () => {
                     ),
                 ),
             ]);
+
+            describe('retry', () => {
+                it('is possible to read automatic retries', () => {
+                    expect(
+                        new CommandStep('noop').retry
+                            .automatic(true)
+                            .retry.getAutomaticValue(),
+                    ).toEqual(new Map([['*', 2]]));
+                    expect(
+                        new CommandStep('noop').retry
+                            .automatic(5)
+                            .retry.getAutomaticValue(),
+                    ).toEqual(new Map([['*', 5]]));
+                    expect(
+                        new CommandStep('noop').retry
+                            .automatic(new Map([[-1, 3]]))
+                            .retry.getAutomaticValue(),
+                    ).toEqual(new Map([[-1, 3]]));
+                });
+            });
         });
     });
 });
