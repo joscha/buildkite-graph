@@ -166,13 +166,23 @@ describe('buildkite-graph', () => {
                 ),
             );
 
-            createTest('concurrency', () =>
+            createTest('concurrency', () => [
                 new Pipeline('whatever').add(
                     new CommandStep('noop')
                         .withConcurrency(10, 'will/be/overridden')
                         .withConcurrency(3, 'my-app/deploy'),
                 ),
-            );
+                new Pipeline('whatever').add(
+                    new CommandStep('noop')
+                        .withConcurrencyMethod('eager')
+                        .withConcurrency(3, 'my-app/deploy'),
+                ),
+                new Pipeline('whatever').add(
+                    new CommandStep('noop')
+                        .withConcurrencyMethod('ordered')
+                        .withConcurrency(3, 'my-app/deploy'),
+                ),
+            ]);
 
             createTest('env', () =>
                 new Pipeline('whatever').add(

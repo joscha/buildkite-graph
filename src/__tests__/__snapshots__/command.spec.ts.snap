@@ -246,7 +246,56 @@ subgraph cluster_0 {
 "
 `;
 
+exports[`buildkite-graph Steps Command concurrency dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command concurrency dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
 exports[`buildkite-graph Steps Command concurrency json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "concurrency": 3,
+      "concurrency_group": "my-app/deploy",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command concurrency json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "concurrency": 3,
+      "concurrency_group": "my-app/deploy",
+      "concurrency_method": "eager",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command concurrency json 3`] = `
 Object {
   "steps": Array [
     Object {
@@ -271,9 +320,57 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command concurrency json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "concurrency": 3,
+      "concurrency_group": "my-app/deploy",
+      "concurrency_method": "eager",
+      "key": "_1",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command concurrency json_depends_on 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noop",
+      "concurrency": 3,
+      "concurrency_group": "my-app/deploy",
+      "key": "_2",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command concurrency structure 1`] = `"* <noop>"`;
 
+exports[`buildkite-graph Steps Command concurrency structure 2`] = `"* <noop>"`;
+
+exports[`buildkite-graph Steps Command concurrency structure 3`] = `"* <noop>"`;
+
 exports[`buildkite-graph Steps Command concurrency yaml 1`] = `
+"steps:
+  - command: noop
+    concurrency: 3
+    concurrency_group: my-app/deploy
+"
+`;
+
+exports[`buildkite-graph Steps Command concurrency yaml 2`] = `
+"steps:
+  - command: noop
+    concurrency: 3
+    concurrency_group: my-app/deploy
+    concurrency_method: eager
+"
+`;
+
+exports[`buildkite-graph Steps Command concurrency yaml 3`] = `
 "steps:
   - command: noop
     concurrency: 3
@@ -284,6 +381,25 @@ exports[`buildkite-graph Steps Command concurrency yaml 1`] = `
 exports[`buildkite-graph Steps Command concurrency yaml_depends_on 1`] = `
 "steps:
   - key: _0
+    command: noop
+    concurrency: 3
+    concurrency_group: my-app/deploy
+"
+`;
+
+exports[`buildkite-graph Steps Command concurrency yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command: noop
+    concurrency: 3
+    concurrency_group: my-app/deploy
+    concurrency_method: eager
+"
+`;
+
+exports[`buildkite-graph Steps Command concurrency yaml_depends_on 3`] = `
+"steps:
+  - key: _2
     command: noop
     concurrency: 3
     concurrency_group: my-app/deploy
