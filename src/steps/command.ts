@@ -73,6 +73,8 @@ const transformSkipValue = (
     return value || undefined;
 };
 
+type ConcurrencyMethod = 'eager' | 'ordered';
+
 export class CommandStep extends LabeledStep {
     public readonly command: Command[] = [];
     public readonly env: KeyValue<this>;
@@ -84,6 +86,12 @@ export class CommandStep extends LabeledStep {
 
     private concurrency?: number;
     private concurrencyGroup?: string;
+    private _concurrencyMethod?: ConcurrencyMethod;
+    private get concurrencyMethod(): ConcurrencyMethod | undefined {
+        return this._concurrencyMethod !== 'ordered'
+            ? this._concurrencyMethod
+            : undefined;
+    }
     private _artifactPaths: Set<string> = new Set();
     private _agents: Agents = new Map();
     get agents(): Agents {
@@ -186,6 +194,12 @@ export class CommandStep extends LabeledStep {
         return this;
     }
 
+    withConcurrencyMethod(method: ConcurrencyMethod): this {
+        ow(method, ow.string.oneOf(['eager', 'ordered']));
+        this._concurrencyMethod = method;
+        return this;
+    }
+
     withSoftFail(fail: ExitStatus | true): this {
         if (fail !== true) {
             ow(fail, exitStatusPredicate);
@@ -224,6 +238,7 @@ export class CommandStep extends LabeledStep {
             parallelism: this.parallelism,
             concurrency: this.concurrency,
             concurrency_group: this.concurrencyGroup,
+            concurrency_method: this.concurrencyMethod,
             artifact_paths: this._artifactPaths.size
                 ? Array.from(this._artifactPaths)
                 : undefined,
