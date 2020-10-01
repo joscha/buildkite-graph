@@ -219,24 +219,46 @@ describe('buildkite-graph', () => {
                 ),
             ]);
 
-            createTest('plugins', () =>
-                new Pipeline('whatever').add(
-                    new CommandStep('noop').plugins
-                        .add(
-                            new Plugin('bugcrowd/test-summary#v1.5.0', {
-                                inputs: [
-                                    {
-                                        label: ':htmllint: HTML lint',
-                                        artifact_path:
-                                            'web/target/htmllint-*.txt',
-                                        type: 'oneline',
-                                    },
-                                ],
-                            }),
-                        )
-                        .plugins.add(new Plugin('detect-clowns#v1.0.0')),
-                ),
-            );
+            describe('plugins', () => {
+                const plugins = [
+                    new Plugin('bugcrowd/test-summary#v1.5.0', {
+                        inputs: [
+                            {
+                                label: ':htmllint: HTML lint',
+                                artifact_path: 'web/target/htmllint-*.txt',
+                                type: 'oneline',
+                            },
+                        ],
+                    }),
+                    new Plugin('detect-clowns#v1.0.0'),
+                ];
+                const stepWithPlugins = new CommandStep('noop').plugins
+                    .add(plugins[0])
+                    .plugins.add(plugins[1]);
+
+                createTest('add plugins', () =>
+                    new Pipeline('whatever').add(stepWithPlugins),
+                );
+
+                it.each([
+                    {
+                        predicate: (plugin: Plugin) =>
+                            plugin.pluginNameOrPath.includes('bugcrowd'),
+                        expected: plugins[0],
+                    },
+                    {
+                        predicate: (plugin: Plugin) =>
+                            plugin.pluginNameOrPath.includes(
+                                'NONEXISTENT_NAME',
+                            ),
+                        expected: undefined,
+                    },
+                ])('get plugins', ({ predicate, expected }) => {
+                    expect(stepWithPlugins.plugins.get(predicate)).toBe(
+                        expected,
+                    );
+                });
+            });
 
             describe('soft_fail', () => {
                 createTest('boolean', () => [

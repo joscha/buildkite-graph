@@ -1039,7 +1039,7 @@ exports[`buildkite-graph Steps Command parallelism yaml_depends_on 2`] = `
 "
 `;
 
-exports[`buildkite-graph Steps Command plugins dot 1`] = `
+exports[`buildkite-graph Steps Command plugins add plugins dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
 subgraph cluster_0 {
@@ -1051,7 +1051,7 @@ subgraph cluster_0 {
 "
 `;
 
-exports[`buildkite-graph Steps Command plugins json 1`] = `
+exports[`buildkite-graph Steps Command plugins add plugins json 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -1077,7 +1077,7 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Steps Command plugins json_depends_on 1`] = `
+exports[`buildkite-graph Steps Command plugins add plugins json_depends_on 1`] = `
 Object {
   "steps": Array [
     Object {
@@ -1104,9 +1104,9 @@ Object {
 }
 `;
 
-exports[`buildkite-graph Steps Command plugins structure 1`] = `"* <noop>"`;
+exports[`buildkite-graph Steps Command plugins add plugins structure 1`] = `"* <noop>"`;
 
-exports[`buildkite-graph Steps Command plugins yaml 1`] = `
+exports[`buildkite-graph Steps Command plugins add plugins yaml 1`] = `
 "steps:
   - command: noop
     plugins:
@@ -1119,7 +1119,7 @@ exports[`buildkite-graph Steps Command plugins yaml 1`] = `
 "
 `;
 
-exports[`buildkite-graph Steps Command plugins yaml_depends_on 1`] = `
+exports[`buildkite-graph Steps Command plugins add plugins yaml_depends_on 1`] = `
 "steps:
   - key: _0
     command: noop
