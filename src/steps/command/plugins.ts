@@ -12,6 +12,8 @@ export class Plugin {
 
 export interface Plugins<T> {
     add(plugin: Plugin): T;
+    /** Get the first plugin that matches the given predicate */
+    get(predicate: (plugin: Plugin) => boolean): Plugin | undefined;
 }
 
 export function transformPlugins(value: PluginsImpl<any>): object | undefined {
@@ -32,5 +34,9 @@ export class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
     add(plugin: Plugin): T {
         this.plugins.push(plugin);
         return this.parent;
+    }
+    
+    get(predicate: (plugin: Plugin) => boolean): Plugin | undefined {
+        return this.plugins.find(predicate);
     }
 }
