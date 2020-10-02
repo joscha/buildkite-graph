@@ -11,6 +11,7 @@ export class Plugin {
 }
 
 export interface Plugins<T> {
+    readonly plugins: Plugin[];
     add(plugin: Plugin): T;
 }
 
