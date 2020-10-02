@@ -244,19 +244,24 @@ describe('buildkite-graph', () => {
                     {
                         predicate: (plugin: Plugin) =>
                             plugin.pluginNameOrPath.includes('bugcrowd'),
-                        expected: plugins[0],
+                        expected: [plugins[0]],
+                    },
+                    {
+                        predicate: (plugin: Plugin) =>
+                            plugin.pluginNameOrPath.includes('.0'),
+                        expected: plugins,
                     },
                     {
                         predicate: (plugin: Plugin) =>
                             plugin.pluginNameOrPath.includes(
                                 'NONEXISTENT_NAME',
                             ),
-                        expected: undefined,
+                        expected: [],
                     },
-                ])('get plugins', ({ predicate, expected }) => {
-                    expect(stepWithPlugins.plugins.get(predicate)).toBe(
-                        expected,
-                    );
+                ])('filter plugins', ({ predicate, expected }) => {
+                    expect(
+                        stepWithPlugins.plugins.filter(predicate),
+                    ).toMatchObject(expected);
                 });
             });
 
