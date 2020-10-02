@@ -13,7 +13,7 @@ export class Plugin {
 export interface Plugins<T> {
     add(plugin: Plugin): T;
     /** Return a list of plugins that match the given predicate */
-    filter(predicate: (plugin: Plugin) => boolean): Plugin[];
+    filter: Plugin[]['filter'];
 }
 
 export function transformPlugins(value: PluginsImpl<any>): object | undefined {
@@ -36,7 +36,9 @@ export class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
         return this.parent;
     }
 
-    filter(predicate: (plugin: Plugin) => boolean): Plugin[] {
-        return this.plugins.filter(predicate);
+    filter(
+        ...args: Parameters<Plugins<T>['filter']>
+    ): ReturnType<Plugins<T>['filter']> {
+        return this.plugins.filter(...args);
     }
 }
