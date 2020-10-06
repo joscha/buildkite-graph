@@ -61,6 +61,6 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/joscha/buildkite-graph.git"
+        "url": "git@github.com:joscha/buildkite-graph.git"
     }
 }
