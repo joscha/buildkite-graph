@@ -90,11 +90,7 @@ describe('buildkite-graph', () => {
                     .dependsOn(a)
                     .alwaysExecute()
                     .allowDependencyFailure();
-                return new Pipeline('test')
-                    .add(a)
-                    .add(b)
-                    .add(c)
-                    .add(d);
+                return new Pipeline('test').add(a).add(b).add(c).add(d);
             });
 
             describe('timeouts', () => {
@@ -305,7 +301,7 @@ describe('buildkite-graph', () => {
                 ]);
             });
 
-            createTest('retry', () => [
+            createTest.only('retry', () => [
                 new Pipeline('whatever').add(
                     new CommandStep('noop').retry.automatic(true),
                 ),

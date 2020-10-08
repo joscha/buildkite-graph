@@ -45,7 +45,7 @@ const transformCommand = (value: Command[]): undefined | string | string[] => {
     if (!value || value.length === 0) {
         return undefined;
     }
-    return value.length === 1 ? value[0].command : value.map(c => c.command);
+    return value.length === 1 ? value[0].command : value.map((c) => c.command);
 };
 
 const transformSoftFail = (
@@ -56,8 +56,7 @@ const transformSoftFail = (
     } else if (value.has('*')) {
         return true;
     } else {
-        return [...value].map(s => ({
-            // eslint-disable-next-line @typescript-eslint/camelcase
+        return [...value].map((s) => ({
             exit_status: s,
         }));
     }
@@ -120,7 +119,7 @@ export class CommandStep extends LabeledStep {
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
     private _softFail: Set<ExitStatus> = new Set();
     private _skip?: SkipValue | SkipFunction;
-    public readonly retry: Retry<CommandStep> = new RetryImpl(this);
+    public readonly retry: Retry<CommandStep>;
 
     constructor(plugin: Plugin, label?: string);
     constructor(command: string, label?: string);
@@ -132,6 +131,7 @@ export class CommandStep extends LabeledStep {
     ) {
         super();
         this.env = new KeyValueImpl(this);
+        this.retry = new RetryImpl(this);
         if (label) {
             this.withLabel(label);
         }
@@ -229,8 +229,7 @@ export class CommandStep extends LabeledStep {
 
     async toJson(
         opts: ToJsonSerializationOptions = { explicitDependencies: false },
-    ): Promise<object> {
-        /* eslint-disable @typescript-eslint/camelcase */
+    ): Promise<Record<string, unknown>> {
         return {
             ...(await super.toJson(opts)),
             command: transformCommand(this.command),

@@ -4,7 +4,7 @@ import { Chainable } from '../../base';
 export class Plugin {
     constructor(
         public readonly pluginNameOrPath: string,
-        public readonly configuration?: object,
+        public readonly configuration?: Record<string, unknown>,
     ) {
         ow(pluginNameOrPath, ow.string.not.empty);
     }
@@ -16,12 +16,14 @@ export interface Plugins<T> {
     filter: Plugin[]['filter'];
 }
 
-export function transformPlugins(value: PluginsImpl<any>): object | undefined {
+export function transformPlugins(
+    value: PluginsImpl<any>,
+): Record<string, unknown>[] | undefined {
     if (!value.plugins.length) {
         return undefined;
     }
 
-    return value.plugins.map(plugin => {
+    return value.plugins.map((plugin) => {
         return {
             [plugin.pluginNameOrPath]: plugin.configuration || null,
         };

@@ -85,7 +85,7 @@ export abstract class Step implements BaseStep, Serializable {
 
     isEffectOf(...steps: PotentialStep[]): this {
         this.assertEffectOrDependency(...steps);
-        steps.forEach(s => {
+        steps.forEach((s) => {
             this.effectDependencies.add(s);
             this.dependencies.delete(s);
         });
@@ -101,7 +101,7 @@ export abstract class Step implements BaseStep, Serializable {
 
     async toJson(
         opts: ToJsonSerializationOptions = { explicitDependencies: false },
-    ): Promise<object> {
+    ): Promise<Record<string, unknown>> {
         if (!opts.explicitDependencies) {
             return {};
         }
@@ -111,8 +111,7 @@ export abstract class Step implements BaseStep, Serializable {
                     [...this.dependencies, ...this.effectDependencies],
                     opts.cache,
                 )
-            ).map(s => ({
-                /* eslint-disable @typescript-eslint/camelcase */
+            ).map((s) => ({
                 step: s.key,
                 allow_failure: this._allowDependencyFailure
                     ? undefined
@@ -120,7 +119,6 @@ export abstract class Step implements BaseStep, Serializable {
             })),
             'step',
         );
-        /* eslint-disable @typescript-eslint/camelcase */
         return {
             key: this.key,
             depends_on: dependsOn.length ? dependsOn : undefined,
@@ -139,7 +137,7 @@ export class BranchLimitedStep extends Step {
     }
     async toJson(
         opts: ToJsonSerializationOptions = { explicitDependencies: false },
-    ): Promise<object> {
+    ): Promise<Record<string, unknown>> {
         return {
             branches: this.branches.size
                 ? [...this.branches].sort().join(' ')
@@ -163,7 +161,7 @@ export class LabeledStep extends BranchLimitedStep {
 
     async toJson(
         opts: ToJsonSerializationOptions = { explicitDependencies: false },
-    ): Promise<object> {
+    ): Promise<Record<string, unknown>> {
         return {
             label: this.label,
             ...(await super.toJson(opts)),

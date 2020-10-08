@@ -4,7 +4,9 @@ import { Serializer } from '.';
 import { JsonSerializer } from './json';
 
 export class YamlSerializer implements Serializer<string> {
-    private readonly jsonSerializer: Serializer<string | object>;
+    private readonly jsonSerializer: Serializer<
+        string | Record<string, unknown>
+    >;
 
     constructor(opts: SerializationOptions = {}) {
         this.jsonSerializer = new JsonSerializer({ ...opts, stringify: false });

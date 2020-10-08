@@ -505,12 +505,12 @@ exports[`buildkite-graph general serialization complex yaml 1`] = `
     continue_on_failure: true
   - label: Annotate failures
     plugins:
-      - 'bugcrowd/test-summary#v1.5.0':
+      - bugcrowd/test-summary#v1.5.0:
           inputs:
             - label: ':htmllint: HTML lint'
               artifact_path: web/target/htmllint-*.txt
               type: oneline
-      - 'detect-clowns#v1.0.0': ~
+      - detect-clowns#v1.0.0: ~
   - label: Upload coverage
     command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
   - wait: ~
@@ -570,12 +570,12 @@ exports[`buildkite-graph general serialization complex yaml_depends_on 1`] = `
       - step: _1
         allow_failure: true
     plugins:
-      - 'bugcrowd/test-summary#v1.5.0':
+      - bugcrowd/test-summary#v1.5.0:
           inputs:
             - label: ':htmllint: HTML lint'
               artifact_path: web/target/htmllint-*.txt
               type: oneline
-      - 'detect-clowns#v1.0.0': ~
+      - detect-clowns#v1.0.0: ~
   - label: Upload coverage
     key: _3
     depends_on:
