@@ -219,24 +219,38 @@ describe('buildkite-graph', () => {
                 ),
             ]);
 
-            createTest('plugins', () =>
-                new Pipeline('whatever').add(
-                    new CommandStep('noop').plugins
-                        .add(
-                            new Plugin('bugcrowd/test-summary#v1.5.0', {
-                                inputs: [
-                                    {
-                                        label: ':htmllint: HTML lint',
-                                        artifact_path:
-                                            'web/target/htmllint-*.txt',
-                                        type: 'oneline',
-                                    },
-                                ],
-                            }),
-                        )
-                        .plugins.add(new Plugin('detect-clowns#v1.0.0')),
-                ),
-            );
+            describe('plugins', () => {
+                let plugins: Plugin[];
+                let stepWithPlugins: CommandStep;
+
+                beforeEach(() => {
+                    plugins = [
+                        new Plugin('bugcrowd/test-summary#v1.5.0', {
+                            inputs: [
+                                {
+                                    label: ':htmllint: HTML lint',
+                                    artifact_path: 'web/target/htmllint-*.txt',
+                                    type: 'oneline',
+                                },
+                            ],
+                        }),
+                        new Plugin('detect-clowns#v1.0.0'),
+                    ];
+                    stepWithPlugins = new CommandStep('noop').plugins
+                        .add(plugins[0])
+                        .plugins.add(plugins[1]);
+                });
+
+                createTest('add plugins', () =>
+                    new Pipeline('whatever').add(stepWithPlugins),
+                );
+
+                it('is possible to query existing plugins', () => {
+                    expect(
+                        stepWithPlugins.plugins.filter(() => true),
+                    ).toMatchObject(plugins);
+                });
+            });
 
             describe('soft_fail', () => {
                 createTest('boolean', () => [
