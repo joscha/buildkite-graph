@@ -230,11 +230,13 @@ export class CommandStep extends LabeledStep {
     async toJson(
         opts: ToJsonSerializationOptions = { explicitDependencies: false },
     ): Promise<object> {
+        const env = await (this.env as KeyValueImpl<this>).toJson();
+        const retry = await (this.retry as RetryImpl<this>).toJson();
         /* eslint-disable @typescript-eslint/camelcase */
         return {
             ...(await super.toJson(opts)),
             command: transformCommand(this.command),
-            env: await (this.env as KeyValueImpl<this>).toJson(),
+            env,
             parallelism: this.parallelism,
             concurrency: this.concurrency,
             concurrency_group: this.concurrencyGroup,
@@ -247,7 +249,7 @@ export class CommandStep extends LabeledStep {
             plugins: transformPlugins(this.plugins as PluginsImpl<this>),
             soft_fail: transformSoftFail(this._softFail),
             skip: this._skip ? transformSkipValue(this._skip) : undefined,
-            retry: await (this.retry as RetryImpl<this>).toJson(),
+            retry,
         };
     }
 }
