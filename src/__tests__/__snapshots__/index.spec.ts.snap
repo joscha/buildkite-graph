@@ -310,22 +310,22 @@ Object {
   "steps": Array [
     Object {
       "command": "web/bin/buildkite/run_web_step.sh build editor",
-      "key": "_0",
+      "key": "_5",
       "label": "Build Editor",
     },
     Object {
       "command": "web/bin/buildkite/run_web_step.sh test editor",
-      "key": "_1",
+      "key": "_6",
       "label": "Test Editor",
     },
     Object {
       "depends_on": Array [
         Object {
           "allow_failure": true,
-          "step": "_1",
+          "step": "_6",
         },
       ],
-      "key": "_2",
+      "key": "_7",
       "label": "Annotate failures",
       "plugins": Array [
         Object {
@@ -349,20 +349,20 @@ Object {
       "depends_on": Array [
         Object {
           "allow_failure": true,
-          "step": "_1",
+          "step": "_6",
         },
       ],
-      "key": "_3",
+      "key": "_8",
       "label": "Upload coverage",
     },
     Object {
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests local editor chrome",
       "depends_on": Array [
         Object {
-          "step": "_0",
+          "step": "_5",
         },
       ],
-      "key": "_4",
+      "key": "_9",
       "label": "Integration tests",
       "parallelism": 8,
     },
@@ -370,10 +370,10 @@ Object {
       "command": "web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor safari",
       "depends_on": Array [
         Object {
-          "step": "_4",
+          "step": "_9",
         },
       ],
-      "key": "_5",
+      "key": "_10",
       "label": ":saucelabs: Integration tests",
       "parallelism": 8,
       "plugins": Array [
@@ -386,10 +386,10 @@ Object {
       "command": "web/bin/buildkite/run_web_step.sh run-visual-regression editor",
       "depends_on": Array [
         Object {
-          "step": "_4",
+          "step": "_9",
         },
       ],
-      "key": "_6",
+      "key": "_11",
       "label": "Visreg baseline update",
     },
     Object {
@@ -397,34 +397,34 @@ Object {
       "depends_on": Array [
         Object {
           "allow_failure": true,
-          "step": "_4",
+          "step": "_10",
         },
         Object {
           "allow_failure": true,
-          "step": "_5",
+          "step": "_9",
         },
       ],
-      "key": "_7",
+      "key": "_12",
       "label": "Annotate cucumber failures",
     },
     Object {
       "command": "web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor",
       "depends_on": Array [
         Object {
-          "step": "_5",
+          "step": "_10",
         },
       ],
-      "key": "_8",
+      "key": "_0",
       "label": "Copy to deploy bucket",
     },
     Object {
       "command": "production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"",
       "depends_on": Array [
         Object {
-          "step": "_8",
+          "step": "_0",
         },
       ],
-      "key": "_9",
+      "key": "_3",
       "label": "Update checkpoint",
     },
     Object {
@@ -436,10 +436,10 @@ Object {
       },
       "depends_on": Array [
         Object {
-          "step": "_8",
+          "step": "_0",
         },
       ],
-      "key": "_10",
+      "key": "_1",
       "label": "Deploy to tech",
       "trigger": "web-deploy",
     },
@@ -452,10 +452,10 @@ Object {
       },
       "depends_on": Array [
         Object {
-          "step": "_8",
+          "step": "_0",
         },
       ],
-      "key": "_11",
+      "key": "_2",
       "label": "Deploy to usertesting",
       "trigger": "web-deploy",
     },
@@ -463,10 +463,10 @@ Object {
       "block": "Release editor",
       "depends_on": Array [
         Object {
-          "step": "_9",
+          "step": "_3",
         },
       ],
-      "key": "_12",
+      "key": "_4",
     },
   ],
 }
@@ -505,12 +505,12 @@ exports[`buildkite-graph general serialization complex yaml 1`] = `
     continue_on_failure: true
   - label: Annotate failures
     plugins:
-      - 'bugcrowd/test-summary#v1.5.0':
+      - bugcrowd/test-summary#v1.5.0:
           inputs:
             - label: ':htmllint: HTML lint'
               artifact_path: web/target/htmllint-*.txt
               type: oneline
-      - 'detect-clowns#v1.0.0': ~
+      - detect-clowns#v1.0.0: ~
   - label: Upload coverage
     command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
   - wait: ~
@@ -559,41 +559,41 @@ exports[`buildkite-graph general serialization complex yaml 1`] = `
 exports[`buildkite-graph general serialization complex yaml_depends_on 1`] = `
 "steps:
   - label: Build Editor
-    key: _0
+    key: _5
     command: web/bin/buildkite/run_web_step.sh build editor
   - label: Test Editor
-    key: _1
+    key: _6
     command: web/bin/buildkite/run_web_step.sh test editor
   - label: Annotate failures
-    key: _2
+    key: _7
     depends_on:
-      - step: _1
+      - step: _6
         allow_failure: true
     plugins:
-      - 'bugcrowd/test-summary#v1.5.0':
+      - bugcrowd/test-summary#v1.5.0:
           inputs:
             - label: ':htmllint: HTML lint'
               artifact_path: web/target/htmllint-*.txt
               type: oneline
-      - 'detect-clowns#v1.0.0': ~
+      - detect-clowns#v1.0.0: ~
   - label: Upload coverage
-    key: _3
+    key: _8
     depends_on:
-      - step: _1
+      - step: _6
         allow_failure: true
     command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
   - label: Integration tests
-    key: _4
+    key: _9
     depends_on:
-      - step: _0
+      - step: _5
     command: >-
       web/bin/buildkite/run_web_step.sh run-integration-tests local editor
       chrome
     parallelism: 8
   - label: ':saucelabs: Integration tests'
-    key: _5
+    key: _10
     depends_on:
-      - step: _4
+      - step: _9
     command: >-
       web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
       safari
@@ -601,49 +601,49 @@ exports[`buildkite-graph general serialization complex yaml_depends_on 1`] = `
     plugins:
       - sauce-connect-plugin: ~
   - label: Visreg baseline update
-    key: _6
+    key: _11
     depends_on:
-      - step: _4
+      - step: _9
     command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
   - label: Annotate cucumber failures
-    key: _7
+    key: _12
     depends_on:
-      - step: _4
+      - step: _10
         allow_failure: true
-      - step: _5
+      - step: _9
         allow_failure: true
     command: web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases
   - label: Copy to deploy bucket
-    key: _8
+    key: _0
     depends_on:
-      - step: _5
+      - step: _10
     command: web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor
   - label: Update checkpoint
-    key: _9
+    key: _3
     depends_on:
-      - step: _8
+      - step: _0
     command: production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"
   - trigger: web-deploy
     label: Deploy to tech
-    key: _10
+    key: _1
     depends_on:
-      - step: _8
+      - step: _0
     build:
       env:
         FLAVOR: tech
         RELEASE_PATH: some/path/
   - trigger: web-deploy
     label: Deploy to usertesting
-    key: _11
+    key: _2
     depends_on:
-      - step: _8
+      - step: _0
     build:
       env:
         FLAVOR: usertesting
         RELEASE_PATH: some/path/
-  - key: _12
+  - key: _4
     depends_on:
-      - step: _9
+      - step: _3
     block: Release editor
 "
 `;

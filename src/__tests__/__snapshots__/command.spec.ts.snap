@@ -1110,12 +1110,12 @@ exports[`buildkite-graph Steps Command plugins add plugins yaml 1`] = `
 "steps:
   - command: noop
     plugins:
-      - 'bugcrowd/test-summary#v1.5.0':
+      - bugcrowd/test-summary#v1.5.0:
           inputs:
             - label: ':htmllint: HTML lint'
               artifact_path: web/target/htmllint-*.txt
               type: oneline
-      - 'detect-clowns#v1.0.0': ~
+      - detect-clowns#v1.0.0: ~
 "
 `;
 
@@ -1124,12 +1124,12 @@ exports[`buildkite-graph Steps Command plugins add plugins yaml_depends_on 1`] =
   - key: _0
     command: noop
     plugins:
-      - 'bugcrowd/test-summary#v1.5.0':
+      - bugcrowd/test-summary#v1.5.0:
           inputs:
             - label: ':htmllint: HTML lint'
               artifact_path: web/target/htmllint-*.txt
               type: oneline
-      - 'detect-clowns#v1.0.0': ~
+      - detect-clowns#v1.0.0: ~
 "
 `;
 

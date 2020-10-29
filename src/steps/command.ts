@@ -45,7 +45,7 @@ const transformCommand = (value: Command[]): undefined | string | string[] => {
     if (!value || value.length === 0) {
         return undefined;
     }
-    return value.length === 1 ? value[0].command : value.map(c => c.command);
+    return value.length === 1 ? value[0].command : value.map((c) => c.command);
 };
 
 const transformSoftFail = (
@@ -56,7 +56,7 @@ const transformSoftFail = (
     } else if (value.has('*')) {
         return true;
     } else {
-        return [...value].map(s => ({
+        return [...value].map((s) => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
             exit_status: s,
         }));
@@ -230,11 +230,16 @@ export class CommandStep extends LabeledStep {
     async toJson(
         opts: ToJsonSerializationOptions = { explicitDependencies: false },
     ): Promise<object> {
+        // Need to pull out one of env/retry to get around a weird Typescript v4.0 bug.
+        // When both env and retry were specified inside the return object,
+        // the contents of retry were being copied to env.
+        const env = await (this.env as KeyValueImpl<this>).toJson();
+        const retry = await (this.retry as RetryImpl<this>).toJson();
         /* eslint-disable @typescript-eslint/camelcase */
         return {
             ...(await super.toJson(opts)),
             command: transformCommand(this.command),
-            env: await (this.env as KeyValueImpl<this>).toJson(),
+            env,
             parallelism: this.parallelism,
             concurrency: this.concurrency,
             concurrency_group: this.concurrencyGroup,
@@ -247,7 +252,7 @@ export class CommandStep extends LabeledStep {
             plugins: transformPlugins(this.plugins as PluginsImpl<this>),
             soft_fail: transformSoftFail(this._softFail),
             skip: this._skip ? transformSkipValue(this._skip) : undefined,
-            retry: await (this.retry as RetryImpl<this>).toJson(),
+            retry,
         };
     }
 }
