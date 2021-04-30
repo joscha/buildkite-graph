@@ -90,11 +90,7 @@ describe('buildkite-graph', () => {
                     .dependsOn(a)
                     .alwaysExecute()
                     .allowDependencyFailure();
-                return new Pipeline('test')
-                    .add(a)
-                    .add(b)
-                    .add(c)
-                    .add(d);
+                return new Pipeline('test').add(a).add(b).add(c).add(d);
             });
 
             describe('timeouts', () => {
@@ -369,6 +365,18 @@ describe('buildkite-graph', () => {
                             .automatic(new Map([[-1, 3]]))
                             .retry.getAutomaticValue(),
                     ).toEqual(new Map([[-1, 3]]));
+                });
+            });
+
+            describe('edge cases', () => {
+                it('throws if key is empty', () => {
+                    expect(() => new CommandStep('noop').withKey('')).toThrow();
+                });
+
+                it('throws if key is longer than 100 chars', () => {
+                    expect(() =>
+                        new CommandStep('noop').withKey('a'.repeat(101)),
+                    ).toThrow();
                 });
             });
         });
