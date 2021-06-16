@@ -37,6 +37,10 @@ export class Command {
     toString(): string {
         return this.command;
     }
+
+    serialize(): string {
+        return this.toString();
+    }
 }
 
 type Agents = Map<string, string>;
@@ -45,7 +49,9 @@ const transformCommand = (value: Command[]): undefined | string | string[] => {
     if (!value || value.length === 0) {
         return undefined;
     }
-    return value.length === 1 ? value[0].command : value.map((c) => c.command);
+    return value.length === 1
+        ? value[0].serialize()
+        : value.map((c) => c.serialize());
 };
 
 const transformSoftFail = (
