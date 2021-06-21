@@ -52,7 +52,7 @@ export abstract class Step implements BaseStep, Serializable {
     }
 
     withKey(identifier: string): this {
-        ow(identifier, ow.string.nonEmpty);
+        ow(identifier, ow.string.nonEmpty.maxLength(100));
         this._key = identifier;
         return this;
     }
@@ -85,7 +85,7 @@ export abstract class Step implements BaseStep, Serializable {
 
     isEffectOf(...steps: PotentialStep[]): this {
         this.assertEffectOrDependency(...steps);
-        steps.forEach(s => {
+        steps.forEach((s) => {
             this.effectDependencies.add(s);
             this.dependencies.delete(s);
         });
@@ -111,7 +111,7 @@ export abstract class Step implements BaseStep, Serializable {
                     [...this.dependencies, ...this.effectDependencies],
                     opts.cache,
                 )
-            ).map(s => ({
+            ).map((s) => ({
                 /* eslint-disable @typescript-eslint/camelcase */
                 step: s.key,
                 allow_failure: this._allowDependencyFailure
