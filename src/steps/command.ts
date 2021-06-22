@@ -38,21 +38,21 @@ export class Command {
         return this.command;
     }
 
-    serialize(): string {
+    protected serialize(): string {
         return this.toString();
+    }
+
+    static transformCommand(value: Command[]): undefined | string | string[] {
+        if (!value || value.length === 0) {
+            return undefined;
+        }
+        return value.length === 1
+            ? value[0].serialize()
+            : value.map((c) => c.serialize());
     }
 }
 
 type Agents = Map<string, string>;
-
-const transformCommand = (value: Command[]): undefined | string | string[] => {
-    if (!value || value.length === 0) {
-        return undefined;
-    }
-    return value.length === 1
-        ? value[0].serialize()
-        : value.map((c) => c.serialize());
-};
 
 const transformSoftFail = (
     value: Set<ExitStatus>,
@@ -244,7 +244,7 @@ export class CommandStep extends LabeledStep {
         /* eslint-disable @typescript-eslint/camelcase */
         return {
             ...(await super.toJson(opts)),
-            command: transformCommand(this.command),
+            command: Command.transformCommand(this.command),
             env,
             parallelism: this.parallelism,
             concurrency: this.concurrency,
