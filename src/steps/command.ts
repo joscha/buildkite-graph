@@ -28,7 +28,8 @@ function assertSkipValue(value: SkipValue): void {
 type SkipValue = boolean | string;
 export type SkipFunction = () => SkipValue;
 
-let transformCommandKey = Symbol();
+// TODO: remove cast when https://github.com/microsoft/TypeScript/pull/44512 landed
+const transformCommandKey: string = Symbol('transformCommand') as any;
 export class Command {
     constructor(public command: string, public timeout: number = Infinity) {
         ow(command, ow.string);
@@ -246,7 +247,7 @@ export class CommandStep extends LabeledStep {
         /* eslint-disable @typescript-eslint/camelcase */
         return {
             ...(await super.toJson(opts)),
-            command: Command.transformCommand(this.command),
+            command: Command[transformCommandKey](this.command),
             env,
             parallelism: this.parallelism,
             concurrency: this.concurrency,
