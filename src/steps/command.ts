@@ -28,22 +28,22 @@ function assertSkipValue(value: SkipValue): void {
 type SkipValue = boolean | string;
 export type SkipFunction = () => SkipValue;
 
-// TODO: remove cast when https://github.com/microsoft/TypeScript/pull/44512 landed
-const transformCommandKey: string = Symbol('transformCommand') as any;
+const transformCommandKey: unique symbol = Symbol('transformCommand');
 export class Command {
+    private static [transformCommandKey] = (
+        value: Command[],
+    ): undefined | string | string[] => {
+        if (!value || value.length === 0) {
+            return undefined;
+        }
+        return value.length === 1
+            ? value[0].serialize()
+            : value.map((c) => c.serialize());
+    };
+
     constructor(public command: string, public timeout: number = Infinity) {
         ow(command, ow.string);
         assertTimeout(timeout);
-        this[transformCommandKey] = (
-            value: Command[],
-        ): undefined | string | string[] => {
-            if (!value || value.length === 0) {
-                return undefined;
-            }
-            return value.length === 1
-                ? value[0].serialize()
-                : value.map((c) => c.serialize());
-        };
     }
 
     toString(): string {
