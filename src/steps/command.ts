@@ -125,6 +125,13 @@ export class CommandStep extends LabeledStep {
             }
         }
     }
+    private _priority?: number;
+    get priority(): number | undefined {
+        if (this._priority === 0) {
+            return undefined;
+        }
+        return this._priority;
+    }
 
     public readonly plugins: Plugins<this> = new PluginsImpl(this);
     private _softFail: Set<ExitStatus> = new Set();
@@ -172,6 +179,17 @@ export class CommandStep extends LabeledStep {
     withTimeout(timeout = Infinity): this {
         assertTimeout(timeout);
         this._timeout = timeout;
+        return this;
+    }
+
+    /**
+     * See: https://github.com/buildkite/docs/pull/1087
+     *
+     * @param priority the relative priority of this command step; defaults to 0
+     */
+    withPriority(priority = 0): this {
+        ow(priority, ow.number.integer);
+        this._priority = priority;
         return this;
     }
 
@@ -248,6 +266,7 @@ export class CommandStep extends LabeledStep {
         return {
             ...(await super.toJson(opts)),
             command: Command[transformCommandKey](this.command),
+            priority: this.priority,
             env,
             parallelism: this.parallelism,
             concurrency: this.concurrency,
