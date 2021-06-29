@@ -1659,7 +1659,7 @@ exports[`buildkite-graph Steps Command retry yaml 4`] = `
     retry:
       manual:
         allowed: false
-        reason: 'Sorry, you can''t retry a deployment'
+        reason: Sorry, you can't retry a deployment
 "
 `;
 
@@ -1745,7 +1745,7 @@ exports[`buildkite-graph Steps Command retry yaml_depends_on 4`] = `
     retry:
       manual:
         allowed: false
-        reason: 'Sorry, you can''t retry a deployment'
+        reason: Sorry, you can't retry a deployment
 "
 `;
 

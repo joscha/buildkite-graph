@@ -1,25 +1,14 @@
 {
-    "extends": [
-        "plugin:@typescript-eslint/recommended",
-        "prettier",
-        "prettier/@typescript-eslint"
+  "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      { "allowExpressions": true }
     ],
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-        "@typescript-eslint"
-    ],
-    "rules": {
-        "@typescript-eslint/explicit-function-return-type": [ "error", { "allowExpressions": true }],
-        "@typescript-eslint/explicit-member-accessibility": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-parameter-properties": "off"
-    },
-    "overrides": [
-        {
-            "files": ["**/__tests__/**"],
-            "rules": {
-                "@typescript-eslint/camelcase": "off"
-            }
-        }
-    ]
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-parameter-properties": "off"
+  }
 }

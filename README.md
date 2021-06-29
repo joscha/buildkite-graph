@@ -7,12 +7,12 @@ All standard Buildkite features are supported.
 
 The main advantage of using this module is:
 
--   Easy reuse and recombination of steps
--   Defining dependencies between steps explicitly
--   Wait steps are not defined explicitly and manually managed but derived from the graph, always providing the most optimized graph
--   Steps can be defined conditionally via an acceptor function, allowing for completely dynamic pipelines
--   The graph can be serialzed into [dot](https://www.graphviz.org/) format, allowing you to see the whole of the pipeline in one glance. Clusters denote which parts of the graph are dependendent.
--   Timeouts can be defined on a per-command basis, the step will then accumulate the timeouts accordingly
+- Easy reuse and recombination of steps
+- Defining dependencies between steps explicitly
+- Wait steps are not defined explicitly and manually managed but derived from the graph, always providing the most optimized graph
+- Steps can be defined conditionally via an acceptor function, allowing for completely dynamic pipelines
+- The graph can be serialzed into [dot](https://www.graphviz.org/) format, allowing you to see the whole of the pipeline in one glance. Clusters denote which parts of the graph are dependendent.
+- Timeouts can be defined on a per-command basis, the step will then accumulate the timeouts accordingly
 
 ## Example in a nutshell
 
@@ -20,20 +20,20 @@ The main advantage of using this module is:
 const install = new Command('yarn', 2);
 
 const lint = new CommandStep([install, new Command('yarn lint', 1)]).withKey(
-    'lint',
+  'lint',
 );
 const test = new CommandStep([install, new Command('yarn test', 2)])
-    .withKey('test')
-    .dependsOn(lint);
+  .withKey('test')
+  .dependsOn(lint);
 const build = new CommandStep([install, new Command('yarn build', 5)])
-    .withKey('build')
-    .dependsOn(lint);
+  .withKey('build')
+  .dependsOn(lint);
 const integration = new CommandStep([
-    install,
-    new Command('yarn integration', 10),
+  install,
+  new Command('yarn integration', 10),
 ])
-    .withKey('integration-test')
-    .dependsOn(build);
+  .withKey('integration-test')
+  .dependsOn(build);
 
 const pipeline = new Pipeline('My pipeline').add(test).add(integration);
 ```
@@ -44,24 +44,24 @@ will serialize to:
 
 ```yaml
 steps:
-    - command:
-          - yarn
-          - yarn lint
-      timeout_in_minutes: 3
-    - wait: ~
-    - command:
-          - yarn
-          - yarn build
-      timeout_in_minutes: 7
-    - command:
-          - yarn
-          - yarn test
-      timeout_in_minutes: 4
-    - wait: ~
-    - command:
-          - yarn
-          - yarn integration
-      timeout_in_minutes: 12
+  - command:
+      - yarn
+      - yarn lint
+    timeout_in_minutes: 3
+  - wait: ~
+  - command:
+      - yarn
+      - yarn build
+    timeout_in_minutes: 7
+  - command:
+      - yarn
+      - yarn test
+    timeout_in_minutes: 4
+  - wait: ~
+  - command:
+      - yarn
+      - yarn integration
+    timeout_in_minutes: 12
 ```
 
 > Did you see how the `wait` step got added for you? How cool is that, hey :)
@@ -72,41 +72,39 @@ Since version 5 we also support the [new `depends_on` syntax](https://buildkite.
 
 ```yaml
 steps:
-    - key: lint
-      command:
-          - yarn
-          - yarn lint
-      timeout_in_minutes: 3
-    - key: build
-      depends_on:
-          - step: lint
-      command:
-          - yarn
-          - yarn build
-      timeout_in_minutes: 7
-    - key: test
-      depends_on:
-          - step: lint
-      command:
-          - yarn
-          - yarn test
-      timeout_in_minutes: 4
-    - key: integration-test
-      depends_on:
-          - step: build
-      command:
-          - yarn
-          - yarn integration
-      timeout_in_minutes: 12
+  - key: lint
+    command:
+      - yarn
+      - yarn lint
+    timeout_in_minutes: 3
+  - key: build
+    depends_on:
+      - step: lint
+    command:
+      - yarn
+      - yarn build
+    timeout_in_minutes: 7
+  - key: test
+    depends_on:
+      - step: lint
+    command:
+      - yarn
+      - yarn test
+    timeout_in_minutes: 4
+  - key: integration-test
+    depends_on:
+      - step: build
+    command:
+      - yarn
+      - yarn integration
+    timeout_in_minutes: 12
 ```
 
 you can get this format by using a flag on the yaml serializer:
 
 ```ts
 console.log(
-    await new YamlSerializer({ explicitDependencies: true }).serialize(
-        pipeline,
-    ),
+  await new YamlSerializer({ explicitDependencies: true }).serialize(pipeline),
 );
 ```
 
