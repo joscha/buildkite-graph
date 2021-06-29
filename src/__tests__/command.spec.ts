@@ -275,6 +275,25 @@ describe('buildkite-graph', () => {
                 );
             });
 
+            describe('priority', () => {
+                createTest('default', () => [
+                    new Pipeline('whatever').add(
+                        new CommandStep('noopImportant').withPriority(100),
+                        new CommandStep('noop').withPriority(0),
+                        new CommandStep('noopUnimportant').withPriority(-100),
+                    ),
+                ]);
+
+                it('throws if not an integer', () => {
+                    expect(() =>
+                        new CommandStep('noop').withPriority(Infinity),
+                    ).toThrow();
+                    expect(() =>
+                        new CommandStep('noop').withPriority(1.234),
+                    ).toThrow();
+                });
+            });
+
             describe('skip', () => {
                 createTest('value', () => [
                     new Pipeline('whatever').add(

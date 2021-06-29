@@ -1133,6 +1133,88 @@ exports[`buildkite-graph Steps Command plugins add plugins yaml_depends_on 1`] =
 "
 `;
 
+exports[`buildkite-graph Steps Command priority default dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"<noopImportant>\\" [ color = \\"grey\\" ];
+  \\"<noop>\\" [ color = \\"grey\\" ];
+  \\"<noopUnimportant>\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Command priority default json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noopImportant",
+      "priority": 100,
+    },
+    Object {
+      "command": "noop",
+    },
+    Object {
+      "command": "noopUnimportant",
+      "priority": -100,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command priority default json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "noopImportant",
+      "key": "_0",
+      "priority": 100,
+    },
+    Object {
+      "command": "noop",
+      "key": "_1",
+    },
+    Object {
+      "command": "noopUnimportant",
+      "key": "_2",
+      "priority": -100,
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command priority default structure 1`] = `
+"* <noopImportant>
+* <noop>
+* <noopUnimportant>"
+`;
+
+exports[`buildkite-graph Steps Command priority default yaml 1`] = `
+"steps:
+  - command: noopImportant
+    priority: 100
+  - command: noop
+  - command: noopUnimportant
+    priority: -100
+"
+`;
+
+exports[`buildkite-graph Steps Command priority default yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: noopImportant
+    priority: 100
+  - key: _1
+    command: noop
+  - key: _2
+    command: noopUnimportant
+    priority: -100
+"
+`;
+
 exports[`buildkite-graph Steps Command retry dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
