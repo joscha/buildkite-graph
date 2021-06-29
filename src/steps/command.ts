@@ -28,7 +28,19 @@ function assertSkipValue(value: SkipValue): void {
 type SkipValue = boolean | string;
 export type SkipFunction = () => SkipValue;
 
+const transformCommandKey: unique symbol = Symbol('transformCommand');
 export class Command {
+    private static [transformCommandKey] = (
+        value: Command[],
+    ): undefined | string | string[] => {
+        if (!value || value.length === 0) {
+            return undefined;
+        }
+        return value.length === 1
+            ? value[0].serialize()
+            : value.map((c) => c.serialize());
+    };
+
     constructor(public command: string, public timeout: number = Infinity) {
         ow(command, ow.string);
         assertTimeout(timeout);
@@ -37,16 +49,13 @@ export class Command {
     toString(): string {
         return this.command;
     }
+
+    protected serialize(): string {
+        return this.toString();
+    }
 }
 
 type Agents = Map<string, string>;
-
-const transformCommand = (value: Command[]): undefined | string | string[] => {
-    if (!value || value.length === 0) {
-        return undefined;
-    }
-    return value.length === 1 ? value[0].command : value.map((c) => c.command);
-};
 
 const transformSoftFail = (
     value: Set<ExitStatus>,
@@ -238,7 +247,7 @@ export class CommandStep extends LabeledStep {
         /* eslint-disable @typescript-eslint/camelcase */
         return {
             ...(await super.toJson(opts)),
-            command: transformCommand(this.command),
+            command: Command[transformCommandKey](this.command),
             env,
             parallelism: this.parallelism,
             concurrency: this.concurrency,
