@@ -66,7 +66,6 @@ const transformSoftFail = (
         return true;
     } else {
         return [...value].map((s) => ({
-            // eslint-disable-next-line @typescript-eslint/camelcase
             exit_status: s,
         }));
     }
@@ -256,13 +255,12 @@ export class CommandStep extends LabeledStep {
 
     async toJson(
         opts: ToJsonSerializationOptions = { explicitDependencies: false },
-    ): Promise<object> {
+    ): Promise<Record<string, unknown>> {
         // Need to pull out one of env/retry to get around a weird Typescript v4.0 bug.
         // When both env and retry were specified inside the return object,
         // the contents of retry were being copied to env.
         const env = await (this.env as KeyValueImpl<this>).toJson();
         const retry = await (this.retry as RetryImpl<this>).toJson();
-        /* eslint-disable @typescript-eslint/camelcase */
         return {
             ...(await super.toJson(opts)),
             command: Command[transformCommandKey](this.command),

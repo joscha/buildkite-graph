@@ -20,7 +20,7 @@ export class BlockStep extends BranchLimitedStep {
 
     async toJson(
         opts: ToJsonSerializationOptions = { explicitDependencies: false },
-    ): Promise<object> {
+    ): Promise<Record<string, unknown>> {
         return {
             ...(await super.toJson(opts)),
             block: this.title,

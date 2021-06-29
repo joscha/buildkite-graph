@@ -352,7 +352,7 @@ describe('buildkite-graph', () => {
 
                         const tests = new MyConditional(
                             () =>
-                                new Promise<Step>(resolve =>
+                                new Promise<Step>((resolve) =>
                                     setTimeout(
                                         () =>
                                             resolve(

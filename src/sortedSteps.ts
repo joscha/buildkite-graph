@@ -10,7 +10,7 @@ export async function sortedSteps(
 ): Promise<Step[]> {
     const steps = await unwrapSteps(e.steps, cache);
     const sortOp = new TopologicalSort<Step, Step>(
-        new Map(steps.map(step => [step, step])),
+        new Map(steps.map((step) => [step, step])),
     );
 
     async function getAndCacheDependency(
@@ -110,6 +110,6 @@ export async function sortedSteps(
         }
     }
     return Array.from(sortOp.sort().values())
-        .map(i => i.node)
-        .filter(s => !removedEffects.has(s));
+        .map((i) => i.node)
+        .filter((s) => !removedEffects.has(s));
 }

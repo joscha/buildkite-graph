@@ -10,7 +10,7 @@ export interface Retry<T> {
     getAutomaticValue(): Map<ExitStatus, number>;
 }
 
-class RetryManual {
+class RetryManual implements Serializable {
     allowed = true;
     permitOnPassed = false;
     reason?: string;
@@ -19,13 +19,12 @@ class RetryManual {
         return !this.allowed || this.permitOnPassed;
     }
 
-    async toJson(): Promise<object | undefined> {
+    async toJson(): Promise<Record<string, unknown> | undefined> {
         if (!this.hasValue()) {
             return undefined;
         }
         return {
             allowed: this.allowed ? undefined : false,
-            // eslint-disable-next-line @typescript-eslint/camelcase
             permit_on_passed: this.permitOnPassed || undefined,
             reason: this.reason || undefined,
         };
@@ -54,16 +53,17 @@ const transformAutomatic = (
         };
     } else {
         return [...value.entries()].map(([s, limit]) => ({
-            // eslint-disable-next-line @typescript-eslint/camelcase
             exit_status: s,
             limit,
         }));
     }
 };
 
-export class RetryImpl<T> extends Chainable<T>
-    implements Retry<T>, Serializable {
-    async toJson(): Promise<object | undefined> {
+export class RetryImpl<T>
+    extends Chainable<T>
+    implements Retry<T>, Serializable
+{
+    async toJson(): Promise<Record<string, unknown> | undefined> {
         if (!this.hasValue()) {
             return undefined;
         }

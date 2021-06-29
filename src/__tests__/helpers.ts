@@ -44,7 +44,7 @@ export const createTest = (
     describeFn = describe,
 ): void =>
     describeFn(name, () => {
-        test.each(serializersToTest)('%s', async type => {
+        test.each(serializersToTest)('%s', async (type) => {
             resetUuidCounter();
             let entities = gen();
             if (!Array.isArray(entities)) {

@@ -41,8 +41,10 @@ export type ToJsonSerializationOptions =
           cache: StepCache;
       }
     | { explicitDependencies: false };
+
+type JSON = Record<string, unknown> | JSON[];
 export interface Serializable {
-    toJson(opts?: ToJsonSerializationOptions): Promise<object | undefined>;
+    toJson(opts?: ToJsonSerializationOptions): Promise<JSON | undefined>;
 }
 
 export type PotentialStep = Step | Conditional<Step>;
@@ -60,7 +62,7 @@ export class Pipeline implements Serializable {
     }
 
     add(...step: PotentialStep[]): this {
-        step.forEach(s => {
+        step.forEach((s) => {
             if (this.steps.includes(s)) {
                 throw new Error('Can not add the same step more than once');
             }
@@ -110,7 +112,7 @@ export class Pipeline implements Serializable {
 
     async toJson(
         opts: SerializationOptions = { explicitDependencies: false },
-    ): Promise<object> {
+    ): Promise<Record<string, unknown>> {
         const newOpts: ToJsonSerializationOptions = opts.explicitDependencies
             ? {
                   explicitDependencies: true,
@@ -123,7 +125,7 @@ export class Pipeline implements Serializable {
         return {
             env: await (this.env as KeyValueImpl<this>).toJson(),
             steps: await Promise.all(
-                (await this.toList(newOpts)).map(s => s.toJson(newOpts)),
+                (await this.toList(newOpts)).map((s) => s.toJson(newOpts)),
             ),
         };
     }

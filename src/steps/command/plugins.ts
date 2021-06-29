@@ -1,10 +1,11 @@
 import ow from 'ow';
 import { Chainable } from '../../base';
 
+type Configuration = Record<string, unknown>;
 export class Plugin {
     constructor(
         public readonly pluginNameOrPath: string,
-        public readonly configuration?: object,
+        public readonly configuration?: Configuration,
     ) {
         ow(pluginNameOrPath, ow.string.not.empty);
     }
@@ -16,12 +17,14 @@ export interface Plugins<T> {
     filter: Plugin[]['filter'];
 }
 
-export function transformPlugins(value: PluginsImpl<any>): object | undefined {
+export function transformPlugins(
+    value: PluginsImpl<any>,
+): Record<string, Configuration | null>[] | undefined {
     if (!value.plugins.length) {
         return undefined;
     }
 
-    return value.plugins.map(plugin => {
+    return value.plugins.map((plugin) => {
         return {
             [plugin.pluginNameOrPath]: plugin.configuration || null,
         };

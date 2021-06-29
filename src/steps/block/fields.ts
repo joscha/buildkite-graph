@@ -12,7 +12,7 @@ abstract class Field implements Serializable {
         ow(key, ow.string.matches(/[0-9a-z-\/]+/i));
     }
 
-    async toJson(): Promise<object> {
+    async toJson(): Promise<Record<string, unknown>> {
         return {
             key: this.key,
             hint: this.hint,
@@ -32,7 +32,7 @@ export class TextField extends Field {
         super(key, hint, required);
     }
 
-    async toJson(): Promise<object> {
+    override async toJson(): Promise<Record<string, unknown>> {
         return {
             ...(await super.toJson()),
             text: this.label,
@@ -49,7 +49,7 @@ export class Option implements Serializable {
         ow(value, ow.string.nonEmpty);
     }
 
-    async toJson(): Promise<object> {
+    async toJson(): Promise<Record<string, unknown>> {
         return {
             label: this.label,
             value: this.value,
@@ -92,10 +92,10 @@ export class SelectField extends Field {
         return this;
     }
 
-    async toJson(): Promise<object> {
+    override async toJson(): Promise<Record<string, unknown>> {
         return {
             ...(await super.toJson()),
-            options: await Promise.all(this.options.map(o => o.toJson())),
+            options: await Promise.all(this.options.map((o) => o.toJson())),
             select: this.label,
             default: this.defaultValue,
             multiple: this.multiple || undefined,
@@ -106,8 +106,10 @@ export interface Fields<T> {
     add(field: Field): T;
 }
 
-export class FieldsImpl<T> extends Chainable<T>
-    implements Fields<T>, Serializable {
+export class FieldsImpl<T>
+    extends Chainable<T>
+    implements Fields<T>, Serializable
+{
     fields: Map<string, Field> = new Map();
     add(field: Field): T {
         this.fields.set(field.key, field);
@@ -117,12 +119,12 @@ export class FieldsImpl<T> extends Chainable<T>
         return this.fields.size > 0;
     }
 
-    async toJson(): Promise<object | undefined> {
+    async toJson(): Promise<Record<string, unknown>[] | undefined> {
         if (!this.hasFields()) {
             return undefined;
         }
         return await Promise.all(
-            [...this.fields.values()].map(f => f.toJson()),
+            [...this.fields.values()].map((f) => f.toJson()),
         );
     }
 }

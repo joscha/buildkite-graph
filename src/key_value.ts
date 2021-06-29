@@ -6,8 +6,10 @@ export interface KeyValue<T> {
     set(name: string, value: string): T;
 }
 
-export class KeyValueImpl<T> extends Chainable<T>
-    implements KeyValue<T>, Serializable {
+export class KeyValueImpl<T>
+    extends Chainable<T>
+    implements KeyValue<T>, Serializable
+{
     public readonly vars: Map<string, string> = new Map();
 
     set(name: string, value: string): T {
@@ -17,7 +19,7 @@ export class KeyValueImpl<T> extends Chainable<T>
         return this.parent;
     }
 
-    async toJson(): Promise<object | undefined> {
+    async toJson(): Promise<Record<string, unknown> | undefined> {
         return this.vars.size ? mapToObject(this.vars) : undefined;
     }
 }
