@@ -3,45 +3,45 @@ import { Chainable } from '../../base';
 
 type Configuration = Record<string, unknown>;
 export class Plugin {
-    constructor(
-        public readonly pluginNameOrPath: string,
-        public readonly configuration?: Configuration,
-    ) {
-        ow(pluginNameOrPath, ow.string.not.empty);
-    }
+  constructor(
+    public readonly pluginNameOrPath: string,
+    public readonly configuration?: Configuration,
+  ) {
+    ow(pluginNameOrPath, ow.string.not.empty);
+  }
 }
 
 export interface Plugins<T> {
-    add(plugin: Plugin): T;
-    /** Return a list of plugins that match the given predicate */
-    filter: Plugin[]['filter'];
+  add(plugin: Plugin): T;
+  /** Return a list of plugins that match the given predicate */
+  filter: Plugin[]['filter'];
 }
 
 export function transformPlugins(
-    value: PluginsImpl<any>,
+  value: PluginsImpl<any>,
 ): Record<string, Configuration | null>[] | undefined {
-    if (!value.plugins.length) {
-        return undefined;
-    }
+  if (!value.plugins.length) {
+    return undefined;
+  }
 
-    return value.plugins.map((plugin) => {
-        return {
-            [plugin.pluginNameOrPath]: plugin.configuration || null,
-        };
-    });
+  return value.plugins.map((plugin) => {
+    return {
+      [plugin.pluginNameOrPath]: plugin.configuration || null,
+    };
+  });
 }
 
 export class PluginsImpl<T> extends Chainable<T> implements Plugins<T> {
-    public plugins: Plugin[] = [];
+  public plugins: Plugin[] = [];
 
-    add(plugin: Plugin): T {
-        this.plugins.push(plugin);
-        return this.parent;
-    }
+  add(plugin: Plugin): T {
+    this.plugins.push(plugin);
+    return this.parent;
+  }
 
-    filter(
-        ...args: Parameters<Plugins<T>['filter']>
-    ): ReturnType<Plugins<T>['filter']> {
-        return this.plugins.filter(...args);
-    }
+  filter(
+    ...args: Parameters<Plugins<T>['filter']>
+  ): ReturnType<Plugins<T>['filter']> {
+    return this.plugins.filter(...args);
+  }
 }

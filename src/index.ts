@@ -21,112 +21,112 @@ export { Plugin } from './steps/command/plugins';
 export { TriggerStep } from './steps/trigger';
 
 export const serializers = {
-    DotSerializer,
-    JsonSerializer,
-    StructuralSerializer,
-    YamlSerializer,
+  DotSerializer,
+  JsonSerializer,
+  StructuralSerializer,
+  YamlSerializer,
 };
 
 export type SerializationOptions = {
-    /**
-     * Whether to use the new depends_on syntax which allows the serializer to serialize into a graph with dependencies instead of a list with wait steps.
-     * More details here: https://buildkite.com/docs/pipelines/dependencies#defining-explicit-dependencies
-     */
-    explicitDependencies?: boolean;
+  /**
+   * Whether to use the new depends_on syntax which allows the serializer to serialize into a graph with dependencies instead of a list with wait steps.
+   * More details here: https://buildkite.com/docs/pipelines/dependencies#defining-explicit-dependencies
+   */
+  explicitDependencies?: boolean;
 };
 
 export type ToJsonSerializationOptions =
-    | {
-          explicitDependencies: true;
-          cache: StepCache;
-      }
-    | { explicitDependencies: false };
+  | {
+      explicitDependencies: true;
+      cache: StepCache;
+    }
+  | { explicitDependencies: false };
 
 type JSON = Record<string, unknown> | JSON[];
 export interface Serializable {
-    toJson(opts?: ToJsonSerializationOptions): Promise<JSON | undefined>;
+  toJson(opts?: ToJsonSerializationOptions): Promise<JSON | undefined>;
 }
 
 export type PotentialStep = Step | Conditional<Step>;
 
 export class Pipeline implements Serializable {
-    public readonly name: string;
+  public readonly name: string;
 
-    public readonly steps: PotentialStep[] = [];
+  public readonly steps: PotentialStep[] = [];
 
-    public readonly env: KeyValue<this>;
+  public readonly env: KeyValue<this>;
 
-    constructor(name: string) {
-        this.name = name;
-        this.env = new KeyValueImpl(this);
+  constructor(name: string) {
+    this.name = name;
+    this.env = new KeyValueImpl(this);
+  }
+
+  add(...step: PotentialStep[]): this {
+    step.forEach((s) => {
+      if (this.steps.includes(s)) {
+        throw new Error('Can not add the same step more than once');
+      }
+      this.steps.push(s);
+    });
+    return this;
+  }
+
+  slug(): string {
+    return slugify(this.name, {
+      lowercase: true,
+      customReplacements: [['_', '-']],
+      decamelize: false,
+    });
+  }
+
+  async toList(
+    opts: ToJsonSerializationOptions = { explicitDependencies: false },
+  ): Promise<(WaitStep | Step)[]> {
+    if (opts.explicitDependencies) {
+      const sorted = await sortedSteps(this, opts.cache);
+      return sorted;
     }
 
-    add(...step: PotentialStep[]): this {
-        step.forEach((s) => {
-            if (this.steps.includes(s)) {
-                throw new Error('Can not add the same step more than once');
-            }
-            this.steps.push(s);
-        });
-        return this;
-    }
-
-    slug(): string {
-        return slugify(this.name, {
-            lowercase: true,
-            customReplacements: [['_', '-']],
-            decamelize: false,
-        });
-    }
-
-    async toList(
-        opts: ToJsonSerializationOptions = { explicitDependencies: false },
-    ): Promise<(WaitStep | Step)[]> {
-        if (opts.explicitDependencies) {
-            const sorted = await sortedSteps(this, opts.cache);
-            return sorted;
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    const stepsWithBlocks = await sortedWithBlocks(this);
+    const steps: (WaitStep | Step)[] = [];
+    let lastWait: WaitStep | undefined = undefined;
+    for (const s of stepsWithBlocks) {
+      if (s === null) {
+        lastWait = new WaitStep();
+        steps.push(lastWait);
+      } else {
+        if (lastWait) {
+          if (s.always && !lastWait.continueOnFailure) {
+            lastWait.continueOnFailure = true;
+          } else if (lastWait.continueOnFailure && !s.always) {
+            lastWait = new WaitStep();
+            steps.push(lastWait);
+          }
         }
-
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        const stepsWithBlocks = await sortedWithBlocks(this);
-        const steps: (WaitStep | Step)[] = [];
-        let lastWait: WaitStep | undefined = undefined;
-        for (const s of stepsWithBlocks) {
-            if (s === null) {
-                lastWait = new WaitStep();
-                steps.push(lastWait);
-            } else {
-                if (lastWait) {
-                    if (s.always && !lastWait.continueOnFailure) {
-                        lastWait.continueOnFailure = true;
-                    } else if (lastWait.continueOnFailure && !s.always) {
-                        lastWait = new WaitStep();
-                        steps.push(lastWait);
-                    }
-                }
-                steps.push(s);
-            }
-        }
-        return steps;
+        steps.push(s);
+      }
     }
+    return steps;
+  }
 
-    async toJson(
-        opts: SerializationOptions = { explicitDependencies: false },
-    ): Promise<Record<string, unknown>> {
-        const newOpts: ToJsonSerializationOptions = opts.explicitDependencies
-            ? {
-                  explicitDependencies: true,
-                  cache: new Map(),
-              }
-            : {
-                  explicitDependencies: false,
-              };
-
-        return {
-            env: await (this.env as KeyValueImpl<this>).toJson(),
-            steps: await Promise.all(
-                (await this.toList(newOpts)).map((s) => s.toJson(newOpts)),
-            ),
+  async toJson(
+    opts: SerializationOptions = { explicitDependencies: false },
+  ): Promise<Record<string, unknown>> {
+    const newOpts: ToJsonSerializationOptions = opts.explicitDependencies
+      ? {
+          explicitDependencies: true,
+          cache: new Map(),
+        }
+      : {
+          explicitDependencies: false,
         };
-    }
+
+    return {
+      env: await (this.env as KeyValueImpl<this>).toJson(),
+      steps: await Promise.all(
+        (await this.toList(newOpts)).map((s) => s.toJson(newOpts)),
+      ),
+    };
+  }
 }

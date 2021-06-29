@@ -8,18 +8,18 @@ import { YamlSerializer } from '../src/serializers/yaml';
  * This Conditional will accept when there is at least one changed file ending in .feature
  */
 class FeatureFileChangedConditional<T extends Step> extends Conditional<T> {
-    accept() {
-        const changedFiles = execSync(
-            'git --no-pager diff master --name-only --no-renames',
-            { encoding: 'utf8' },
-        ).split(EOL);
-        for (const changedFile of changedFiles) {
-            if (extname(changedFile) === '.feature') {
-                return true;
-            }
-        }
-        return false;
+  accept() {
+    const changedFiles = execSync(
+      'git --no-pager diff master --name-only --no-renames',
+      { encoding: 'utf8' },
+    ).split(EOL);
+    for (const changedFile of changedFiles) {
+      if (extname(changedFile) === '.feature') {
+        return true;
+      }
     }
+    return false;
+  }
 }
 
 const install = new Command('yarn', 2);
@@ -27,18 +27,18 @@ const install = new Command('yarn', 2);
 const lint = new CommandStep([install, new Command('yarn lint', 1)]);
 
 const test = new CommandStep([install, new Command('yarn test', 2)]).dependsOn(
-    lint,
+  lint,
 );
 const build = new CommandStep([install, new Command('yarn build', 5)]);
 
 const integration = new CommandStep([
-    install,
-    new Command('yarn integration', 10),
+  install,
+  new Command('yarn integration', 10),
 ]).dependsOn(build);
 
 const pipeline = new Pipeline('My pipeline')
-    .add(test)
-    .add(new FeatureFileChangedConditional(integration));
+  .add(test)
+  .add(new FeatureFileChangedConditional(integration));
 
 console.log(await new YamlSerializer().serialize(pipeline));
 
