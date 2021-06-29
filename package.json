@@ -35,7 +35,7 @@
         "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "prettier": "prettier --write .",
         "preprepare": "rimraf dist/",
-        "prepare": "tsc",
+        "prepare": "husky install & tsc",
         "lint": "eslint --ext .ts src",
         "pretest": "prettier --check . && yarn lint",
         "test": "jest --ci --coverage",
