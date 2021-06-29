@@ -15,7 +15,7 @@ class RetryCommand extends Command {
     }
 }
 
-const install = new RetryCommand(1, new Command('yarn'));
+const install = new Command('yarn');
 
 const test = new CommandStep([
     install,
