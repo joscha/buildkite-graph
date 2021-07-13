@@ -13,7 +13,7 @@ import {
   mapToObject,
 } from '../base';
 import { Retry, RetryImpl } from './command/retry';
-import { ToJsonSerializationOptions } from 'src';
+import type { ToJsonSerializationOptions } from '../index';
 
 function assertTimeout(timeout: number): void {
   ow(timeout, ow.number.integerOrInfinite.positive);
