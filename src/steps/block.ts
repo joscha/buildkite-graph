@@ -1,7 +1,7 @@
 import ow from 'ow';
 import { BranchLimitedStep } from '../base';
 import { Fields, FieldsImpl } from './block/fields';
-import { ToJsonSerializationOptions } from 'src';
+import type { ToJsonSerializationOptions } from '../index';
 
 export class BlockStep extends BranchLimitedStep {
   private readonly title: string;
