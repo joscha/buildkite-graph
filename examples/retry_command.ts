@@ -6,7 +6,7 @@ class RetryCommand extends Command {
     super(command.toString(), command.timeout * (retries + 1));
   }
 
-  protected serialize(): string {
+  public serialize(): string {
     return new Array(this.retries + 1).fill(this.command).join(' || ');
   }
 
