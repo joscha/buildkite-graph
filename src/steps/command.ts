@@ -50,7 +50,7 @@ export class Command {
     return this.command;
   }
 
-  protected serialize(): string {
+  public serialize(): string {
     return this.toString();
   }
 }
