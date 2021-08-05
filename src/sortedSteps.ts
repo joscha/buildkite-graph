@@ -1,8 +1,8 @@
 import TopologicalSort from 'topological-sort';
 import { Step } from './base';
-import { Pipeline, PotentialStep } from './index';
+import { Pipeline } from './index';
 import { unwrapSteps, StepCache } from './unwrapSteps';
-import { Conditional } from './conditional';
+import { Conditional, getAndCacheDependency } from './conditional';
 
 export async function sortedSteps(
   e: Pipeline,
@@ -13,27 +13,6 @@ export async function sortedSteps(
     new Map(steps.map((step) => [step, step])),
   );
 
-  async function getAndCacheDependency(
-    potentialDependency: PotentialStep,
-  ): Promise<Step> {
-    if (potentialDependency instanceof Conditional) {
-      if (cache.has(potentialDependency)) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return cache.get(potentialDependency)!;
-      } else {
-        // in the case we have to unwrap the conditional we store it for later use
-        // otherwise the getter will be called many times, returning a new object each
-        // time which means evenm though multiple steps might depend on the same conditionals
-        // we would add a new step each time. Also, generating a step can be potentially expemnsive
-        // so we want to do this only once
-        const dependency = await potentialDependency.get();
-        cache.set(potentialDependency, dependency);
-        return dependency;
-      }
-    } else {
-      return potentialDependency;
-    }
-  }
   const inGraph = (s: Step): boolean => steps.indexOf(s) !== -1;
   const addToGraph = (s: Step): void => {
     if (!inGraph(s)) {
@@ -61,6 +40,7 @@ export async function sortedSteps(
     const iterateAndAddEffect = async (s: Step): Promise<void> => {
       for (const potentialEffectDependency of s.effectDependencies) {
         const dependency = await getAndCacheDependency(
+          cache,
           potentialEffectDependency,
         );
         if (potentialEffectDependency instanceof Conditional) {
@@ -95,7 +75,10 @@ export async function sortedSteps(
       for (const potentialDependency of [...step.dependencies]) {
         // when we depend on a conditional the acceptor of the conditional doesn't matter
         // we need to always get it and add it to the graph
-        const dependency = await getAndCacheDependency(potentialDependency);
+        const dependency = await getAndCacheDependency(
+          cache,
+          potentialDependency,
+        );
         addDependency(dependency);
         for (const removedEffectStep of [...removedEffects]) {
           removedEffects.delete(removedEffectStep);
