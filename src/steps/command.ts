@@ -84,7 +84,7 @@ const transformSkipValue = (
 type ConcurrencyMethod = 'eager' | 'ordered';
 
 export class CommandStep extends LabeledStep {
-  public readonly command: Command[] = [];
+  public command: Command[] = [];
   public readonly env: KeyValue<this>;
 
   private _parallelism?: number;

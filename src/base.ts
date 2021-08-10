@@ -20,7 +20,7 @@ export abstract class Step implements BaseStep, Serializable {
    * current step. Each of these will be marked as accepted in case
    * it is a Conditional and added to the graph as a side-effect.
    */
-  public readonly dependencies: Set<PotentialStep> = new Set();
+  public dependencies: Set<PotentialStep> = new Set();
 
   /**
    * A set of potential steps the current step is an effect of.

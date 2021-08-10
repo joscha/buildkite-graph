@@ -46,14 +46,13 @@ const integration = new CommandStep([
   new Command('yarn integration', 10),
 ]).dependsOn(build);
 
-const pipeline = new Pipeline('My pipeline')
-  .add(new TestConditional(test))
-  .add(integration);
+const conditional = new TestConditional(test);
+const pipeline = new Pipeline('My pipeline').add(conditional).add(integration);
 
-function mutator(entity: Entity): Entity {
+async function mutator<T extends Entity>(entity: T): Promise<T> {
   if (entity instanceof Command) {
     if (entity.timeout !== 0 && entity.timeout !== Infinity) {
-      return new RetryCommand(1, entity);
+      return new RetryCommand(1, entity) as any;
     }
   }
   return entity;

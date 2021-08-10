@@ -53,7 +53,7 @@ export type PotentialStep = Step | Conditional<Step>;
 export class Pipeline implements Serializable {
   public readonly name: string;
 
-  public readonly steps: PotentialStep[] = [];
+  public steps: PotentialStep[] = [];
 
   public readonly env: KeyValue<this>;
 

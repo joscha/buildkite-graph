@@ -1,62 +1,67 @@
 import { PotentialStep, Pipeline, Conditional, Command, CommandStep } from '.';
 import { getAndCacheDependency } from './conditional';
-
+import { cloneDeep } from 'lodash';
 export type Entity = Pipeline | PotentialStep | Command;
+
+export type MutatorFn = <T extends Entity>(entity: T) => Promise<T>;
 
 async function walkEntity<T extends Entity>(
   entity: T,
-  nodeCache: Map<any, any>,
-  mutator?: (entity: Entity) => any,
+  mutator?: MutatorFn,
+  nodeCache: Map<any, any> = new Map<any, any>(),
 ): Promise<T> {
+  if (!mutator) {
+    return entity;
+  }
+
   if (nodeCache.has(entity)) {
     return nodeCache.get(entity);
   }
 
-  const cache = new Map();
+  const conditionalCache = new Map();
 
   if (entity instanceof Conditional) {
     if (await entity.accept()) {
-      entity = <any>await getAndCacheDependency(cache, entity);
+      entity = <any>await getAndCacheDependency(conditionalCache, entity);
     } else {
       return entity;
     }
   }
 
   if (entity instanceof Pipeline) {
-    const steps = entity.steps;
-    steps.forEach(async (step, idx) => {
-      const newStep = await walkEntity(step, nodeCache, mutator);
-      steps[idx] = newStep;
-    });
+    const newSteps = [];
+
+    for (const step of entity.steps) {
+      let newStep = cloneDeep(step);
+      newStep = await walkEntity(newStep, mutator, nodeCache);
+      newSteps.push(newStep);
+    }
+    entity.steps = newSteps;
   } else if (entity instanceof CommandStep) {
-    const deps = entity.dependencies;
-    deps.forEach(async (dep) => {
-      const newDep = await walkEntity(dep, nodeCache, mutator);
-      if (deps.has(dep)) {
-        deps.delete(dep);
-        deps.add(newDep);
-      }
-    });
+    const newDeps: Set<PotentialStep> = new Set();
+    for (const dep of entity.dependencies) {
+      const newDep = await walkEntity(dep, mutator, nodeCache);
+      newDeps.add(newDep);
+    }
+    entity.dependencies = newDeps;
 
-    const commands = entity.command;
-    commands.forEach(async (command, idx) => {
-      commands[idx] = await walkEntity(command, nodeCache, mutator);
-    });
+    const newCommands: Command[] = [];
+    for (const command of entity.command) {
+      let newCommand = cloneDeep(command);
+      newCommand = await walkEntity(newCommand, mutator, nodeCache);
+      newCommands.push(newCommand);
+    }
+    entity.command = newCommands;
   }
 
-  if (mutator) {
-    const newEntity = mutator(entity);
-    nodeCache.set(entity, newEntity);
-    entity = newEntity;
-  }
+  let newEntity = cloneDeep(entity);
+  newEntity = await mutator(newEntity);
+  nodeCache.set(entity, newEntity);
+  entity = newEntity;
 
-  return entity;
+  return newEntity;
 }
 
-export async function walk(
-  p: Pipeline,
-  mutator: (entity: Entity) => Entity,
-): Promise<Pipeline> {
-  const nodeCache = new Map();
-  return walkEntity(p, nodeCache, mutator);
+export async function walk(p: Pipeline, mutator: MutatorFn): Promise<Pipeline> {
+  return walkEntity(p, mutator);
 }
