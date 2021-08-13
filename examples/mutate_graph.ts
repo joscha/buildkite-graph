@@ -5,9 +5,9 @@ import {
   Step,
   Conditional,
   walk,
+  evaluatePipeline
 } from '../src';
 import { YamlSerializer } from '../src/serializers/yaml';
-import { evaluatePipeline } from '../src/walker';
 
 class RetryCommand extends Command {
   constructor(private retries: number, command: Command) {
