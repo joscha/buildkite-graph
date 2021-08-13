@@ -5,9 +5,9 @@ import {
   Step,
   Conditional,
   walk,
-  Entity,
 } from '../src';
 import { YamlSerializer } from '../src/serializers/yaml';
+import { evaluatePipeline } from '../src/walker';
 
 class RetryCommand extends Command {
   constructor(private retries: number, command: Command) {
@@ -49,17 +49,18 @@ const integration = new CommandStep([
 const conditional = new TestConditional(test);
 const pipeline = new Pipeline('My pipeline').add(conditional).add(integration);
 
-async function mutator<T extends Entity>(entity: T): Promise<T> {
-  if (entity instanceof Command) {
-    if (entity.timeout !== 0 && entity.timeout !== Infinity) {
-      return new RetryCommand(1, entity) as any;
-    }
+function commandFn(entity: Command): Command {
+  if (entity.timeout !== 0 && entity.timeout !== Infinity) {
+    return new RetryCommand(1, entity);
   }
+
   return entity;
 }
 
-walk(pipeline, mutator).then((p) => {
-  new YamlSerializer({ explicitDependencies: true })
-    .serialize(p)
-    .then(console.log);
-});
+evaluatePipeline(pipeline).then((p) =>
+  walk(p, { commandFn: commandFn }).then((p) => {
+    new YamlSerializer({ explicitDependencies: true })
+      .serialize(p)
+      .then(console.log);
+  }),
+);
