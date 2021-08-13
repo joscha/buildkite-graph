@@ -19,7 +19,7 @@ export { Option, SelectField, TextField } from './steps/block/fields';
 export { Command, CommandStep } from './steps/command';
 export { Plugin } from './steps/command/plugins';
 export { TriggerStep } from './steps/trigger';
-export { walk } from './walker';
+export { walk, evaluatePipeline } from './walker';
 
 export const serializers = {
   DotSerializer,
