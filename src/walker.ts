@@ -70,7 +70,6 @@ export async function walk(p: Pipeline, mutator: Mutators): Promise<Pipeline> {
     if (mutator.pipelineFn) {
       newPipeline = mutator.pipelineFn(newPipeline);
     }
-    // console.log(nodeCache)
     return newPipeline;
   }
 
