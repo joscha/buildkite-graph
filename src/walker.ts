@@ -19,11 +19,11 @@ export async function evaluatePipeline(p: Pipeline): Promise<Pipeline> {
   const conditionalCache = new Map<any, any>();
   const pipeline = new Pipeline(p.name);
   pipeline.steps = [];
-  for (let i = 0; i < p.steps.length; i++) {
-    let step: PotentialStep | null = cloneDeep(p.steps[i]);
-    step = await evaluateStep(step, conditionalCache);
-    if (step) {
-      pipeline.steps.push(step);
+  for (const step of p.steps) {
+    let newStep: PotentialStep | null = cloneDeep(step);
+    newStep = await evaluateStep(newStep, conditionalCache);
+    if (newStep) {
+      pipeline.steps.push(newStep);
     }
   }
   return pipeline;

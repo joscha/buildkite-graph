@@ -5,7 +5,7 @@ import {
   Step,
   Conditional,
   walk,
-  evaluatePipeline
+  evaluatePipeline,
 } from '../src';
 import { YamlSerializer } from '../src/serializers/yaml';
 
