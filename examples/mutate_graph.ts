@@ -15,7 +15,7 @@ class TimeoutCommand extends Command {
   }
 
   public serialize(): string {
-    return `./timeout ${this.timeout} ${this.command}`;
+    return `timeout ${this.timeout} ${this.command}`;
   }
 
   public toString(): string {
