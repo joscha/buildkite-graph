@@ -8,14 +8,15 @@ import {
   evaluatePipeline,
 } from '../src';
 import { YamlSerializer } from '../src/serializers/yaml';
+import { JsonSerializer } from '../src/serializers/json';
 
-class RetryCommand extends Command {
+class TimeoutCommand extends Command {
   constructor(private retries: number, command: Command) {
     super(command.toString(), command.timeout * (retries + 1));
   }
 
   public serialize(): string {
-    return new Array(this.retries + 1).fill(this.command).join(' || ');
+    return `./timeout ${this.timeout} ${this.command}`;
   }
 
   public toString(): string {
@@ -51,16 +52,25 @@ const pipeline = new Pipeline('My pipeline').add(conditional).add(integration);
 
 function commandFn(entity: Command): Command {
   if (entity.timeout !== 0 && entity.timeout !== Infinity) {
-    return new RetryCommand(1, entity);
+    return new TimeoutCommand(1, entity);
   }
 
   return entity;
 }
+new JsonSerializer({ explicitDependencies: true })
+  .serialize(pipeline)
+  .then((p) => {
+    console.log(p);
+    return evaluatePipeline(pipeline);
+  })
+  .then((p) => walk(p, { commandFn: commandFn }))
+  .then((p) => new JsonSerializer({ explicitDependencies: true }).serialize(p))
+  .then(console.log);
 
-evaluatePipeline(pipeline).then((p) =>
-  walk(p, { commandFn: commandFn }).then((p) => {
-    new YamlSerializer({ explicitDependencies: true })
-      .serialize(p)
-      .then(console.log);
-  }),
-);
+// evaluatePipeline(pipeline).then((p) =>
+//   walk(p, { commandFn: commandFn }).then((p) => {
+//     new JsonSerializer({ explicitDependencies: true })
+//       .serialize(p)
+//       .then(console.log);
+//   }),
+// );
