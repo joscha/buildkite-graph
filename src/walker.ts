@@ -6,7 +6,6 @@ import {
   CommandStep,
   Step,
 } from '.';
-import { cloneDeep } from 'lodash';
 import { getAndCacheDependency } from './conditional';
 export interface Mutators {
   pipelineFn?: (pipeline: Pipeline) => Promise<Pipeline>;
@@ -99,8 +98,7 @@ export async function walk(p: Pipeline, mutator: Mutators): Promise<Pipeline> {
 
       const newCommands: Command[] = [];
       for (const command of step.command) {
-        let newCommand = cloneDeep(command);
-        newCommand = await walkCommand(newCommand);
+        const newCommand = await walkCommand(command);
         newCommands.push(newCommand);
       }
       step.command = newCommands;
