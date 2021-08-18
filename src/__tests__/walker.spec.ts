@@ -23,7 +23,6 @@ describe('buildkite-graph', () => {
         'unmutated',
       );
       pipeline.add(new TrueConditional(step));
-
       const p = await evaluatePipeline(pipeline);
       expect(p.steps[0]).toEqual(step);
     });
@@ -33,7 +32,6 @@ describe('buildkite-graph', () => {
         'unmutated',
       );
       pipeline.add(new FalseConditional(step));
-
       const p = await evaluatePipeline(pipeline);
       expect(p.steps).toEqual([]);
     });
@@ -47,7 +45,6 @@ describe('buildkite-graph', () => {
       );
       step.dependsOn(dep);
       pipeline.add(step);
-
       const p = await evaluatePipeline(pipeline);
       const result = p.steps[0] as CommandStep;
       result.dependencies.forEach((dep) => {
@@ -67,7 +64,6 @@ describe('buildkite-graph', () => {
       pipeline
         .add(new FalseConditional(falseStep))
         .add(new TrueConditional(trueStep));
-
       const p = await evaluatePipeline(pipeline);
       expect(p.steps.length).toEqual(1);
       expect(p.steps[0]).toEqual(trueStep);
@@ -79,12 +75,12 @@ describe('buildkite-graph', () => {
       const mutators: Mutators = {};
       beforeEach(async () => {
         pipeline = await evaluatePipeline(new Pipeline('unmutated pipeline'));
-        mutators.pipelineFn = (entity: Pipeline): Pipeline => {
+        mutators.pipelineFn = async (entity: Pipeline): Promise<Pipeline> => {
           const p = new Pipeline('mutated pipeline');
           p.steps = entity.steps;
           return p;
         };
-        mutators.stepFn = (entity: Step): Step => {
+        mutators.stepFn = async (entity: Step): Promise<Step> => {
           const step = new CommandStep([new Command('mutated')]).withKey(
             'mutated',
           );
@@ -93,7 +89,7 @@ describe('buildkite-graph', () => {
           }
           return step;
         };
-        mutators.commandFn = (entity: Command): Command => {
+        mutators.commandFn = async (entity: Command): Promise<Command> => {
           if (entity instanceof Command) {
             return new Command('mutated');
           }
@@ -106,7 +102,6 @@ describe('buildkite-graph', () => {
           expect(p.name).toEqual('mutated pipeline');
         });
       });
-
       describe('step', () => {
         beforeEach(() => {
           pipeline.add(
@@ -146,7 +141,6 @@ describe('buildkite-graph', () => {
             'encountered conditional during walk, please run evaluatePipeline',
           );
         });
-
         it('should mutate dependent steps', async () => {
           pipeline = new Pipeline('unmutated pipeline');
           const step = new CommandStep([new Command('unmutated')]).withKey(
@@ -179,7 +173,6 @@ describe('buildkite-graph', () => {
           const step = new CommandStep([new Command('unmutated')]).withKey(
             'unmutated',
           );
-
           pipeline.add(step);
         });
         it('should mutate command', async () => {

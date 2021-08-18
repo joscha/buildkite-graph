@@ -6,9 +6,8 @@ import {
   CommandStep,
   Step,
 } from '.';
-import { getAndCacheDependency } from './conditional';
 import { cloneDeep } from 'lodash';
-import { unwrapSteps } from './unwrapSteps';
+import { getAndCacheDependency } from './conditional';
 export interface Mutators {
   pipelineFn?: (pipeline: Pipeline) => Promise<Pipeline>;
   stepFn?: (step: Step) => Promise<Step>;
@@ -19,10 +18,40 @@ export interface Mutators {
  * @param p The pipeline to evaluate
  * @returns An evaluated pipeline with all conditionals generated if they were accepted
  */
-export async function evaluatePipeline(p: Pipeline): Promise<Pipeline> {
+export async function evaluatePipeline(pipeline: Pipeline): Promise<Pipeline> {
   const conditionalCache = new Map<any, any>();
-  p.steps = await unwrapSteps(p.steps, conditionalCache);
-  return p;
+  const newSteps = [];
+  for (const step of pipeline.steps) {
+    const newStep = await evaluateStep(step, conditionalCache);
+    if (newStep) {
+      newSteps.push(newStep);
+    }
+  }
+  pipeline.steps = newSteps;
+  return pipeline;
+}
+
+async function evaluateStep(
+  step: PotentialStep,
+  conditionalCache: Map<any, any>,
+): Promise<Step | null> {
+  if (step instanceof Conditional) {
+    if (await step.accept()) {
+      step = await getAndCacheDependency(conditionalCache, step);
+    } else {
+      return null;
+    }
+  }
+  const deps = step.dependencies;
+  const newDeps: Set<Step> = new Set();
+  for (const dep of deps) {
+    const newDep = await evaluateStep(dep, conditionalCache);
+    if (newDep) {
+      newDeps.add(newDep);
+    }
+  }
+  step.dependencies = newDeps;
+  return step;
 }
 
 export async function walk(p: Pipeline, mutator: Mutators): Promise<Pipeline> {
@@ -36,7 +65,7 @@ export async function walk(p: Pipeline, mutator: Mutators): Promise<Pipeline> {
         newSteps.push(result);
       }
     }
-    p.steps = p.steps;
+    p.steps = newSteps;
     if (mutator.pipelineFn) {
       p = await mutator.pipelineFn(p);
     }
