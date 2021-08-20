@@ -2,6 +2,7 @@ import slugify from '@sindresorhus/slugify';
 import { Step } from './base';
 import { Conditional } from './conditional';
 import { KeyValue, KeyValueImpl } from './key_value';
+import { MutatorFn } from './serializers';
 import { DotSerializer } from './serializers/dot';
 import { JsonSerializer } from './serializers/json';
 import { StructuralSerializer } from './serializers/structural';
@@ -33,6 +34,8 @@ export type SerializationOptions = {
    * More details here: https://buildkite.com/docs/pipelines/dependencies#defining-explicit-dependencies
    */
   explicitDependencies?: boolean;
+  mutator?: MutatorFn
+
 };
 
 export type ToJsonSerializationOptions =
@@ -121,11 +124,18 @@ export class Pipeline implements Serializable {
       : {
           explicitDependencies: false,
         };
-
+    const steps = await this.toList(newOpts)
+    if(opts.mutator) {
+      for(const step of steps) {
+        if(step instanceof Step) {
+          await opts.mutator(step);
+        }
+      }
+    }
     return {
       env: await (this.env as KeyValueImpl<this>).toJson(),
       steps: await Promise.all(
-        (await this.toList(newOpts)).map((s) => s.toJson(newOpts)),
+        steps.map((s) => s.toJson(newOpts)),
       ),
     };
   }

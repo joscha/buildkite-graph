@@ -1,8 +1,9 @@
 import { Pipeline, SerializationOptions } from '../';
-import { Serializer } from '.';
+import { MutatorFn, Serializer } from '.';
 
 type JsonSerializationOptions = {
   stringify?: boolean;
+  mutator?: MutatorFn
 } & SerializationOptions;
 
 export class JsonSerializer
@@ -10,8 +11,8 @@ export class JsonSerializer
 {
   constructor(private readonly opts: JsonSerializationOptions = {}) {}
 
-  async serialize(e: Pipeline): Promise<Record<string, unknown> | string> {
-    const serialized = JSON.stringify(await e.toJson(this.opts));
+  async serialize(e: Pipeline, mutator: MutatorFn): Promise<Record<string, unknown> | string> {
+    const serialized = JSON.stringify(await e.toJson({...this.opts, mutator: mutator}));
     // Workaround to get rid of undefined values
     return this.opts.stringify ? serialized : JSON.parse(serialized);
   }
