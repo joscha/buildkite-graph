@@ -11,7 +11,7 @@ import { sortedSteps } from './sortedSteps';
 import { sortedWithBlocks } from './sortedWithBlocks';
 import { WaitStep } from './steps/wait';
 import { StepCache } from './unwrapSteps';
-import { cloneDeep, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 export { ExitStatus, Step } from './base';
 export { Conditional, Generator, ThingOrGenerator } from './conditional';
 export { KeyValue } from './key_value';
@@ -130,8 +130,8 @@ export class Pipeline implements Serializable {
       for (const step of steps) {
         if (step instanceof Step) {
           const deps = {
-            dependencies: cloneDeep(step.dependencies),
-            effectDependencies: cloneDeep(step.effectDependencies),
+            dependencies: new Set(step.dependencies),
+            effectDependencies: new Set(step.effectDependencies),
           };
           await opts.mutator(step);
           if (

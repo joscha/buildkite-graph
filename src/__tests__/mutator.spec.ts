@@ -1,6 +1,7 @@
 import { Command, CommandStep } from '../../src/steps/command';
 import { Pipeline, Step } from '../../src/index';
 import { JsonSerializer } from '../../src/serializers/json';
+import { Plugin } from '../../src/steps/command/plugins';
 
 describe('buildkite-graph', () => {
   describe('Mutator', () => {
@@ -22,6 +23,25 @@ describe('buildkite-graph', () => {
         });
         expect(received).toEqual({
           steps: [{ key: 'unmutated', command: 'mutated' }],
+        });
+      });
+      it('should mutate step plugins', async () => {
+        const plugin = new Plugin('test plugin');
+        const received = await new JsonSerializer({
+          explicitDependencies: true,
+        }).serialize(pipeline, async (entity: Step) => {
+          if (entity instanceof CommandStep) {
+            entity.plugins.add(plugin);
+          }
+        });
+        expect(received).toEqual({
+          steps: [
+            {
+              key: 'unmutated',
+              command: 'unmutated',
+              plugins: [{ 'test plugin': null }],
+            },
+          ],
         });
       });
       it('should fail on dependency change', async () => {

@@ -13,10 +13,10 @@ export class JsonSerializer
 
   async serialize(
     e: Pipeline,
-    mutator: MutatorFn,
+    mutator?: MutatorFn,
   ): Promise<Record<string, unknown> | string> {
     const serialized = JSON.stringify(
-      await e.toJson({ ...this.opts, mutator: mutator }),
+      await e.toJson({ ...this.opts, mutator }),
     );
     // Workaround to get rid of undefined values
     return this.opts.stringify ? serialized : JSON.parse(serialized);
