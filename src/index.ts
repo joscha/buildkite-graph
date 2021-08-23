@@ -131,7 +131,9 @@ export class Pipeline implements Serializable {
     const steps = await this.toList(newOpts);
     if (opts.mutator) {
       for (const step of steps) {
-        if (step instanceof Step) {
+        if (!(step instanceof Step)) {
+          continue;
+        }
           const deps = {
             dependencies: new Set(step.dependencies),
             effectDependencies: new Set(step.effectDependencies),
