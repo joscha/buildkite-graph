@@ -68,7 +68,7 @@ export const createTest = (
         entities = [entities];
       }
       for (const entity of entities) {
-          expect(await serializers[type].serialize(entity)).toMatchSnapshot();
+        expect(await serializers[type].serialize(entity)).toMatchSnapshot();
       }
     });
   });
