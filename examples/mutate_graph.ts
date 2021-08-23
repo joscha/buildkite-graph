@@ -52,6 +52,6 @@ async function commandFn(entity: Step) {
   }
 }
 
-new YamlSerializer({ explicitDependencies: true })
-  .serialize(pipeline, commandFn)
+new YamlSerializer({ explicitDependencies: true, mutator: commandFn })
+  .serialize(pipeline)
   .then(console.log);

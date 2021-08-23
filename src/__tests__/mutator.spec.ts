@@ -16,11 +16,12 @@ describe('buildkite-graph', () => {
       it('should mutate step', async () => {
         const received = await new JsonSerializer({
           explicitDependencies: true,
-        }).serialize(pipeline, async (entity: Step) => {
-          if (entity instanceof CommandStep) {
-            entity.command[0] = new Command('mutated');
-          }
-        });
+          mutator: async (entity: Step) => {
+            if (entity instanceof CommandStep) {
+              entity.command[0] = new Command('mutated');
+            }
+          },
+        }).serialize(pipeline);
         expect(received).toEqual({
           steps: [{ key: 'unmutated', command: 'mutated' }],
         });
@@ -29,11 +30,12 @@ describe('buildkite-graph', () => {
         const plugin = new Plugin('test plugin');
         const received = await new JsonSerializer({
           explicitDependencies: true,
-        }).serialize(pipeline, async (entity: Step) => {
-          if (entity instanceof CommandStep) {
-            entity.plugins.add(plugin);
-          }
-        });
+          mutator: async (entity: Step) => {
+            if (entity instanceof CommandStep) {
+              entity.plugins.add(plugin);
+            }
+          },
+        }).serialize(pipeline);
         expect(received).toEqual({
           steps: [
             {
@@ -48,12 +50,13 @@ describe('buildkite-graph', () => {
         await expect(
           new JsonSerializer({
             explicitDependencies: true,
-          }).serialize(pipeline, async (entity: Step) => {
-            const dep = new CommandStep([new Command('unmutated')]).withKey(
-              'unmutated',
-            );
-            entity.dependsOn(dep);
-          }),
+            mutator: async (entity: Step) => {
+              const dep = new CommandStep([new Command('unmutated')]).withKey(
+                'unmutated',
+              );
+              entity.dependsOn(dep);
+            },
+          }).serialize(pipeline),
         ).rejects.toThrow('mutator cannot mutate dependencies');
       });
     });

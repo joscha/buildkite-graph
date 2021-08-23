@@ -121,10 +121,13 @@ export class Pipeline implements Serializable {
       ? {
           explicitDependencies: true,
           cache: new Map(),
+          mutator: opts.mutator,
         }
       : {
           explicitDependencies: false,
+          mutator: opts.mutator,
         };
+
     const steps = await this.toList(newOpts);
     if (opts.mutator) {
       for (const step of steps) {

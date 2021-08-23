@@ -113,6 +113,28 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Trigger async mutate 1`] = `
+"steps:
+  - trigger: another
+    label: Label
+    async: true
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async mutate 2`] = `
+"steps:
+  - trigger: another
+    label: Label
+"
+`;
+
+exports[`buildkite-graph Steps Trigger async mutate 3`] = `
+"steps:
+  - trigger: another
+    async: true
+"
+`;
+
 exports[`buildkite-graph Steps Trigger async structure 1`] = `"* Label"`;
 
 exports[`buildkite-graph Steps Trigger async structure 2`] = `"* Label"`;
@@ -383,6 +405,50 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Trigger build mutate 1`] = `
+"steps:
+  - trigger: another
+    build:
+      env:
+        KEY: VALUE
+        ANOTHER_KEY: VALUE
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build mutate 2`] = `
+"steps:
+  - trigger: another
+    build:
+      branch: rease-bla
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build mutate 3`] = `
+"steps:
+  - trigger: another
+    build:
+      commit: c0ffee
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build mutate 4`] = `
+"steps:
+  - trigger: another
+    build:
+      message: My messge
+"
+`;
+
+exports[`buildkite-graph Steps Trigger build mutate 5`] = `
+"steps:
+  - trigger: another
+    build:
+      meta_data:
+        release-version: '1.1'
+        some-other: value
+"
+`;
+
 exports[`buildkite-graph Steps Trigger build structure 1`] = `"* [trigger another]"`;
 
 exports[`buildkite-graph Steps Trigger build structure 2`] = `"* [trigger another]"`;
@@ -556,6 +622,18 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Trigger can trigger another pipeline mutate 1`] = `
+"steps:
+  - trigger: another-build
+"
+`;
+
+exports[`buildkite-graph Steps Trigger can trigger another pipeline mutate 2`] = `
+"steps:
+  - trigger: another-build
+"
+`;
+
 exports[`buildkite-graph Steps Trigger can trigger another pipeline structure 1`] = `"* [trigger another-build]"`;
 
 exports[`buildkite-graph Steps Trigger can trigger another pipeline structure 2`] = `"* [trigger another-build]"`;
@@ -623,6 +701,13 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Trigger limit branches mutate 1`] = `
+"steps:
+  - trigger: another
+    branches: master
+"
+`;
+
 exports[`buildkite-graph Steps Trigger limit branches structure 1`] = `"* [trigger another]"`;
 
 exports[`buildkite-graph Steps Trigger limit branches yaml 1`] = `
@@ -675,6 +760,13 @@ Object {
     },
   ],
 }
+`;
+
+exports[`buildkite-graph Steps Trigger with a label mutate 1`] = `
+"steps:
+  - trigger: another
+    label: Trigger another pipeline
+"
 `;
 
 exports[`buildkite-graph Steps Trigger with a label structure 1`] = `"* Trigger another pipeline"`;

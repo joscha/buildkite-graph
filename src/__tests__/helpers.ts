@@ -1,7 +1,11 @@
+import { MutatorFn } from 'src/serializers';
 import {
   Pipeline,
   Serializer,
   serializers as predefinedSerializers,
+  Step,
+  CommandStep,
+  Command,
 } from '../';
 import { resetUuidCounter } from './setup';
 
@@ -11,8 +15,19 @@ type SerializerType =
   | 'yaml'
   | 'yaml_depends_on'
   | 'dot'
-  | 'structure';
+  | 'structure'
+  | 'mutate';
 
+const mutate: MutatorFn = async (entity: Step) => {
+  if (entity instanceof CommandStep) {
+    for (let i = 0; i < entity.command.length; i++) {
+      const command = entity.command[i];
+      if (command.timeout !== 0 && command.timeout !== Infinity) {
+        entity.command[i] = new Command(command.command);
+      }
+    }
+  }
+};
 export const serializers: Record<SerializerType, Serializer<any>> = {
   json: new predefinedSerializers.JsonSerializer(),
   json_depends_on: new predefinedSerializers.JsonSerializer({
@@ -24,6 +39,7 @@ export const serializers: Record<SerializerType, Serializer<any>> = {
   }),
   dot: new predefinedSerializers.DotSerializer(),
   structure: new predefinedSerializers.StructuralSerializer(),
+  mutate: new predefinedSerializers.YamlSerializer({ mutator: mutate }),
 };
 
 type PipelineGenerator = () => Pipeline | Pipeline[];
@@ -35,6 +51,7 @@ const defaultSerializerTypes: SerializerType[] = [
   'yaml_depends_on',
   'dot',
   'structure',
+  'mutate',
 ];
 
 export const createTest = (
@@ -51,7 +68,8 @@ export const createTest = (
         entities = [entities];
       }
       for (const entity of entities) {
-        expect(await serializers[type].serialize(entity)).toMatchSnapshot();
+        if (type)
+          expect(await serializers[type].serialize(entity)).toMatchSnapshot();
       }
     });
   });

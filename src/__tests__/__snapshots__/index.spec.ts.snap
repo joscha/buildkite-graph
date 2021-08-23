@@ -25,6 +25,13 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Pipeline env mutate 1`] = `
+"env:
+  COLOR: '1'
+steps: []
+"
+`;
+
 exports[`buildkite-graph Pipeline env structure 1`] = `""`;
 
 exports[`buildkite-graph Pipeline env yaml 1`] = `
@@ -72,6 +79,12 @@ Object {
     },
   ],
 }
+`;
+
+exports[`buildkite-graph Pipeline steps mutate 1`] = `
+"steps:
+  - command: command
+"
 `;
 
 exports[`buildkite-graph Pipeline steps structure 1`] = `"* <command>"`;
@@ -472,6 +485,67 @@ Object {
 }
 `;
 
+exports[`buildkite-graph general serialization complex mutate 1`] = `
+"steps:
+  - label: Build Editor
+    command: web/bin/buildkite/run_web_step.sh build editor
+  - label: Test Editor
+    command: web/bin/buildkite/run_web_step.sh test editor
+  - wait: ~
+    continue_on_failure: true
+  - label: Annotate failures
+    plugins:
+      - bugcrowd/test-summary#v1.5.0:
+          inputs:
+            - label: ':htmllint: HTML lint'
+              artifact_path: web/target/htmllint-*.txt
+              type: oneline
+      - detect-clowns#v1.0.0: ~
+  - label: Upload coverage
+    command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
+  - wait: ~
+  - label: Integration tests
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests local editor
+      chrome
+    parallelism: 8
+  - wait: ~
+  - label: ':saucelabs: Integration tests'
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
+      safari
+    parallelism: 8
+    plugins:
+      - sauce-connect-plugin: ~
+  - label: Visreg baseline update
+    command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
+  - wait: ~
+    continue_on_failure: true
+  - label: Annotate cucumber failures
+    command: web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases
+  - wait: ~
+  - label: Copy to deploy bucket
+    command: web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor
+  - wait: ~
+  - label: Update checkpoint
+    command: production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"
+  - trigger: web-deploy
+    label: Deploy to tech
+    build:
+      env:
+        FLAVOR: tech
+        RELEASE_PATH: some/path/
+  - trigger: web-deploy
+    label: Deploy to usertesting
+    build:
+      env:
+        FLAVOR: usertesting
+        RELEASE_PATH: some/path/
+  - wait: ~
+  - block: Release editor
+"
+`;
+
 exports[`buildkite-graph general serialization complex structure 1`] = `
 "* Build Editor
 * Test Editor
@@ -691,6 +765,16 @@ Object {
 }
 `;
 
+exports[`buildkite-graph general serialization simple mutate 1`] = `
+"env:
+  USE_COLOR: '1'
+  DEBUG: 'true'
+steps:
+  - label: Deploy
+    command: buildkite/deploy_web.sh
+"
+`;
+
 exports[`buildkite-graph general serialization simple structure 1`] = `"* Deploy"`;
 
 exports[`buildkite-graph general serialization simple yaml 1`] = `
@@ -768,6 +852,14 @@ Object {
     },
   ],
 }
+`;
+
+exports[`buildkite-graph missing transitive steps get added to the graph mutate 1`] = `
+"steps:
+  - command: yarn
+  - wait: ~
+  - command: yarn test
+"
 `;
 
 exports[`buildkite-graph missing transitive steps get added to the graph structure 1`] = `
