@@ -10,7 +10,7 @@ export class YamlSerializer implements Serializer<string> {
     this.jsonSerializer = new JsonSerializer({ ...opts, stringify: false });
   }
 
-  async serialize(e: Pipeline, mutator: MutatorFn): Promise<string> {
+  async serialize(e: Pipeline, mutator?: MutatorFn): Promise<string> {
     return jsyaml.dump(await this.jsonSerializer.serialize(e, mutator), {
       skipInvalid: true,
       noRefs: true,

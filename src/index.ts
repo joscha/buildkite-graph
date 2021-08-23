@@ -11,6 +11,7 @@ import { sortedSteps } from './sortedSteps';
 import { sortedWithBlocks } from './sortedWithBlocks';
 import { WaitStep } from './steps/wait';
 import { StepCache } from './unwrapSteps';
+import { cloneDeep, isEqual } from 'lodash';
 export { ExitStatus, Step } from './base';
 export { Conditional, Generator, ThingOrGenerator } from './conditional';
 export { KeyValue } from './key_value';
@@ -34,16 +35,16 @@ export type SerializationOptions = {
    * More details here: https://buildkite.com/docs/pipelines/dependencies#defining-explicit-dependencies
    */
   explicitDependencies?: boolean;
-  mutator?: MutatorFn
-
+  mutator?: MutatorFn;
 };
 
 export type ToJsonSerializationOptions =
   | {
       explicitDependencies: true;
       cache: StepCache;
+      mutator?: MutatorFn;
     }
-  | { explicitDependencies: false };
+  | { explicitDependencies: false; mutator?: MutatorFn };
 
 type JSON = Record<string, unknown> | JSON[];
 export interface Serializable {
@@ -124,19 +125,29 @@ export class Pipeline implements Serializable {
       : {
           explicitDependencies: false,
         };
-    const steps = await this.toList(newOpts)
-    if(opts.mutator) {
-      for(const step of steps) {
-        if(step instanceof Step) {
+    const steps = await this.toList(newOpts);
+    if (opts.mutator) {
+      for (const step of steps) {
+        if (step instanceof Step) {
+          const deps = {
+            dependencies: cloneDeep(step.dependencies),
+            effectDependencies: cloneDeep(step.effectDependencies),
+          };
           await opts.mutator(step);
+          if (
+            !isEqual(deps, {
+              dependencies: step.dependencies,
+              effectDependencies: step.effectDependencies,
+            })
+          ) {
+            throw new Error('mutator cannot mutate dependencies');
+          }
         }
       }
     }
     return {
       env: await (this.env as KeyValueImpl<this>).toJson(),
-      steps: await Promise.all(
-        steps.map((s) => s.toJson(newOpts)),
-      ),
+      steps: await Promise.all(steps.map((s) => s.toJson(newOpts))),
     };
   }
 }
