@@ -145,7 +145,7 @@ export class Pipeline implements Serializable {
               effectDependencies: step.effectDependencies,
             })
           ) {
-            throw new Error('mutator cannot mutate dependencies');
+            throw new Error('mutator must not mutate dependencies or effects');
           }
         }
       }
