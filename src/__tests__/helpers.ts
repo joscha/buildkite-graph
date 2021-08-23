@@ -16,7 +16,7 @@ type SerializerType =
   | 'yaml_depends_on'
   | 'dot'
   | 'structure'
-  | 'mutate';
+  | 'yaml_mutate';
 
 const mutate: MutatorFn = async (entity: Step) => {
   if (entity instanceof CommandStep) {
