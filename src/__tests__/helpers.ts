@@ -23,7 +23,7 @@ const mutate: MutatorFn = async (entity: Step) => {
     const random = seedrandom(
       JSON.stringify(entity.command.map((command) => command.serialize())),
     );
-    entity.withKey(`key-${random.int32()}`);
+    entity.withKey(`mutated_${random.int32()}`);
   }
 };
 export const serializers: Record<SerializerType, Serializer<any>> = {
