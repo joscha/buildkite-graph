@@ -1,10 +1,9 @@
 import { Pipeline, Step } from '../';
 
 /**
- * method signature for the mutator to run on every step in a topologically sorted pipeline
- * @param entity the step being muted. This must be mutated in-place a step must not be mutated into a different object, and its dependencies
- * or effective dependencies must not be mutated.
- * @returns void the step must be mutated in-place.
+ * Step mutator callback signature; This function is called for every `Step` in a topologically sorted `Pipeline` when being passed to supporting serializers.
+ *
+ * @param entity the `Step` to be muted. Mutations must happen in-place (it is not possible to replace the `Step` as a whole and dependencies and effects must not be altered.
  */
 export type MutatorFn = (entity: Step) => Promise<void>;
 export interface Serializer<T> {
