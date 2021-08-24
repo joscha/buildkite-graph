@@ -58,6 +58,15 @@ exports[`buildkite-graph Steps Command agents yaml_depends_on 1`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command agents yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    agents:
+      npm: 'true'
+"
+`;
+
 exports[`buildkite-graph Steps Command artifact_paths dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -182,6 +191,26 @@ exports[`buildkite-graph Steps Command artifact_paths yaml_depends_on 2`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command artifact_paths yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    artifact_paths:
+      - logs/**/*
+      - coverage/**/*
+"
+`;
+
+exports[`buildkite-graph Steps Command artifact_paths yaml_mutate 2`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    artifact_paths:
+      - logs/**/*
+      - coverage/**/*
+"
+`;
+
 exports[`buildkite-graph Steps Command branches dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -230,6 +259,14 @@ exports[`buildkite-graph Steps Command branches yaml_depends_on 1`] = `
 "steps:
   - branches: '!release/* master stable/*'
     key: _0
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command branches yaml_mutate 1`] = `
+"steps:
+  - branches: '!release/* master stable/*'
+    key: mutated_779175783
     command: noop
 "
 `;
@@ -406,6 +443,34 @@ exports[`buildkite-graph Steps Command concurrency yaml_depends_on 3`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command concurrency yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    concurrency: 3
+    concurrency_group: my-app/deploy
+"
+`;
+
+exports[`buildkite-graph Steps Command concurrency yaml_mutate 2`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    concurrency: 3
+    concurrency_group: my-app/deploy
+    concurrency_method: eager
+"
+`;
+
+exports[`buildkite-graph Steps Command concurrency yaml_mutate 3`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    concurrency: 3
+    concurrency_group: my-app/deploy
+"
+`;
+
 exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
@@ -537,6 +602,28 @@ exports[`buildkite-graph Steps Command continue on failure multiple subsequent a
 "
 `;
 
+exports[`buildkite-graph Steps Command continue on failure multiple subsequent always-executed subsequent steps do not get an additional wait step yaml_mutate 1`] = `
+"steps:
+  - key: mutated_-2052219384
+    command: command.sh
+  - key: mutated_-1403558946
+    depends_on:
+      - step: mutated_-2052219384
+        allow_failure: true
+    command: echo This runs regardless of the success or failure
+  - key: mutated_-526553108
+    depends_on:
+      - step: mutated_-2052219384
+        allow_failure: true
+    command: echo This runs regardless of the success or failure 2
+  - key: mutated_2016134234
+    depends_on:
+      - step: mutated_-2052219384
+        allow_failure: true
+    command: echo This runs regardless of the success or failure 3
+"
+`;
+
 exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
@@ -644,6 +731,22 @@ exports[`buildkite-graph Steps Command continue on failure subsequent depending 
   - key: _2
     depends_on:
       - step: _0
+    command: echo The command passed
+"
+`;
+
+exports[`buildkite-graph Steps Command continue on failure subsequent depending steps that are not always executed get an additional wait step yaml_mutate 1`] = `
+"steps:
+  - key: mutated_-2052219384
+    command: command.sh
+  - key: mutated_-1403558946
+    depends_on:
+      - step: mutated_-2052219384
+        allow_failure: true
+    command: echo This runs regardless of the success or failure
+  - key: mutated_-2143155355
+    depends_on:
+      - step: mutated_-2052219384
     command: echo The command passed
 "
 `;
@@ -777,6 +880,28 @@ exports[`buildkite-graph Steps Command dependency failures yaml_depends_on 1`] =
 "
 `;
 
+exports[`buildkite-graph Steps Command dependency failures yaml_mutate 1`] = `
+"steps:
+  - key: mutated_1578953079
+    command: a.sh
+  - key: mutated_-1793171298
+    depends_on:
+      - step: mutated_1578953079
+    allow_dependency_failure: true
+    command: b.sh
+  - key: mutated_43765474
+    depends_on:
+      - step: mutated_1578953079
+        allow_failure: true
+    command: c.sh
+  - key: mutated_43765474
+    depends_on:
+      - step: mutated_1578953079
+    allow_dependency_failure: true
+    command: c.sh
+"
+`;
+
 exports[`buildkite-graph Steps Command env dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -839,6 +964,16 @@ exports[`buildkite-graph Steps Command env yaml_depends_on 1`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command env yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    env:
+      RAILS_ENV: test
+      DEBUG: 'true'
+"
+`;
+
 exports[`buildkite-graph Steps Command key dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -883,6 +1018,13 @@ exports[`buildkite-graph Steps Command key yaml 1`] = `
 exports[`buildkite-graph Steps Command key yaml_depends_on 1`] = `
 "steps:
   - key: my-key
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command key yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
     command: noop
 "
 `;
@@ -935,6 +1077,14 @@ exports[`buildkite-graph Steps Command label yaml_depends_on 1`] = `
 "steps:
   - label: my label
     key: _0
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command label yaml_mutate 1`] = `
+"steps:
+  - label: my label
+    key: mutated_779175783
     command: noop
 "
 `;
@@ -1039,6 +1189,21 @@ exports[`buildkite-graph Steps Command parallelism yaml_depends_on 2`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command parallelism yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    parallelism: 123
+"
+`;
+
+exports[`buildkite-graph Steps Command parallelism yaml_mutate 2`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+"
+`;
+
 exports[`buildkite-graph Steps Command plugins add plugins dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -1133,6 +1298,20 @@ exports[`buildkite-graph Steps Command plugins add plugins yaml_depends_on 1`] =
 "
 `;
 
+exports[`buildkite-graph Steps Command plugins add plugins yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    plugins:
+      - bugcrowd/test-summary#v1.5.0:
+          inputs:
+            - label: ':htmllint: HTML lint'
+              artifact_path: web/target/htmllint-*.txt
+              type: oneline
+      - detect-clowns#v1.0.0: ~
+"
+`;
+
 exports[`buildkite-graph Steps Command priority default dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -1210,6 +1389,19 @@ exports[`buildkite-graph Steps Command priority default yaml_depends_on 1`] = `
   - key: _1
     command: noop
   - key: _2
+    command: noopUnimportant
+    priority: -100
+"
+`;
+
+exports[`buildkite-graph Steps Command priority default yaml_mutate 1`] = `
+"steps:
+  - key: mutated_-1996809418
+    command: noopImportant
+    priority: 100
+  - key: mutated_779175783
+    command: noop
+  - key: mutated_1584869433
     command: noopUnimportant
     priority: -100
 "
@@ -1797,6 +1989,97 @@ exports[`buildkite-graph Steps Command retry yaml_depends_on 9`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command retry yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    retry:
+      automatic: true
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_mutate 2`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    retry:
+      automatic:
+        - exit_status: '*'
+          limit: 2
+        - exit_status: 255
+          limit: 2
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_mutate 3`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    retry:
+      manual:
+        allowed: false
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_mutate 4`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    retry:
+      manual:
+        allowed: false
+        reason: Sorry, you can't retry a deployment
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_mutate 5`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_mutate 6`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    retry:
+      manual:
+        permit_on_passed: true
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_mutate 7`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    retry:
+      manual:
+        permit_on_passed: true
+      automatic: true
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_mutate 8`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    retry:
+      automatic:
+        limit: 2
+"
+`;
+
+exports[`buildkite-graph Steps Command retry yaml_mutate 9`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    retry:
+      automatic:
+        limit: 1
+"
+`;
+
 exports[`buildkite-graph Steps Command skip function dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -1944,6 +2227,29 @@ exports[`buildkite-graph Steps Command skip function yaml_depends_on 2`] = `
 exports[`buildkite-graph Steps Command skip function yaml_depends_on 3`] = `
 "steps:
   - key: _2
+    command: noop
+    skip: my reason
+"
+`;
+
+exports[`buildkite-graph Steps Command skip function yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command skip function yaml_mutate 2`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    skip: true
+"
+`;
+
+exports[`buildkite-graph Steps Command skip function yaml_mutate 3`] = `
+"steps:
+  - key: mutated_779175783
     command: noop
     skip: my reason
 "
@@ -2101,6 +2407,29 @@ exports[`buildkite-graph Steps Command skip value yaml_depends_on 3`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command skip value yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value yaml_mutate 2`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    skip: true
+"
+`;
+
+exports[`buildkite-graph Steps Command skip value yaml_mutate 3`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    skip: my reason
+"
+`;
+
 exports[`buildkite-graph Steps Command soft_fail boolean dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -2205,6 +2534,22 @@ exports[`buildkite-graph Steps Command soft_fail boolean yaml_depends_on 2`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command soft_fail boolean yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph Steps Command soft_fail boolean yaml_mutate 2`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    soft_fail: true
+"
+`;
+
 exports[`buildkite-graph Steps Command soft_fail multiple dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -2275,6 +2620,16 @@ exports[`buildkite-graph Steps Command soft_fail multiple yaml_depends_on 1`] = 
 "
 `;
 
+exports[`buildkite-graph Steps Command soft_fail multiple yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
+    command: noop
+    soft_fail:
+      - exit_status: 1
+      - exit_status: -127
+"
+`;
+
 exports[`buildkite-graph Steps Command soft_fail star dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -2322,6 +2677,14 @@ exports[`buildkite-graph Steps Command soft_fail star yaml 1`] = `
 exports[`buildkite-graph Steps Command soft_fail star yaml_depends_on 1`] = `
 "steps:
   - key: _0
+    command: noop
+    soft_fail: true
+"
+`;
+
+exports[`buildkite-graph Steps Command soft_fail star yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
     command: noop
     soft_fail: true
 "
@@ -2433,6 +2796,22 @@ exports[`buildkite-graph Steps Command step addition yaml_depends_on 2`] = `
 "
 `;
 
+exports[`buildkite-graph Steps Command step addition yaml_mutate 1`] = `
+"steps:
+  - key: mutated_1033664532
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_mutate 2`] = `
+"steps:
+  - key: mutated_1585778734
+    command: ''
+"
+`;
+
 exports[`buildkite-graph Steps Command timeouts can be infinite dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
@@ -2477,6 +2856,13 @@ exports[`buildkite-graph Steps Command timeouts can be infinite yaml 1`] = `
 exports[`buildkite-graph Steps Command timeouts can be infinite yaml_depends_on 1`] = `
 "steps:
   - key: _0
+    command: noop
+"
+`;
+
+exports[`buildkite-graph Steps Command timeouts can be infinite yaml_mutate 1`] = `
+"steps:
+  - key: mutated_779175783
     command: noop
 "
 `;
@@ -2543,6 +2929,16 @@ exports[`buildkite-graph Steps Command timeouts commands with timeouts set step 
 "
 `;
 
+exports[`buildkite-graph Steps Command timeouts commands with timeouts set step timeout total yaml_mutate 1`] = `
+"steps:
+  - key: mutated_2131137260
+    command:
+      - yarn install
+      - yarn test
+    timeout_in_minutes: 20
+"
+`;
+
 exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others dot 1`] = `
 "digraph \\"test\\" {
   graph [ compound =true ];
@@ -2595,6 +2991,15 @@ exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel
 exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others yaml_depends_on 1`] = `
 "steps:
   - key: _0
+    command:
+      - yarn install
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command timeouts one infinite timeout will cancel out the others yaml_mutate 1`] = `
+"steps:
+  - key: mutated_2131137260
     command:
       - yarn install
       - yarn test
@@ -2656,6 +3061,16 @@ exports[`buildkite-graph Steps Command timeouts step timeout total trumps comman
 exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands yaml_depends_on 1`] = `
 "steps:
   - key: _0
+    command:
+      - yarn install
+      - yarn test
+    timeout_in_minutes: 2
+"
+`;
+
+exports[`buildkite-graph Steps Command timeouts step timeout total trumps commands yaml_mutate 1`] = `
+"steps:
+  - key: mutated_2131137260
     command:
       - yarn install
       - yarn test
@@ -2857,6 +3272,34 @@ exports[`buildkite-graph Steps dependencies step dependency yaml_depends_on 2`] 
       - step: _2
       - step: _3
       - step: _4
+    command: d
+"
+`;
+
+exports[`buildkite-graph Steps dependencies step dependency yaml_mutate 1`] = `
+"steps:
+  - key: mutated_1944449125
+    command: a
+  - key: mutated_966993846
+    depends_on:
+      - step: mutated_1944449125
+    command: b
+"
+`;
+
+exports[`buildkite-graph Steps dependencies step dependency yaml_mutate 2`] = `
+"steps:
+  - key: mutated_1944449125
+    command: a
+  - key: mutated_966993846
+    command: b
+  - key: mutated_451205911
+    command: c
+  - key: mutated_-146007960
+    depends_on:
+      - step: mutated_1944449125
+      - step: mutated_451205911
+      - step: mutated_966993846
     command: d
 "
 `;

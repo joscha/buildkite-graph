@@ -2,6 +2,7 @@ import slugify from '@sindresorhus/slugify';
 import { Step } from './base';
 import { Conditional } from './conditional';
 import { KeyValue, KeyValueImpl } from './key_value';
+import { MutatorFn } from './serializers';
 import { DotSerializer } from './serializers/dot';
 import { JsonSerializer } from './serializers/json';
 import { StructuralSerializer } from './serializers/structural';
@@ -10,6 +11,8 @@ import { sortedSteps } from './sortedSteps';
 import { sortedWithBlocks } from './sortedWithBlocks';
 import { WaitStep } from './steps/wait';
 import { StepCache } from './unwrapSteps';
+import { isEqual } from 'lodash';
+import { ok } from 'assert';
 export { ExitStatus, Step } from './base';
 export { Conditional, Generator, ThingOrGenerator } from './conditional';
 export { KeyValue } from './key_value';
@@ -19,7 +22,7 @@ export { Option, SelectField, TextField } from './steps/block/fields';
 export { Command, CommandStep } from './steps/command';
 export { Plugin } from './steps/command/plugins';
 export { TriggerStep } from './steps/trigger';
-
+export { MutatorFn } from './serializers';
 export const serializers = {
   DotSerializer,
   JsonSerializer,
@@ -33,6 +36,14 @@ export type SerializationOptions = {
    * More details here: https://buildkite.com/docs/pipelines/dependencies#defining-explicit-dependencies
    */
   explicitDependencies?: boolean;
+  /**
+   * Allows passing in a method that will be called on every Step in a topological sorted list of steps
+   * This mutator can mutate anything in a Step except things that can change the structural integrity of the DAG.
+   * i.e. the mutator must not mutate anything in Step dependencies or effective dependencies, and also must be
+   * mutated in place.
+   * Example: examples/mutate_graph.ts
+   */
+  mutator?: MutatorFn;
 };
 
 export type ToJsonSerializationOptions =
@@ -122,11 +133,30 @@ export class Pipeline implements Serializable {
           explicitDependencies: false,
         };
 
+    const steps = await this.toList(newOpts);
+    if (opts.mutator) {
+      for (const step of steps) {
+        if (!(step instanceof Step)) {
+          continue;
+        }
+        const deps = {
+          dependencies: new Set(step.dependencies),
+          effectDependencies: new Set(step.effectDependencies),
+        };
+        await opts.mutator(step);
+        ok(
+          isEqual(deps, {
+            dependencies: step.dependencies,
+            effectDependencies: step.effectDependencies,
+          }),
+          'mutator must not mutate dependencies or effects',
+        );
+      }
+    }
+
     return {
       env: await (this.env as KeyValueImpl<this>).toJson(),
-      steps: await Promise.all(
-        (await this.toList(newOpts)).map((s) => s.toJson(newOpts)),
-      ),
+      steps: await Promise.all(steps.map((s) => s.toJson(newOpts))),
     };
   }
 }

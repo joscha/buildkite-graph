@@ -41,6 +41,13 @@ steps: []
 "
 `;
 
+exports[`buildkite-graph Pipeline env yaml_mutate 1`] = `
+"env:
+  COLOR: '1'
+steps: []
+"
+`;
+
 exports[`buildkite-graph Pipeline steps dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
@@ -85,6 +92,13 @@ exports[`buildkite-graph Pipeline steps yaml 1`] = `
 exports[`buildkite-graph Pipeline steps yaml_depends_on 1`] = `
 "steps:
   - key: _0
+    command: command
+"
+`;
+
+exports[`buildkite-graph Pipeline steps yaml_mutate 1`] = `
+"steps:
+  - key: mutated_1360099341
     command: command
 "
 `;
@@ -648,6 +662,98 @@ exports[`buildkite-graph general serialization complex yaml_depends_on 1`] = `
 "
 `;
 
+exports[`buildkite-graph general serialization complex yaml_mutate 1`] = `
+"steps:
+  - label: Build Editor
+    key: mutated_-524811166
+    command: web/bin/buildkite/run_web_step.sh build editor
+  - label: Test Editor
+    key: mutated_-820674632
+    command: web/bin/buildkite/run_web_step.sh test editor
+  - label: Annotate failures
+    key: mutated_-1548825547
+    depends_on:
+      - step: mutated_-820674632
+        allow_failure: true
+    plugins:
+      - bugcrowd/test-summary#v1.5.0:
+          inputs:
+            - label: ':htmllint: HTML lint'
+              artifact_path: web/target/htmllint-*.txt
+              type: oneline
+      - detect-clowns#v1.0.0: ~
+  - label: Upload coverage
+    key: mutated_-251307587
+    depends_on:
+      - step: mutated_-820674632
+        allow_failure: true
+    command: web/bin/buildkite/run_web_step.sh deploy-report coverage editor
+  - label: Integration tests
+    key: mutated_89839195
+    depends_on:
+      - step: mutated_-524811166
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests local editor
+      chrome
+    parallelism: 8
+  - label: ':saucelabs: Integration tests'
+    key: mutated_-2007261278
+    depends_on:
+      - step: mutated_89839195
+    command: >-
+      web/bin/buildkite/run_web_step.sh run-integration-tests saucelabs editor
+      safari
+    parallelism: 8
+    plugins:
+      - sauce-connect-plugin: ~
+  - label: Visreg baseline update
+    key: mutated_1074012661
+    depends_on:
+      - step: mutated_89839195
+    command: web/bin/buildkite/run_web_step.sh run-visual-regression editor
+  - label: Annotate cucumber failures
+    key: mutated_-835408298
+    depends_on:
+      - step: mutated_-2007261278
+        allow_failure: true
+      - step: mutated_89839195
+        allow_failure: true
+    command: web/bin/buildkite/run_web_step.sh annotate-cucumber-failed-cases
+  - label: Copy to deploy bucket
+    key: mutated_1456764841
+    depends_on:
+      - step: mutated_-2007261278
+    command: web/bin/buildkite/run_web_step.sh copy-to-deploy-bucket editor
+  - label: Update checkpoint
+    key: mutated_-791177691
+    depends_on:
+      - step: mutated_1456764841
+    command: production/test/jobs/advance_branch.sh \\"checkpoint/web/green/editor\\"
+  - trigger: web-deploy
+    label: Deploy to tech
+    key: _0
+    depends_on:
+      - step: mutated_1456764841
+    build:
+      env:
+        FLAVOR: tech
+        RELEASE_PATH: some/path/
+  - trigger: web-deploy
+    label: Deploy to usertesting
+    key: _1
+    depends_on:
+      - step: mutated_1456764841
+    build:
+      env:
+        FLAVOR: usertesting
+        RELEASE_PATH: some/path/
+  - key: _2
+    depends_on:
+      - step: mutated_-791177691
+    block: Release editor
+"
+`;
+
 exports[`buildkite-graph general serialization simple dot 1`] = `
 "digraph \\"web-deploy\\" {
   graph [ compound =true ];
@@ -710,6 +816,17 @@ exports[`buildkite-graph general serialization simple yaml_depends_on 1`] = `
 steps:
   - label: Deploy
     key: _0
+    command: buildkite/deploy_web.sh
+"
+`;
+
+exports[`buildkite-graph general serialization simple yaml_mutate 1`] = `
+"env:
+  USE_COLOR: '1'
+  DEBUG: 'true'
+steps:
+  - label: Deploy
+    key: mutated_114586020
     command: buildkite/deploy_web.sh
 "
 `;
@@ -791,6 +908,17 @@ exports[`buildkite-graph missing transitive steps get added to the graph yaml_de
   - key: _1
     depends_on:
       - step: _0
+    command: yarn test
+"
+`;
+
+exports[`buildkite-graph missing transitive steps get added to the graph yaml_mutate 1`] = `
+"steps:
+  - key: mutated_-1525436778
+    command: yarn
+  - key: mutated_137155087
+    depends_on:
+      - step: mutated_-1525436778
     command: yarn test
 "
 `;

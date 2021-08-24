@@ -1,9 +1,13 @@
+import { MutatorFn } from 'src/serializers';
 import {
   Pipeline,
   Serializer,
   serializers as predefinedSerializers,
+  Step,
+  CommandStep,
 } from '../';
 import { resetUuidCounter } from './setup';
+import seedrandom from 'seedrandom';
 
 type SerializerType =
   | 'json'
@@ -11,8 +15,17 @@ type SerializerType =
   | 'yaml'
   | 'yaml_depends_on'
   | 'dot'
-  | 'structure';
+  | 'structure'
+  | 'yaml_mutate';
 
+const mutate: MutatorFn = async (entity: Step) => {
+  if (entity instanceof CommandStep) {
+    const random = seedrandom(
+      JSON.stringify(entity.command.map((command) => command.serialize())),
+    );
+    entity.withKey(`mutated_${random.int32()}`);
+  }
+};
 export const serializers: Record<SerializerType, Serializer<any>> = {
   json: new predefinedSerializers.JsonSerializer(),
   json_depends_on: new predefinedSerializers.JsonSerializer({
@@ -24,6 +37,10 @@ export const serializers: Record<SerializerType, Serializer<any>> = {
   }),
   dot: new predefinedSerializers.DotSerializer(),
   structure: new predefinedSerializers.StructuralSerializer(),
+  yaml_mutate: new predefinedSerializers.YamlSerializer({
+    explicitDependencies: true,
+    mutator: mutate,
+  }),
 };
 
 type PipelineGenerator = () => Pipeline | Pipeline[];
@@ -35,6 +52,7 @@ const defaultSerializerTypes: SerializerType[] = [
   'yaml_depends_on',
   'dot',
   'structure',
+  'yaml_mutate',
 ];
 
 export const createTest = (
