@@ -20,10 +20,10 @@ type SerializerType =
 
 const mutate: MutatorFn = async (entity: Step) => {
   if (entity instanceof CommandStep) {
-    const seed = seedrandom(
+    const random = seedrandom(
       JSON.stringify(entity.command.map((command) => command.serialize())),
     );
-    entity.withKey(`key-${seed.int32()}`);
+    entity.withKey(`key-${random.int32()}`);
   }
 };
 export const serializers: Record<SerializerType, Serializer<any>> = {
