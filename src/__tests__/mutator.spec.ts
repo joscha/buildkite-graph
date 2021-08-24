@@ -57,7 +57,7 @@ describe('buildkite-graph', () => {
               entity.dependsOn(dep);
             },
           }).serialize(pipeline),
-        ).rejects.toThrow('mutator cannot mutate dependencies');
+        ).rejects.toThrow('mutator must not mutate dependencies');
       });
     });
   });

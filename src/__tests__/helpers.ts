@@ -4,8 +4,6 @@ import {
   Serializer,
   serializers as predefinedSerializers,
   Step,
-  CommandStep,
-  Command,
 } from '../';
 import { resetUuidCounter } from './setup';
 
@@ -19,14 +17,7 @@ type SerializerType =
   | 'yaml_mutate';
 
 const mutate: MutatorFn = async (entity: Step) => {
-  if (entity instanceof CommandStep) {
-    for (let i = 0; i < entity.command.length; i++) {
-      const command = entity.command[i];
-      if (command.timeout !== 0 && command.timeout !== Infinity) {
-        entity.command[i] = new Command(command.command);
-      }
-    }
-  }
+  return;
 };
 export const serializers: Record<SerializerType, Serializer<any>> = {
   json: new predefinedSerializers.JsonSerializer(),
@@ -51,7 +42,7 @@ const defaultSerializerTypes: SerializerType[] = [
   'yaml_depends_on',
   'dot',
   'structure',
-  'mutate',
+  'yaml_mutate',
 ];
 
 export const createTest = (

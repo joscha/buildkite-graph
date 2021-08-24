@@ -12,6 +12,7 @@ import { sortedWithBlocks } from './sortedWithBlocks';
 import { WaitStep } from './steps/wait';
 import { StepCache } from './unwrapSteps';
 import { isEqual } from 'lodash';
+import { ok } from 'assert';
 export { ExitStatus, Step } from './base';
 export { Conditional, Generator, ThingOrGenerator } from './conditional';
 export { KeyValue } from './key_value';
@@ -42,9 +43,8 @@ export type ToJsonSerializationOptions =
   | {
       explicitDependencies: true;
       cache: StepCache;
-      mutator?: MutatorFn;
     }
-  | { explicitDependencies: false; mutator?: MutatorFn };
+  | { explicitDependencies: false };
 
 type JSON = Record<string, unknown> | JSON[];
 export interface Serializable {
@@ -121,11 +121,9 @@ export class Pipeline implements Serializable {
       ? {
           explicitDependencies: true,
           cache: new Map(),
-          mutator: opts.mutator,
         }
       : {
           explicitDependencies: false,
-          mutator: opts.mutator,
         };
 
     const steps = await this.toList(newOpts);
@@ -134,22 +132,21 @@ export class Pipeline implements Serializable {
         if (!(step instanceof Step)) {
           continue;
         }
-          const deps = {
-            dependencies: new Set(step.dependencies),
-            effectDependencies: new Set(step.effectDependencies),
-          };
-          await opts.mutator(step);
-          if (
-            !isEqual(deps, {
-              dependencies: step.dependencies,
-              effectDependencies: step.effectDependencies,
-            })
-          ) {
-            throw new Error('mutator must not mutate dependencies or effects');
-          }
-        }
+        const deps = {
+          dependencies: new Set(step.dependencies),
+          effectDependencies: new Set(step.effectDependencies),
+        };
+        await opts.mutator(step);
+        ok(
+          isEqual(deps, {
+            dependencies: step.dependencies,
+            effectDependencies: step.effectDependencies,
+          }),
+          'mutator must not mutate dependencies or effects',
+        );
       }
     }
+
     return {
       env: await (this.env as KeyValueImpl<this>).toJson(),
       steps: await Promise.all(steps.map((s) => s.toJson(newOpts))),

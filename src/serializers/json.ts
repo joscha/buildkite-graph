@@ -3,7 +3,6 @@ import { MutatorFn, Serializer } from '.';
 
 type JsonSerializationOptions = {
   stringify?: boolean;
-  mutator?: MutatorFn;
 } & SerializationOptions;
 
 export class JsonSerializer
