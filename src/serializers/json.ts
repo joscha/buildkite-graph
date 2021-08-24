@@ -1,5 +1,5 @@
 import { Pipeline, SerializationOptions } from '../';
-import { MutatorFn, Serializer } from '.';
+import { Serializer } from '.';
 
 type JsonSerializationOptions = {
   stringify?: boolean;
