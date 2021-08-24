@@ -55,6 +55,7 @@ exports[`buildkite-graph Steps Block branches yaml_depends_on 1`] = `
 exports[`buildkite-graph Steps Block branches yaml_mutate 1`] = `
 "steps:
   - branches: '!release/* master stable/*'
+    key: _0
     block: my title
 "
 `;
@@ -161,13 +162,15 @@ exports[`buildkite-graph Steps Block can be added yaml_depends_on 2`] = `
 
 exports[`buildkite-graph Steps Block can be added yaml_mutate 1`] = `
 "steps:
-  - block: ':rocket: Release!'
+  - key: _0
+    block: ':rocket: Release!'
 "
 `;
 
 exports[`buildkite-graph Steps Block can be added yaml_mutate 2`] = `
 "steps:
-  - block: ':rocket: Release!'
+  - key: _1
+    block: ':rocket: Release!'
     prompt: Release to production?
 "
 `;
@@ -604,7 +607,8 @@ exports[`buildkite-graph Steps Block with fields yaml_depends_on 4`] = `
 
 exports[`buildkite-graph Steps Block with fields yaml_mutate 1`] = `
 "steps:
-  - block: my title
+  - key: _0
+    block: my title
     fields:
       - key: field-1
         text: Label 1
@@ -618,7 +622,8 @@ exports[`buildkite-graph Steps Block with fields yaml_mutate 1`] = `
 
 exports[`buildkite-graph Steps Block with fields yaml_mutate 2`] = `
 "steps:
-  - block: my title
+  - key: _1
+    block: my title
     fields:
       - key: release-name
         hint: 'What’s the code name for this release? :name_badge:'
@@ -630,7 +635,8 @@ exports[`buildkite-graph Steps Block with fields yaml_mutate 2`] = `
 
 exports[`buildkite-graph Steps Block with fields yaml_mutate 3`] = `
 "steps:
-  - block: my title
+  - key: _2
+    block: my title
     fields:
       - key: release-stream
         hint: What’s the release stream?
@@ -647,7 +653,8 @@ exports[`buildkite-graph Steps Block with fields yaml_mutate 3`] = `
 
 exports[`buildkite-graph Steps Block with fields yaml_mutate 4`] = `
 "steps:
-  - block: my title
+  - key: _3
+    block: my title
     fields:
       - key: regions
         hint: 'Which regions should we deploy this to? :earth_asia:'

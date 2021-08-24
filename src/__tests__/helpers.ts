@@ -37,7 +37,10 @@ export const serializers: Record<SerializerType, Serializer<any>> = {
   }),
   dot: new predefinedSerializers.DotSerializer(),
   structure: new predefinedSerializers.StructuralSerializer(),
-  yaml_mutate: new predefinedSerializers.YamlSerializer({ mutator: mutate }),
+  yaml_mutate: new predefinedSerializers.YamlSerializer({
+    explicitDependencies: true,
+    mutator: mutate,
+  }),
 };
 
 type PipelineGenerator = () => Pipeline | Pipeline[];

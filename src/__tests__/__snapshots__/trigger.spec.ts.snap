@@ -170,6 +170,7 @@ exports[`buildkite-graph Steps Trigger async yaml_mutate 1`] = `
 "steps:
   - trigger: another
     label: Label
+    key: _0
     async: true
 "
 `;
@@ -178,12 +179,14 @@ exports[`buildkite-graph Steps Trigger async yaml_mutate 2`] = `
 "steps:
   - trigger: another
     label: Label
+    key: _1
 "
 `;
 
 exports[`buildkite-graph Steps Trigger async yaml_mutate 3`] = `
 "steps:
   - trigger: another
+    key: _2
     async: true
 "
 `;
@@ -511,6 +514,7 @@ exports[`buildkite-graph Steps Trigger build yaml_depends_on 5`] = `
 exports[`buildkite-graph Steps Trigger build yaml_mutate 1`] = `
 "steps:
   - trigger: another
+    key: _0
     build:
       env:
         KEY: VALUE
@@ -521,6 +525,7 @@ exports[`buildkite-graph Steps Trigger build yaml_mutate 1`] = `
 exports[`buildkite-graph Steps Trigger build yaml_mutate 2`] = `
 "steps:
   - trigger: another
+    key: _1
     build:
       branch: rease-bla
 "
@@ -529,6 +534,7 @@ exports[`buildkite-graph Steps Trigger build yaml_mutate 2`] = `
 exports[`buildkite-graph Steps Trigger build yaml_mutate 3`] = `
 "steps:
   - trigger: another
+    key: _2
     build:
       commit: c0ffee
 "
@@ -537,6 +543,7 @@ exports[`buildkite-graph Steps Trigger build yaml_mutate 3`] = `
 exports[`buildkite-graph Steps Trigger build yaml_mutate 4`] = `
 "steps:
   - trigger: another
+    key: _3
     build:
       message: My messge
 "
@@ -545,6 +552,7 @@ exports[`buildkite-graph Steps Trigger build yaml_mutate 4`] = `
 exports[`buildkite-graph Steps Trigger build yaml_mutate 5`] = `
 "steps:
   - trigger: another
+    key: _4
     build:
       meta_data:
         release-version: '1.1'
@@ -655,12 +663,14 @@ exports[`buildkite-graph Steps Trigger can trigger another pipeline yaml_depends
 exports[`buildkite-graph Steps Trigger can trigger another pipeline yaml_mutate 1`] = `
 "steps:
   - trigger: another-build
+    key: _0
 "
 `;
 
 exports[`buildkite-graph Steps Trigger can trigger another pipeline yaml_mutate 2`] = `
 "steps:
   - trigger: another-build
+    key: _1
 "
 `;
 
@@ -722,6 +732,7 @@ exports[`buildkite-graph Steps Trigger limit branches yaml_mutate 1`] = `
 "steps:
   - trigger: another
     branches: master
+    key: _0
 "
 `;
 
@@ -783,5 +794,6 @@ exports[`buildkite-graph Steps Trigger with a label yaml_mutate 1`] = `
 "steps:
   - trigger: another
     label: Trigger another pipeline
+    key: _0
 "
 `;
