@@ -4,8 +4,10 @@ import {
   Serializer,
   serializers as predefinedSerializers,
   Step,
+  CommandStep,
 } from '../';
 import { resetUuidCounter } from './setup';
+import seedrandom from 'seedrandom';
 
 type SerializerType =
   | 'json'
@@ -17,7 +19,12 @@ type SerializerType =
   | 'yaml_mutate';
 
 const mutate: MutatorFn = async (entity: Step) => {
-  return;
+  if (entity instanceof CommandStep) {
+    const seed = seedrandom(
+      JSON.stringify(entity.command.map((command) => command.serialize())),
+    );
+    entity.withKey(`key-${seed.int32()}`);
+  }
 };
 export const serializers: Record<SerializerType, Serializer<any>> = {
   json: new predefinedSerializers.JsonSerializer(),
