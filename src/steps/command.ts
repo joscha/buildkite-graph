@@ -83,9 +83,25 @@ const transformSkipValue = (
 
 type ConcurrencyMethod = 'eager' | 'ordered';
 
+type CommandProperty =
+  | 'command'
+  | 'priority'
+  | 'parallelism'
+  | 'concurrency'
+  | 'concurrency_group'
+  | 'concurrency_method'
+  | 'artifact_paths'
+  | 'agents'
+  | 'timeout_in_minutes'
+  | 'soft_fail'
+  | 'plugins'
+  | 'skip'
+  | 'retry'
+  | 'env';
 export class CommandStep extends LabeledStep {
   public readonly command: Command[] = [];
   public readonly env: KeyValue<this>;
+  private readonly overrides: Map<string, string> = new Map();
 
   private _parallelism?: number;
   private get parallelism(): number | undefined {
@@ -234,6 +250,20 @@ export class CommandStep extends LabeledStep {
     return this;
   }
 
+  /**
+   * Allows to override the value of a property of the command.
+   * The override is the name of a environment variable.
+   *
+   * E.g. `withParameterOverride('priority', 'CUSTOM_PRIORITY')` would
+   * then yield `priority: ${CUSTOM_PRIORITY}` in the resulting serialization.
+   */
+  withParameterOverride(key: CommandProperty, value: string): this {
+    ow(key, ow.string.nonEmpty);
+    ow(value, ow.string.nonEmpty);
+    this.overrides.set(key, value);
+    return this;
+  }
+
   skip(skip: SkipValue | SkipFunction): this {
     if (typeof skip !== 'function') {
       assertSkipValue(skip);
@@ -253,9 +283,16 @@ export class CommandStep extends LabeledStep {
     );
   }
 
+  private valueWithOverride<T>(value: T, key: CommandProperty): string | T {
+    if (this.overrides.has(key)) {
+      return `$\{${this.overrides.get(key) as string}}`;
+    }
+    return value;
+  }
+
   async toJson(
     opts: ToJsonSerializationOptions = { explicitDependencies: false },
-  ): Promise<Record<string, unknown>> {
+  ): Promise<Record<CommandProperty, unknown>> {
     // Need to pull out one of env/retry to get around a weird Typescript v4.0 bug.
     // When both env and retry were specified inside the return object,
     // the contents of retry were being copied to env.
@@ -263,22 +300,47 @@ export class CommandStep extends LabeledStep {
     const retry = await (this.retry as RetryImpl<this>).toJson();
     return {
       ...(await super.toJson(opts)),
-      command: Command[transformCommandKey](this.command),
-      priority: this.priority,
-      env,
-      parallelism: this.parallelism,
-      concurrency: this.concurrency,
-      concurrency_group: this.concurrencyGroup,
-      concurrency_method: this.concurrencyMethod,
-      artifact_paths: this._artifactPaths.size
-        ? Array.from(this._artifactPaths)
-        : undefined,
-      agents: this.agents.size ? mapToObject(this.agents) : undefined,
-      timeout_in_minutes: this.timeout,
-      plugins: transformPlugins(this.plugins as PluginsImpl<this>),
-      soft_fail: transformSoftFail(this._softFail),
-      skip: this._skip ? transformSkipValue(this._skip) : undefined,
-      retry,
+      command: this.valueWithOverride(
+        Command[transformCommandKey](this.command),
+        'command',
+      ),
+      priority: this.valueWithOverride(this.priority, 'priority'),
+      env: this.valueWithOverride(env, 'env'),
+      parallelism: this.valueWithOverride(this.parallelism, 'parallelism'),
+      concurrency: this.valueWithOverride(this.concurrency, 'concurrency'),
+      concurrency_group: this.valueWithOverride(
+        this.concurrencyGroup,
+        'concurrency_group',
+      ),
+      concurrency_method: this.valueWithOverride(
+        this.concurrencyMethod,
+        'concurrency_method',
+      ),
+      artifact_paths: this.valueWithOverride(
+        this._artifactPaths.size ? Array.from(this._artifactPaths) : undefined,
+        'artifact_paths',
+      ),
+      agents: this.valueWithOverride(
+        this.agents.size ? mapToObject(this.agents) : undefined,
+        'agents',
+      ),
+      timeout_in_minutes: this.valueWithOverride(
+        this.timeout,
+        'timeout_in_minutes',
+      ),
+      plugins: this.valueWithOverride(
+        transformPlugins(this.plugins as PluginsImpl<this>),
+        'plugins',
+      ),
+      soft_fail: this.valueWithOverride(
+        transformSoftFail(this._softFail),
+        'soft_fail',
+      ),
+      skip: this.valueWithOverride(
+        this._skip ? transformSkipValue(this._skip) : undefined,
+        'skip',
+      ),
+      retry: this.valueWithOverride(retry, 'retry'),
     };
   }
 }
