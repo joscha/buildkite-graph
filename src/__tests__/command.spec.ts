@@ -375,6 +375,18 @@ describe('buildkite-graph', () => {
           ).toThrow();
         });
       });
+
+      describe('withParameterOverride', () => {
+        it('produces an override for a given key', async () => {
+          await expect(
+            new CommandStep('noop')
+              .withParameterOverride('priority', 'MY_PRIORITY')
+              .toJson(),
+          ).resolves.toEqual(
+            expect.objectContaining({ priority: '${MY_PRIORITY}' }),
+          );
+        });
+      });
     });
   });
 });
