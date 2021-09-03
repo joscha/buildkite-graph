@@ -383,7 +383,16 @@ describe('buildkite-graph', () => {
               .withParameterOverride('priority', 'MY_PRIORITY')
               .toJson(),
           ).resolves.toEqual(
-            expect.objectContaining({ priority: '${MY_PRIORITY}' }),
+            expect.objectContaining({ priority: '$MY_PRIORITY' }),
+          );
+        });
+        it('supports double escape', async () => {
+          await expect(
+            new CommandStep('noop')
+              .withParameterOverride('priority', '$MY_PRIORITY')
+              .toJson(),
+          ).resolves.toEqual(
+            expect.objectContaining({ priority: '$$MY_PRIORITY' }),
           );
         });
       });

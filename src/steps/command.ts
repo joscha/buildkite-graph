@@ -285,7 +285,7 @@ export class CommandStep extends LabeledStep {
 
   private valueWithOverride<T>(value: T, key: CommandProperty): string | T {
     if (this.overrides.has(key)) {
-      return `$\{${this.overrides.get(key) as string}}`;
+      return ('$' + this.overrides.get(key)) as string;
     }
     return value;
   }
