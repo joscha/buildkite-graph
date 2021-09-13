@@ -252,14 +252,16 @@ export class CommandStep extends LabeledStep {
 
   /**
    * Allows to override the value of a property of the command.
-   * The override is the name of a environment variable.
+   * The override needs to follow the syntax for a Buildkite-supported
+   * environment variable (supporting fallbacks, etc.).
    *
-   * E.g. `withParameterOverride('priority', 'CUSTOM_PRIORITY')` would
+   * E.g. `withParameterOverride('priority', '${CUSTOM_PRIORITY}')` would
    * then yield `priority: ${CUSTOM_PRIORITY}` in the resulting serialization.
+   * The value is used verbatim.
    */
   withParameterOverride(key: CommandProperty, value: string): this {
     ow(key, ow.string.nonEmpty);
-    ow(value, ow.string.nonEmpty);
+    ow(value, ow.string.nonEmpty.startsWith('$'));
     this.overrides.set(key, value);
     return this;
   }
@@ -285,7 +287,7 @@ export class CommandStep extends LabeledStep {
 
   private valueWithOverride<T>(value: T, key: CommandProperty): string | T {
     if (this.overrides.has(key)) {
-      return ('$' + this.overrides.get(key)) as string;
+      return this.overrides.get(key) as string;
     }
     return value;
   }

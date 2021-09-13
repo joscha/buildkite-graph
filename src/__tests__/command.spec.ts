@@ -377,19 +377,27 @@ describe('buildkite-graph', () => {
       });
 
       describe('withParameterOverride', () => {
+        it('asserts that the passed override is a variable', async () => {
+          await expect(() =>
+            new CommandStep('noop').withParameterOverride(
+              'priority',
+              'MY_PRIORITY',
+            ),
+          ).toThrow();
+        });
         it('produces an override for a given key', async () => {
           await expect(
             new CommandStep('noop')
-              .withParameterOverride('priority', 'MY_PRIORITY')
+              .withParameterOverride('priority', '${MY_PRIORITY:-0}')
               .toJson(),
           ).resolves.toEqual(
-            expect.objectContaining({ priority: '$MY_PRIORITY' }),
+            expect.objectContaining({ priority: '${MY_PRIORITY:-0}' }),
           );
         });
         it('supports double escape', async () => {
           await expect(
             new CommandStep('noop')
-              .withParameterOverride('priority', '$MY_PRIORITY')
+              .withParameterOverride('priority', '$$MY_PRIORITY')
               .toJson(),
           ).resolves.toEqual(
             expect.objectContaining({ priority: '$$MY_PRIORITY' }),
