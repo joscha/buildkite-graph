@@ -13,7 +13,8 @@ import {
   mapToObject,
 } from '../base';
 import { Retry, RetryImpl } from './command/retry';
-import type { ToJsonSerializationOptions } from '../index';
+import type { ToJsonSerializationOptions } from '../serialization';
+import { toJsonSerializationDefaultOptions } from '../serialization';
 
 function assertTimeout(timeout: number): void {
   ow(timeout, ow.number.integerOrInfinite.positive);
@@ -293,7 +294,7 @@ export class CommandStep extends LabeledStep {
   }
 
   async toJson(
-    opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    opts: ToJsonSerializationOptions = toJsonSerializationDefaultOptions,
   ): Promise<Record<CommandProperty, unknown>> {
     // Need to pull out one of env/retry to get around a weird Typescript v4.0 bug.
     // When both env and retry were specified inside the return object,

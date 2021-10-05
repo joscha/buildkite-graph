@@ -1,4 +1,5 @@
-import { Pipeline, SerializationOptions } from '../';
+import { Pipeline } from '../index';
+import { SerializationOptions } from '../serialization';
 import { Serializer } from '.';
 
 type JsonSerializationOptions = {

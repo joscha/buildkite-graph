@@ -36,6 +36,46 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+      "key": "_0",
+    },
+    Object {
+      "command": "b",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+      "key": "_0",
+    },
+    Object {
+      "command": "b",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency dot 1`] = `
 "digraph \\"x\\" {
   graph [ compound =true ];
@@ -78,6 +118,64 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+      "key": "_0",
+    },
+    Object {
+      "command": "b",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+    Object {
+      "command": "c",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_2",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "a",
+      "key": "_0",
+    },
+    Object {
+      "command": "b",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+    Object {
+      "command": "c",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_2",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency structure 1`] = `
 "* <a>
 * [wait]
@@ -94,6 +192,51 @@ exports[`buildkite-graph Steps Command Conditional dependencies can be specified
 "
 `;
 
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: a
+  - key: _1
+    depends_on:
+      - step: _0
+    command: b
+  - key: _2
+    depends_on:
+      - step: _0
+    command: c
+"
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency yaml_depends_on_accept_all 1`] = `
+"steps:
+  - key: _0
+    command: a
+  - key: _1
+    depends_on:
+      - step: _0
+    command: b
+  - key: _2
+    depends_on:
+      - step: _0
+    command: c
+"
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified multiple times as dependency yaml_mutate 1`] = `
+"steps:
+  - key: mutated_1944449125
+    command: a
+  - key: mutated_966993846
+    depends_on:
+      - step: mutated_1944449125
+    command: b
+  - key: mutated_451205911
+    depends_on:
+      - step: mutated_1944449125
+    command: c
+"
+`;
+
 exports[`buildkite-graph Steps Command Conditional dependencies can be specified structure 1`] = `
 "* <a>
 * [wait]
@@ -105,6 +248,39 @@ exports[`buildkite-graph Steps Command Conditional dependencies can be specified
   - command: a
   - wait: ~
   - command: b
+"
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command: a
+  - key: _1
+    depends_on:
+      - step: _0
+    command: b
+"
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified yaml_depends_on_accept_all 1`] = `
+"steps:
+  - key: _0
+    command: a
+  - key: _1
+    depends_on:
+      - step: _0
+    command: b
+"
+`;
+
+exports[`buildkite-graph Steps Command Conditional dependencies can be specified yaml_mutate 1`] = `
+"steps:
+  - key: mutated_1944449125
+    command: a
+  - key: mutated_966993846
+    depends_on:
+      - step: mutated_1944449125
+    command: b
 "
 `;
 
@@ -146,6 +322,54 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command async step addition json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command async step addition json_depends_on 2`] = `
+Object {
+  "steps": Array [],
+}
+`;
+
+exports[`buildkite-graph Steps Command async step addition json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command async step addition json_depends_on_accept_all 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command async step addition structure 1`] = `"* <yarn && yarn test>"`;
 
 exports[`buildkite-graph Steps Command async step addition structure 2`] = `""`;
@@ -159,6 +383,52 @@ exports[`buildkite-graph Steps Command async step addition yaml 1`] = `
 `;
 
 exports[`buildkite-graph Steps Command async step addition yaml 2`] = `
+"steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Command async step addition yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step addition yaml_depends_on 2`] = `
+"steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Command async step addition yaml_depends_on_accept_all 1`] = `
+"steps:
+  - key: _0
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step addition yaml_depends_on_accept_all 2`] = `
+"steps:
+  - key: _1
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step addition yaml_mutate 1`] = `
+"steps:
+  - key: mutated_1033664532
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step addition yaml_mutate 2`] = `
 "steps: []
 "
 `;
@@ -213,6 +483,62 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command async step creation json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command async step creation json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command async step creation json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command async step creation json_depends_on_accept_all 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command async step creation structure 1`] = `"* <yarn && yarn test>"`;
 
 exports[`buildkite-graph Steps Command async step creation structure 2`] = `"* <yarn && yarn test>"`;
@@ -228,6 +554,60 @@ exports[`buildkite-graph Steps Command async step creation yaml 1`] = `
 exports[`buildkite-graph Steps Command async step creation yaml 2`] = `
 "steps:
   - command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step creation yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step creation yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step creation yaml_depends_on_accept_all 1`] = `
+"steps:
+  - key: _0
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step creation yaml_depends_on_accept_all 2`] = `
+"steps:
+  - key: _1
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step creation yaml_mutate 1`] = `
+"steps:
+  - key: mutated_1033664532
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command async step creation yaml_mutate 2`] = `
+"steps:
+  - key: mutated_1033664532
+    command:
       - yarn
       - yarn test
 "
@@ -282,6 +662,37 @@ exports[`buildkite-graph Steps Command isEffectOf later steps affect earlier eff
 * [wait]
 * <release app>
 * <run integration tests>"
+`;
+
+exports[`buildkite-graph Steps Command isEffectOf will add steps if acceptAllConditions is set even if effect dependency is rejected json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "run tests",
+      "key": "_0",
+    },
+    Object {
+      "command": "deploy coverage",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command isEffectOf will add steps if acceptAllConditions is set even if effect dependency is rejected yaml_depends_on_accept_all 1`] = `
+"steps:
+  - key: _0
+    command: run tests
+  - key: _1
+    depends_on:
+      - step: _0
+    command: deploy coverage
+"
 `;
 
 exports[`buildkite-graph Steps Command isEffectOf will add steps if their effect dependency is accepted structure 1`] = `
@@ -357,6 +768,82 @@ Object {
 }
 `;
 
+exports[`buildkite-graph Steps Command step addition json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command step addition json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command step addition json_depends_on 3`] = `
+Object {
+  "steps": Array [],
+}
+`;
+
+exports[`buildkite-graph Steps Command step addition json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_0",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command step addition json_depends_on_accept_all 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command step addition json_depends_on_accept_all 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": Array [
+        "yarn",
+        "yarn test",
+      ],
+      "key": "_2",
+    },
+  ],
+}
+`;
+
 exports[`buildkite-graph Steps Command step addition structure 1`] = `"* <yarn && yarn test>"`;
 
 exports[`buildkite-graph Steps Command step addition structure 2`] = `"* <yarn && yarn test>"`;
@@ -380,6 +867,79 @@ exports[`buildkite-graph Steps Command step addition yaml 2`] = `
 `;
 
 exports[`buildkite-graph Steps Command step addition yaml 3`] = `
+"steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_depends_on 1`] = `
+"steps:
+  - key: _0
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_depends_on 2`] = `
+"steps:
+  - key: _1
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_depends_on 3`] = `
+"steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_depends_on_accept_all 1`] = `
+"steps:
+  - key: _0
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_depends_on_accept_all 2`] = `
+"steps:
+  - key: _1
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_depends_on_accept_all 3`] = `
+"steps:
+  - key: _2
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_mutate 1`] = `
+"steps:
+  - key: mutated_1033664532
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_mutate 2`] = `
+"steps:
+  - key: mutated_1033664532
+    command:
+      - yarn
+      - yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Command step addition yaml_mutate 3`] = `
 "steps: []
 "
 `;

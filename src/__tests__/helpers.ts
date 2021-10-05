@@ -12,8 +12,10 @@ import seedrandom from 'seedrandom';
 type SerializerType =
   | 'json'
   | 'json_depends_on'
+  | 'json_depends_on_accept_all'
   | 'yaml'
   | 'yaml_depends_on'
+  | 'yaml_depends_on_accept_all'
   | 'dot'
   | 'structure'
   | 'yaml_mutate';
@@ -31,9 +33,17 @@ export const serializers: Record<SerializerType, Serializer<any>> = {
   json_depends_on: new predefinedSerializers.JsonSerializer({
     explicitDependencies: true,
   }),
+  json_depends_on_accept_all: new predefinedSerializers.JsonSerializer({
+    explicitDependencies: true,
+    acceptAllConditions: true,
+  }),
   yaml: new predefinedSerializers.YamlSerializer(),
   yaml_depends_on: new predefinedSerializers.YamlSerializer({
     explicitDependencies: true,
+  }),
+  yaml_depends_on_accept_all: new predefinedSerializers.YamlSerializer({
+    explicitDependencies: true,
+    acceptAllConditions: true,
   }),
   dot: new predefinedSerializers.DotSerializer(),
   structure: new predefinedSerializers.StructuralSerializer(),
@@ -48,8 +58,10 @@ type PipelineGenerator = () => Pipeline | Pipeline[];
 const defaultSerializerTypes: SerializerType[] = [
   'json',
   'json_depends_on',
+  'json_depends_on_accept_all',
   'yaml',
   'yaml_depends_on',
+  'yaml_depends_on_accept_all',
   'dot',
   'structure',
   'yaml_mutate',

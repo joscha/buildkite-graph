@@ -1,5 +1,5 @@
 import { BaseStep } from '../base';
-import { Serializable } from '../index';
+import { Serializable } from '../serialization';
 
 export class WaitStep implements BaseStep, Serializable {
   constructor(public continueOnFailure = false) {}

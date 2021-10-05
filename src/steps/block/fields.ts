@@ -1,6 +1,6 @@
 import ow from 'ow';
 import { Chainable } from '../../base';
-import { Serializable } from '../../index';
+import { Serializable } from '../../serialization';
 
 abstract class Field implements Serializable {
   constructor(

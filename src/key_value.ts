@@ -1,6 +1,6 @@
 import ow from 'ow';
 import { Chainable, mapToObject } from './base';
-import { Serializable } from './index';
+import { Serializable } from './serialization';
 
 export interface KeyValue<T> {
   set(name: string, value: string): T;

@@ -2,7 +2,12 @@ import slugify from '@sindresorhus/slugify';
 import { Step } from './base';
 import { Conditional } from './conditional';
 import { KeyValue, KeyValueImpl } from './key_value';
-import { MutatorFn } from './serializers';
+import {
+  ToJsonSerializationOptions,
+  toJsonSerializationDefaultOptions,
+  Serializable,
+  SerializationOptions,
+} from './serialization';
 import { DotSerializer } from './serializers/dot';
 import { JsonSerializer } from './serializers/json';
 import { StructuralSerializer } from './serializers/structural';
@@ -10,7 +15,6 @@ import { YamlSerializer } from './serializers/yaml';
 import { sortedSteps } from './sortedSteps';
 import { sortedWithBlocks } from './sortedWithBlocks';
 import { WaitStep } from './steps/wait';
-import { StepCache } from './unwrapSteps';
 import { isEqual } from 'lodash';
 import { ok } from 'assert';
 export { ExitStatus, Step } from './base';
@@ -22,41 +26,12 @@ export { Option, SelectField, TextField } from './steps/block/fields';
 export { Command, CommandStep } from './steps/command';
 export { Plugin } from './steps/command/plugins';
 export { TriggerStep } from './steps/trigger';
-export { MutatorFn } from './serializers';
 export const serializers = {
   DotSerializer,
   JsonSerializer,
   StructuralSerializer,
   YamlSerializer,
 };
-
-export type SerializationOptions = {
-  /**
-   * Whether to use the new depends_on syntax which allows the serializer to serialize into a graph with dependencies instead of a list with wait steps.
-   * More details here: https://buildkite.com/docs/pipelines/dependencies#defining-explicit-dependencies
-   */
-  explicitDependencies?: boolean;
-  /**
-   * Allows passing in a method that will be called on every Step in a topological sorted list of steps
-   * This mutator can mutate anything in a Step except things that can change the structural integrity of the DAG.
-   * i.e. the mutator must not mutate anything in Step dependencies or effective dependencies, and also must be
-   * mutated in place.
-   * Example: examples/mutate_graph.ts
-   */
-  mutator?: MutatorFn;
-};
-
-export type ToJsonSerializationOptions =
-  | {
-      explicitDependencies: true;
-      cache: StepCache;
-    }
-  | { explicitDependencies: false };
-
-type JSON = Record<string, unknown> | JSON[];
-export interface Serializable {
-  toJson(opts?: ToJsonSerializationOptions): Promise<JSON | undefined>;
-}
 
 export type PotentialStep = Step | Conditional<Step>;
 
@@ -91,10 +66,14 @@ export class Pipeline implements Serializable {
   }
 
   async toList(
-    opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    opts: ToJsonSerializationOptions = toJsonSerializationDefaultOptions,
   ): Promise<(WaitStep | Step)[]> {
     if (opts.explicitDependencies) {
-      const sorted = await sortedSteps(this, opts.cache);
+      const sorted = await sortedSteps(
+        this,
+        opts.cache,
+        opts.acceptAllConditions,
+      );
       return sorted;
     }
 
@@ -127,11 +106,10 @@ export class Pipeline implements Serializable {
     const newOpts: ToJsonSerializationOptions = opts.explicitDependencies
       ? {
           explicitDependencies: true,
+          acceptAllConditions: !!opts.acceptAllConditions,
           cache: new Map(),
         }
-      : {
-          explicitDependencies: false,
-        };
+      : toJsonSerializationDefaultOptions;
 
     const steps = await this.toList(newOpts);
     if (opts.mutator) {

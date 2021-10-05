@@ -37,6 +37,7 @@ describe('buildkite-graph', () => {
           new MyConditional(new CommandStep('yarn').add('yarn test'), false),
         ),
       ]);
+
       createTest('async step addition', () => [
         new Pipeline('whatever').add(
           new MyConditional(
@@ -127,7 +128,7 @@ describe('buildkite-graph', () => {
         });
       });
 
-      describe.only('isEffectOf', () => {
+      describe('isEffectOf', () => {
         createTest(
           'will add steps if their effect dependency is accepted',
           () => {
@@ -159,6 +160,39 @@ describe('buildkite-graph', () => {
           },
           ['structure'],
         );
+
+        createTest(
+          'will add steps if acceptAllConditions is set even if effect dependency is rejected',
+          () => {
+            const acceptedTests = new MyConditional(
+              new CommandStep('run tests'),
+              false,
+            );
+            const deployCoverage = new CommandStep(
+              'deploy coverage',
+            ).isEffectOf(acceptedTests);
+
+            return new Pipeline('x').add(acceptedTests, deployCoverage);
+          },
+          ['json_depends_on_accept_all', 'yaml_depends_on_accept_all'],
+        );
+
+        it('should not execute conditional.accept when acceptAllConditions is set', () => {
+          const acceptedTests = new MyConditional(
+            new CommandStep('run tests'),
+            false,
+          );
+          const acceptFnSpy = jest.spyOn(acceptedTests, 'accept');
+          const deployCoverage = new CommandStep('deploy coverage').isEffectOf(
+            acceptedTests,
+          );
+
+          serializers.json_depends_on_accept_all.serialize(
+            new Pipeline('whatever').add(acceptedTests, deployCoverage),
+          );
+
+          expect(acceptFnSpy).not.toHaveBeenCalled();
+        });
 
         createTest(
           'will not add steps if any effect dependency is rejected',
@@ -296,6 +330,7 @@ describe('buildkite-graph', () => {
           },
           ['structure'],
         );
+
         createTest(
           'later steps affect earlier effects',
           () => {
