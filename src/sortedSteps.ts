@@ -9,7 +9,7 @@ export async function sortedSteps(
   cache: StepCache,
   acceptAllConditions = false,
 ): Promise<Step[]> {
-  const steps = await unwrapSteps(e.steps, cache);
+  const steps = await unwrapSteps(e.steps, cache, acceptAllConditions);
   const sortOp = new TopologicalSort<Step, Step>(
     new Map(steps.map((step) => [step, step])),
   );

@@ -113,6 +113,7 @@ export abstract class Step implements BaseStep, Serializable {
         await unwrapSteps(
           [...this.dependencies, ...this.effectDependencies],
           opts.cache,
+          opts.acceptAllConditions,
         )
       ).map((s) => ({
         step: s.key,
