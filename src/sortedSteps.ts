@@ -7,6 +7,7 @@ import { Conditional } from './conditional';
 export async function sortedSteps(
   e: Pipeline,
   cache: StepCache,
+  acceptAllConditions = false,
 ): Promise<Step[]> {
   const steps = await unwrapSteps(e.steps, cache);
   const sortOp = new TopologicalSort<Step, Step>(
@@ -63,6 +64,14 @@ export async function sortedSteps(
         const dependency = await getAndCacheDependency(
           potentialEffectDependency,
         );
+
+        // Accept all conditions/steps regardless
+        if (acceptAllConditions) {
+          addDependency(dependency);
+          s.dependsOn(potentialEffectDependency);
+          continue;
+        }
+
         if (potentialEffectDependency instanceof Conditional) {
           // in case it is a conditional we are interested in whether it that one was accepted or not
           if (

@@ -100,7 +100,10 @@ export abstract class Step implements BaseStep, Serializable {
   }
 
   async toJson(
-    opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    opts: ToJsonSerializationOptions = {
+      explicitDependencies: false,
+      acceptAllConditions: false,
+    },
   ): Promise<Record<string, unknown>> {
     if (!opts.explicitDependencies) {
       return {};
@@ -136,7 +139,10 @@ export class BranchLimitedStep extends Step {
     return this;
   }
   async toJson(
-    opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    opts: ToJsonSerializationOptions = {
+      explicitDependencies: false,
+      acceptAllConditions: false,
+    },
   ): Promise<Record<string, unknown>> {
     return {
       branches: this.branches.size
@@ -160,7 +166,10 @@ export class LabeledStep extends BranchLimitedStep {
   }
 
   async toJson(
-    opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    opts: ToJsonSerializationOptions = {
+      explicitDependencies: false,
+      acceptAllConditions: false,
+    },
   ): Promise<Record<string, unknown>> {
     return {
       label: this.label,

@@ -293,7 +293,10 @@ export class CommandStep extends LabeledStep {
   }
 
   async toJson(
-    opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    opts: ToJsonSerializationOptions = {
+      explicitDependencies: false,
+      acceptAllConditions: false,
+    },
   ): Promise<Record<CommandProperty, unknown>> {
     // Need to pull out one of env/retry to get around a weird Typescript v4.0 bug.
     // When both env and retry were specified inside the return object,

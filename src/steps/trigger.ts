@@ -33,7 +33,10 @@ export class TriggerStep extends LabeledStep implements Serializable {
   }
 
   async toJson(
-    opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    opts: ToJsonSerializationOptions = {
+      explicitDependencies: false,
+      acceptAllConditions: false,
+    },
   ): Promise<Record<string, unknown>> {
     return {
       trigger: this.trigger,

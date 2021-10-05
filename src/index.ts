@@ -37,6 +37,11 @@ export type SerializationOptions = {
    */
   explicitDependencies?: boolean;
   /**
+   * Whether accept all conditional steps regardlss of it's being rejected or not. This is particularlly helpful in some places whether you want to generate the entire
+   * graph without conditions. Plese note this would only work when `explicitDependencies` above is set to true.
+   */
+  acceptAllConditions?: boolean;
+  /**
    * Allows passing in a method that will be called on every Step in a topological sorted list of steps
    * This mutator can mutate anything in a Step except things that can change the structural integrity of the DAG.
    * i.e. the mutator must not mutate anything in Step dependencies or effective dependencies, and also must be
@@ -49,9 +54,13 @@ export type SerializationOptions = {
 export type ToJsonSerializationOptions =
   | {
       explicitDependencies: true;
+      acceptAllConditions: boolean;
       cache: StepCache;
     }
-  | { explicitDependencies: false };
+  | {
+      explicitDependencies: false;
+      acceptAllConditions: false;
+    };
 
 type JSON = Record<string, unknown> | JSON[];
 export interface Serializable {
@@ -91,10 +100,17 @@ export class Pipeline implements Serializable {
   }
 
   async toList(
-    opts: ToJsonSerializationOptions = { explicitDependencies: false },
+    opts: ToJsonSerializationOptions = {
+      explicitDependencies: false,
+      acceptAllConditions: false,
+    },
   ): Promise<(WaitStep | Step)[]> {
     if (opts.explicitDependencies) {
-      const sorted = await sortedSteps(this, opts.cache);
+      const sorted = await sortedSteps(
+        this,
+        opts.cache,
+        opts.acceptAllConditions,
+      );
       return sorted;
     }
 
@@ -127,10 +143,12 @@ export class Pipeline implements Serializable {
     const newOpts: ToJsonSerializationOptions = opts.explicitDependencies
       ? {
           explicitDependencies: true,
+          acceptAllConditions: !!opts.acceptAllConditions,
           cache: new Map(),
         }
       : {
           explicitDependencies: false,
+          acceptAllConditions: false,
         };
 
     const steps = await this.toList(newOpts);

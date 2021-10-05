@@ -37,6 +37,7 @@ describe('buildkite-graph', () => {
           new MyConditional(new CommandStep('yarn').add('yarn test'), false),
         ),
       ]);
+
       createTest('async step addition', () => [
         new Pipeline('whatever').add(
           new MyConditional(
@@ -158,6 +159,22 @@ describe('buildkite-graph', () => {
             return new Pipeline('x').add(acceptedTests, deployCoverage);
           },
           ['structure'],
+        );
+
+        createTest(
+          'will add steps if acceptAllConditions is set even effect dependency is rejected',
+          () => {
+            const acceptedTests = new MyConditional(
+              new CommandStep('run tests'),
+              false,
+            );
+            const deployCoverage = new CommandStep(
+              'deploy coverage',
+            ).isEffectOf(acceptedTests);
+
+            return new Pipeline('x').add(acceptedTests, deployCoverage);
+          },
+          ['json_depends_on_accept_all', 'yaml_depends_on_accept_all'],
         );
 
         createTest(
@@ -296,6 +313,7 @@ describe('buildkite-graph', () => {
           },
           ['structure'],
         );
+
         createTest(
           'later steps affect earlier effects',
           () => {

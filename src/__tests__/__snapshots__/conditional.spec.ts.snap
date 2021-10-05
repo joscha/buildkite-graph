@@ -284,6 +284,37 @@ exports[`buildkite-graph Steps Command isEffectOf later steps affect earlier eff
 * <run integration tests>"
 `;
 
+exports[`buildkite-graph Steps Command isEffectOf will add steps if acceptAllConditions is set even effect dependency is rejected json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "command": "run tests",
+      "key": "_0",
+    },
+    Object {
+      "command": "deploy coverage",
+      "depends_on": Array [
+        Object {
+          "step": "_0",
+        },
+      ],
+      "key": "_1",
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Command isEffectOf will add steps if acceptAllConditions is set even effect dependency is rejected yaml_depends_on_accept_all 1`] = `
+"steps:
+  - key: _0
+    command: run tests
+  - key: _1
+    depends_on:
+      - step: _0
+    command: deploy coverage
+"
+`;
+
 exports[`buildkite-graph Steps Command isEffectOf will add steps if their effect dependency is accepted structure 1`] = `
 "* <run tests>
 * [wait]
