@@ -162,7 +162,7 @@ describe('buildkite-graph', () => {
         );
 
         createTest(
-          'will add steps if acceptAllConditions is set even effect dependency is rejected',
+          'will add steps if acceptAllConditions is set even if effect dependency is rejected',
           () => {
             const acceptedTests = new MyConditional(
               new CommandStep('run tests'),
