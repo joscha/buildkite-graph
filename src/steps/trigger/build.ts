@@ -1,5 +1,5 @@
 import { KeyValue, KeyValueImpl } from '../../key_value';
-import { Serializable } from '../../index';
+import { Serializable } from '../../serialization';
 
 export interface Build<T> {
   env: KeyValue<T>;

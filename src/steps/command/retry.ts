@@ -1,6 +1,6 @@
 import ow from 'ow';
 import { Chainable, ExitStatus, exitStatusPredicate } from '../../base';
-import { Serializable } from '../../index';
+import { Serializable } from '../../serialization';
 
 type Statuses = boolean | number | Map<ExitStatus, number>;
 

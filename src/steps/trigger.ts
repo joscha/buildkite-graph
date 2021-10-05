@@ -1,4 +1,9 @@
-import { Pipeline, Serializable, ToJsonSerializationOptions } from '../index';
+import type {
+  Serializable,
+  ToJsonSerializationOptions,
+} from '../serialization';
+import { toJsonSerializationDefaultOptions } from '../serialization';
+import { Pipeline } from '../index';
 import { LabeledStep } from '../base';
 import { Build, BuildImpl } from './trigger/build';
 
@@ -33,10 +38,7 @@ export class TriggerStep extends LabeledStep implements Serializable {
   }
 
   async toJson(
-    opts: ToJsonSerializationOptions = {
-      explicitDependencies: false,
-      acceptAllConditions: false,
-    },
+    opts: ToJsonSerializationOptions = toJsonSerializationDefaultOptions,
   ): Promise<Record<string, unknown>> {
     return {
       trigger: this.trigger,

@@ -1,7 +1,8 @@
 import ow from 'ow';
 import { BranchLimitedStep } from '../base';
 import { Fields, FieldsImpl } from './block/fields';
-import type { ToJsonSerializationOptions } from '../index';
+import type { ToJsonSerializationOptions } from '../serialization';
+import { toJsonSerializationDefaultOptions } from '../serialization';
 
 export class BlockStep extends BranchLimitedStep {
   private readonly title: string;
@@ -19,10 +20,7 @@ export class BlockStep extends BranchLimitedStep {
   }
 
   async toJson(
-    opts: ToJsonSerializationOptions = {
-      explicitDependencies: false,
-      acceptAllConditions: false,
-    },
+    opts: ToJsonSerializationOptions = toJsonSerializationDefaultOptions,
   ): Promise<Record<string, unknown>> {
     return {
       ...(await super.toJson(opts)),

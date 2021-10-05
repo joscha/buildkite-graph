@@ -1,5 +1,6 @@
 import * as jsyaml from 'js-yaml';
-import { Pipeline, SerializationOptions } from '../';
+import { SerializationOptions } from '../serialization';
+import { Pipeline } from '../index';
 import { Serializer } from '.';
 import { JsonSerializer } from './json';
 

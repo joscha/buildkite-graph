@@ -1,10 +1,8 @@
 import ow from 'ow';
 import sortBy from 'lodash.sortby';
-import {
-  PotentialStep,
-  Serializable,
-  ToJsonSerializationOptions,
-} from './index';
+import { PotentialStep } from './index';
+import type { Serializable, ToJsonSerializationOptions } from './serialization';
+import { toJsonSerializationDefaultOptions } from './serialization';
 import uniqid from 'uniqid';
 import { unwrapSteps } from './unwrapSteps';
 
@@ -100,10 +98,7 @@ export abstract class Step implements BaseStep, Serializable {
   }
 
   async toJson(
-    opts: ToJsonSerializationOptions = {
-      explicitDependencies: false,
-      acceptAllConditions: false,
-    },
+    opts: ToJsonSerializationOptions = toJsonSerializationDefaultOptions,
   ): Promise<Record<string, unknown>> {
     if (!opts.explicitDependencies) {
       return {};
@@ -140,10 +135,7 @@ export class BranchLimitedStep extends Step {
     return this;
   }
   async toJson(
-    opts: ToJsonSerializationOptions = {
-      explicitDependencies: false,
-      acceptAllConditions: false,
-    },
+    opts: ToJsonSerializationOptions = toJsonSerializationDefaultOptions,
   ): Promise<Record<string, unknown>> {
     return {
       branches: this.branches.size
@@ -167,10 +159,7 @@ export class LabeledStep extends BranchLimitedStep {
   }
 
   async toJson(
-    opts: ToJsonSerializationOptions = {
-      explicitDependencies: false,
-      acceptAllConditions: false,
-    },
+    opts: ToJsonSerializationOptions = toJsonSerializationDefaultOptions,
   ): Promise<Record<string, unknown>> {
     return {
       label: this.label,
