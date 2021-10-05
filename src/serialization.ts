@@ -14,8 +14,8 @@ export type SerializationOptions = {
    */
   explicitDependencies?: boolean;
   /**
-   * Whether accept all conditional steps regardlss of it's being rejected or not. This is particularlly helpful in some places whether you want to generate the entire
-   * graph without conditions. Plese note this would only work when `explicitDependencies` above is set to true.
+   * Whether to accept all conditional steps regardless of what their `.accept()` function would return. This is particularly helpful in some places whether you want to generate the entire
+   * graph without pruning.
    */
   acceptAllConditions?: boolean;
   /**
