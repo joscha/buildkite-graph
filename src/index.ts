@@ -20,7 +20,12 @@ import { ok } from 'assert';
 export { ExitStatus, Step } from './base';
 export { Conditional, Generator, ThingOrGenerator } from './conditional';
 export { KeyValue } from './key_value';
-export { Serializer } from './serializers';
+export { MutatorFn, Serializer } from './serializers';
+export {
+  SerializationOptions,
+  Serializable,
+  ToJsonSerializationOptions,
+} from './serialization';
 export { BlockStep } from './steps/block';
 export { Option, SelectField, TextField } from './steps/block/fields';
 export { Command, CommandStep } from './steps/command';
