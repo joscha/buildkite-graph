@@ -65,14 +65,17 @@ export async function sortedSteps(
           potentialEffectDependency,
         );
 
-        // Accept all conditions/steps regardless
-        if (acceptAllConditions) {
-          addDependency(dependency);
-          s.dependsOn(potentialEffectDependency);
-          continue;
-        }
-
         if (potentialEffectDependency instanceof Conditional) {
+          // Accept all conditions/steps regardless
+          if (
+            acceptAllConditions &&
+            potentialEffectDependency.isOverridable()
+          ) {
+            addDependency(dependency);
+            s.dependsOn(potentialEffectDependency);
+            continue;
+          }
+
           // in case it is a conditional we are interested in whether it that one was accepted or not
           if (
             (await potentialEffectDependency.accept()) ||

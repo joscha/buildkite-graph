@@ -705,6 +705,17 @@ exports[`buildkite-graph Steps Command isEffectOf will not add steps if any effe
 
 exports[`buildkite-graph Steps Command isEffectOf will not add steps if effect dependency is rejected structure 1`] = `""`;
 
+exports[`buildkite-graph Steps Command isEffectOf will not override when acceptAllConditions is set but isOverridable returns false in a condition json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [],
+}
+`;
+
+exports[`buildkite-graph Steps Command isEffectOf will not override when acceptAllConditions is set but isOverridable returns false in a condition yaml_depends_on_accept_all 1`] = `
+"steps: []
+"
+`;
+
 exports[`buildkite-graph Steps Command step addition dot 1`] = `
 "digraph \\"whatever\\" {
   graph [ compound =true ];
