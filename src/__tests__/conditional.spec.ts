@@ -11,8 +11,9 @@ class MyConditional<T extends Step> extends Conditional<T> {
   constructor(
     step: ThingOrGenerator<T>,
     private readonly accepted: ReturnType<Conditional<T>['accept']>,
+    overridable = true,
   ) {
-    super(step as any);
+    super(step as any, overridable);
   }
 
   accept(): ReturnType<Conditional<T>['accept']> {
@@ -166,6 +167,23 @@ describe('buildkite-graph', () => {
           () => {
             const acceptedTests = new MyConditional(
               new CommandStep('run tests'),
+              false,
+            );
+            const deployCoverage = new CommandStep(
+              'deploy coverage',
+            ).isEffectOf(acceptedTests);
+
+            return new Pipeline('x').add(acceptedTests, deployCoverage);
+          },
+          ['json_depends_on_accept_all', 'yaml_depends_on_accept_all'],
+        );
+
+        createTest(
+          'will not override when acceptAllConditions is set but isOverridable returns false in a condition',
+          () => {
+            const acceptedTests = new MyConditional(
+              new CommandStep('run tests'),
+              false,
               false,
             );
             const deployCoverage = new CommandStep(

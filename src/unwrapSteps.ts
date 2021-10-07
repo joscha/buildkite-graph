@@ -14,7 +14,10 @@ export async function unwrapSteps(
       if (cache.has(s)) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ret.push(cache.get(s)!);
-      } else if (acceptAllConditions || (await s.accept()) === true) {
+      } else if (
+        (acceptAllConditions && s.isOverridable()) ||
+        (await s.accept()) === true
+      ) {
         const cond = await s.get();
         cache.set(s, cond);
         ret.push(cond);
