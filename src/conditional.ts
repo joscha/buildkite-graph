@@ -20,7 +20,7 @@ export abstract class Conditional<T extends Step> {
   abstract accept(): boolean | Promise<boolean>;
 
   /**
-   * Whether this condition could be overriden to accept when `acceptAllConditions` is set. `overridable` is
+   * Whether this condition could be overridden to accept when `acceptAllConditions` is set. `overridable` is
    * set to true by default.
    * @returns boolean
    */
