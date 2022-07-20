@@ -1,0 +1,482 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildkite-graph Steps Group group step dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[object Object]\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Group group step json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "steps": Array [],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group group step json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "key": "_0",
+      "steps": Array [],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group group step json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "key": "_0",
+      "steps": Array [],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group group step structure 1`] = `"* [object Object]"`;
+
+exports[`buildkite-graph Steps Group group step yaml 1`] = `
+"steps:
+  - group: group
+    steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Group group step yaml_depends_on 1`] = `
+"steps:
+  - group: group
+    key: _0
+    steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Group group step yaml_depends_on_accept_all 1`] = `
+"steps:
+  - group: group
+    key: _0
+    steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Group group step yaml_mutate 1`] = `
+"steps:
+  - group: group
+    key: _0
+    steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[object Object]\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition dot 2`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[object Object]\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition dot 3`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[object Object]\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "steps": Array [
+        Object {
+          "command": "yarn",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group step addition json 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "steps": Array [
+        Object {
+          "command": "yarn",
+        },
+        Object {
+          "command": "yarn test",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group step addition json 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "steps": Array [
+        Object {
+          "command": "yarn",
+        },
+        Object {
+          "command": "yarn test",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group step addition json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "key": "_0",
+      "steps": Array [
+        Object {
+          "command": "yarn",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group step addition json_depends_on 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "key": "_1",
+      "steps": Array [
+        Object {
+          "command": "yarn",
+        },
+        Object {
+          "command": "yarn test",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group step addition json_depends_on 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "key": "_2",
+      "steps": Array [
+        Object {
+          "command": "yarn",
+        },
+        Object {
+          "command": "yarn test",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group step addition json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "key": "_0",
+      "steps": Array [
+        Object {
+          "command": "yarn",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group step addition json_depends_on_accept_all 2`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "key": "_1",
+      "steps": Array [
+        Object {
+          "command": "yarn",
+        },
+        Object {
+          "command": "yarn test",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group step addition json_depends_on_accept_all 3`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "group",
+      "key": "_2",
+      "steps": Array [
+        Object {
+          "command": "yarn",
+        },
+        Object {
+          "command": "yarn test",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group step addition structure 1`] = `"* [object Object]"`;
+
+exports[`buildkite-graph Steps Group step addition structure 2`] = `"* [object Object]"`;
+
+exports[`buildkite-graph Steps Group step addition structure 3`] = `"* [object Object]"`;
+
+exports[`buildkite-graph Steps Group step addition yaml 1`] = `
+"steps:
+  - group: group
+    steps:
+      - command: yarn
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml 2`] = `
+"steps:
+  - group: group
+    steps:
+      - command: yarn
+      - command: yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml 3`] = `
+"steps:
+  - group: group
+    steps:
+      - command: yarn
+      - command: yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml_depends_on 1`] = `
+"steps:
+  - group: group
+    key: _0
+    steps:
+      - command: yarn
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml_depends_on 2`] = `
+"steps:
+  - group: group
+    key: _1
+    steps:
+      - command: yarn
+      - command: yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml_depends_on 3`] = `
+"steps:
+  - group: group
+    key: _2
+    steps:
+      - command: yarn
+      - command: yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml_depends_on_accept_all 1`] = `
+"steps:
+  - group: group
+    key: _0
+    steps:
+      - command: yarn
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml_depends_on_accept_all 2`] = `
+"steps:
+  - group: group
+    key: _1
+    steps:
+      - command: yarn
+      - command: yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml_depends_on_accept_all 3`] = `
+"steps:
+  - group: group
+    key: _2
+    steps:
+      - command: yarn
+      - command: yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml_mutate 1`] = `
+"steps:
+  - group: group
+    key: _0
+    steps:
+      - command: yarn
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml_mutate 2`] = `
+"steps:
+  - group: group
+    key: _1
+    steps:
+      - command: yarn
+      - command: yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Group step addition yaml_mutate 3`] = `
+"steps:
+  - group: group
+    key: _2
+    steps:
+      - command: yarn
+      - command: yarn test
+"
+`;
+
+exports[`buildkite-graph Steps Group with a label dot 1`] = `
+"digraph \\"whatever\\" {
+  graph [ compound =true ];
+subgraph cluster_0 {
+  graph [ color = \\"black\\" ];
+  \\"[object Object]\\" [ color = \\"grey\\" ];
+}
+
+}
+"
+`;
+
+exports[`buildkite-graph Steps Group with a label json 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "another",
+      "label": "Trigger another pipeline",
+      "steps": Array [],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group with a label json_depends_on 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "another",
+      "key": "_0",
+      "label": "Trigger another pipeline",
+      "steps": Array [],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group with a label json_depends_on_accept_all 1`] = `
+Object {
+  "steps": Array [
+    Object {
+      "group": "another",
+      "key": "_0",
+      "label": "Trigger another pipeline",
+      "steps": Array [],
+    },
+  ],
+}
+`;
+
+exports[`buildkite-graph Steps Group with a label structure 1`] = `"* [object Object]"`;
+
+exports[`buildkite-graph Steps Group with a label yaml 1`] = `
+"steps:
+  - group: another
+    label: Trigger another pipeline
+    steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Group with a label yaml_depends_on 1`] = `
+"steps:
+  - group: another
+    label: Trigger another pipeline
+    key: _0
+    steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Group with a label yaml_depends_on_accept_all 1`] = `
+"steps:
+  - group: another
+    label: Trigger another pipeline
+    key: _0
+    steps: []
+"
+`;
+
+exports[`buildkite-graph Steps Group with a label yaml_mutate 1`] = `
+"steps:
+  - group: another
+    label: Trigger another pipeline
+    key: _0
+    steps: []
+"
+`;

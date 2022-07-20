@@ -29,6 +29,7 @@ export {
 export { BlockStep } from './steps/block';
 export { Option, SelectField, TextField } from './steps/block/fields';
 export { Command, CommandStep } from './steps/command';
+export { GroupStep } from './steps/group';
 export { Plugin } from './steps/command/plugins';
 export { TriggerStep } from './steps/trigger';
 export const serializers = {
