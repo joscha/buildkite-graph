@@ -102,7 +102,7 @@ type CommandProperty =
 export class CommandStep extends LabeledStep {
   public readonly command: Command[] = [];
   public readonly env: KeyValue<this>;
-  private readonly overrides: Map<string, string> = new Map();
+  public readonly overrides: Map<string, string> = new Map();
 
   private _parallelism?: number;
   private get parallelism(): number | undefined {
