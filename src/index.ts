@@ -15,7 +15,7 @@ import { YamlSerializer } from './serializers/yaml';
 import { sortedSteps } from './sortedSteps';
 import { sortedWithBlocks } from './sortedWithBlocks';
 import { WaitStep } from './steps/wait';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import { ok } from 'assert';
 export { ExitStatus, Step } from './base';
 export { Conditional, Generator, ThingOrGenerator } from './conditional';
