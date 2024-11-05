@@ -38,7 +38,7 @@ export const serializers = {
   YamlSerializer,
 };
 
-export type PotentialStep = Step | Conditional<Step>;
+export type PotentialStep<S extends Step = Step> = S | Conditional<S>;
 
 export class Pipeline implements Serializable {
   public readonly name: string;

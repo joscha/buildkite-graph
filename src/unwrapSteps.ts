@@ -1,14 +1,14 @@
 import { PotentialStep, Step } from './index';
 import { Conditional } from './conditional';
 
-export type StepCache = Map<Conditional<Step>, Step>;
+export type StepCache<S extends Step = Step> = Map<Conditional<S>, S>;
 
-export async function unwrapSteps(
-  steps: PotentialStep[],
-  cache: StepCache,
+export async function unwrapSteps<S extends Step = Step>(
+  steps: PotentialStep<S>[],
+  cache: StepCache<S>,
   acceptAllConditions: boolean,
-): Promise<Step[]> {
-  const ret: Step[] = [];
+): Promise<S[]> {
+  const ret: S[] = [];
   for (const s of steps) {
     if (s instanceof Conditional) {
       if (cache.has(s)) {
